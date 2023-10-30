@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include "progargs.hpp"
+#include "../sim/progargs.hpp"
 
 int main(int argc, char *argv[]) {
     ProgArgs args(argc, argv);
