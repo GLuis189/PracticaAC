@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include "../sim/progargs.hpp"
+#include <vector>
 
 /* template <typename T>
 char * as_writable_buffer(T & value) {
@@ -42,7 +43,7 @@ int main(int argc, char *argv[]) {
     int np;
 
     // Lectura de la cabecera
-    inpufile.read(reinterpret_cast<char *>(&ppm), sizeof(float));
+    inputfile.read(reinterpret_cast<char *>(&ppm), sizeof(float));
     inputfile.read(reinterpret_cast<char *>(&np), sizeof(int));
 
     std::cout << "Partículas por metro: " << ppm << std::endl;
@@ -52,15 +53,15 @@ int main(int argc, char *argv[]) {
     std::vector<Particle> particles(np);
 
     for (int i = 0; i < np; ++i) {
-        inpufile.read(reinterpret_cast<char *>(&particles[i].px), sizeof(float));
-        inpufile.read(reinterpret_cast<char *>(&particles[i].py), sizeof(float));
-        inpufile.read(reinterpret_cast<char *>(&particles[i].pz), sizeof(float));
-        inpufile.read(reinterpret_cast<char *>(&particles[i].hvx), sizeof(float));
-        inpufile.read(reinterpret_cast<char *>(&particles[i].hvy), sizeof(float));
-        inpufile.read(reinterpret_cast<char *>(&particles[i].hvz), sizeof(float));
-        inpufile.read(reinterpret_cast<char *>(&particles[i].vx), sizeof(float));
-        inpufile.read(reinterpret_cast<char *>(&particles[i].vy), sizeof(float));
-        inpufile.read(reinterpret_cast<char *>(&particles[i].vz), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].px), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].py), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].pz), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].hvx), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].hvy), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].hvz), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].vx), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].vy), sizeof(float));
+        inputfile.read(reinterpret_cast<char *>(&particles[i].vz), sizeof(float));
     }
 
     // Mostrar los datos de las partículas
@@ -71,7 +72,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Velocidad: (" << particles[i].vx << ", " << particles[i].vy << ", " << particles[i].vz << ")\n\n";
     }
  */
-    inpufile.close();
+    inputfile.close();
 
    /*  int x = read_binary_value<int>(inputfile);
     std::cout << "El valor leído es: " << x << '\n';
