@@ -5,7 +5,7 @@
 
 ProgArgs::ProgArgs(int argc, char *argv[]) {
     if(argc != 4) {
-        std::cerr << "Error: Se requieren exactamente tres argumentos.\n";
+        std::cerr << "Error: Invalid number of arguments: " << (argc - 1) << ".\n";
         exit(-1);
     }
 
