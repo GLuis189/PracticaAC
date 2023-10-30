@@ -1,14 +1,14 @@
-//
-// Created by luis on 30/10/23.
-//
+#ifndef PROGARGS_H
+#define PROGARGS_H
 
-#ifndef PRACTICAAC_PROGARGS_H
-#define PRACTICAAC_PROGARGS_H
+#include <string>
 
+struct ProgArgs {
+    int nts;
+    std::string inputfile;
+    std::string outputfile;
 
-class progargs {
-
+    ProgArgs(int argc, char *argv[]);
 };
 
-
-#endif //PRACTICAAC_PROGARGS_H
+#endif
