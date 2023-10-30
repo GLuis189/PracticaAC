@@ -38,6 +38,11 @@ int main(int argc, char *argv[]) {
     std::ifstream inputfile(args.inputfile, std::ios::binary);
     std::ofstream outputfile(args.outputfile, std::ios::binary);
 
+    int x = read_binary_value<int>(inputfile);
+    std::cout << "El valor leído es: " << x << '\n';
+    write_binary_value(x, outputfile);
+    float y = read_binary_value<float>(intput_file);
+
     // Aquí va el código de la simulación
 
     return 0;
