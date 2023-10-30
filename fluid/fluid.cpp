@@ -4,21 +4,16 @@
 #include "../sim/progargs.hpp"
 
 template <typename T>
-  requires(std::is_integral_v<T> or std::is_floating_point_v<T>)
 char * as_writable_buffer(T & value) {
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
   return reinterpret_cast<char *>(&value);
 }
 
 template <typename T>
-  requires(std::is_integral_v<T> or std::is_floating_point_v<T>)
 char const * as_buffer(T const & value) {
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
   return reinterpret_cast<char const *>(&value);
 }
 
 template <typename T>
-  requires(std::is_integral_v<T> or std::is_floating_point_v<T>)
 T read_binary_value(std::istream & is) {
   T value{};
   is.read(as_writable_buffer(value), sizeof(value));
@@ -26,11 +21,9 @@ T read_binary_value(std::istream & is) {
 }
 
 template <typename T>
-  requires(std::is_integral_v<T> or std::is_floating_point_v<T>)
 void write_binary_value(T value, std::ostream & os) {
   os.write(as_buffer(value), sizeof(value));
 }
-
 
 int main(int argc, char *argv[]) {
     ProgArgs args(argc, argv);
@@ -41,9 +34,9 @@ int main(int argc, char *argv[]) {
     int x = read_binary_value<int>(inputfile);
     std::cout << "El valor leído es: " << x << '\n';
     write_binary_value(x, outputfile);
-    float y = read_binary_value<float>(intput_file);
 
-    // Aquí va el código de la simulación
+    float y = read_binary_value<float>(inputfile);
+    // Procede con la simulación aquí
 
     return 0;
 }
