@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -48,18 +50,18 @@ int main(int argc, char *argv[]) {
     float ppm;
     int np;
 
-    /*const float r = 1.695;
-    const float d = 1e3;
-    const float ps = 3.0;
-    const float sc = 3e4;
-    const float dv = 128.0;
-    const float mu = 0.4; // Asume un valor para μ_p
-    const float dp = 2e-4;
-    const float pt = 1e-3; // Asume un valor para Δt
+    const float radio = 1.695;
+    const float densidad = 1e3;
+    const float presion = 3.0;
+    const float colisiones = 3e4;
+    const float amortiguamiento = 128.0;
+    const float vis = 0.4; // Asume un valor para μ_p
+    const float tparticula = 2e-4;
+    const float ptiempo = 1e-3; // Asume un valor para Δt
 
-    const float gx = 0.0;
-    const float gy = -9.8;
-    const float gz = 0.0;
+    const float g_x = 0.0;
+    const float g_y = -9.8;
+    const float g_z = 0.0;
 
     const float bmax_x = 0.65;
     const float bmax_y = 0.1;
@@ -69,26 +71,28 @@ int main(int argc, char *argv[]) {
     const float bmin_y = -0.08;
     const float bmin_z = -0.065;
 
-    float masa = d/(ppm*ppm*ppm);
-    float h = r/ppm;
+    const float masa = densidad/(ppm*ppm*ppm);
+    const float suavizado = radio/ppm;
     
     
-    Malla n; */
+    Malla malla;
 
-
-
+    malla.x = static_cast<int>((bmax_x - bmin_x)/suavizado);
+    malla.y = static_cast<int>((bmax_y - bmin_y)/suavizado);
+    malla.z = static_cast<int>((bmax_z - bmin_z)/suavizado);
+    
     // Lectura de la cabecera
     inputfile.read(reinterpret_cast<char *>(&ppm), sizeof(float));
-    inputfile.read(reinterpret_cast<char *>(&np), sizeof(int));
+    inputfile.read(reinterpret_cast<char *>(&numparticulas), sizeof(int));
 
     std::cout << "Partículas por metro: " << ppm << std::endl;
-    std::cout << "Número de partículas: " << np << std::endl;
+    std::cout << "Número de partículas: " << numparticulas << std::endl;
 
     // Lectura de la información de cada partícula
         std::vector<Particle> particles;
-    particles.reserve(np);
+    particles.reserve(numparticulas);
 
-    for (int i = 0; i < np; ++i) {
+    for (int i = 0; i < numparticulas; ++i) {
         Particle particle;
 
         float tempValue;
@@ -123,7 +127,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Mostrar los datos de las partículas
-    for (int i = 0; i < np; ++i) {
+    for (int i = 0; i < numparticulas; ++i) {
         outputfile << "Partícula " << i + 1 << ":\n";
         outputfile << "Posición: (" << particles[i].px << ", " << particles[i].py << ", " << particles[i].pz << ")\n";
         outputfile << "Vector hv: (" << particles[i].hvx << ", " << particles[i].hvy << ", " << particles[i].hvz << ")\n";
