@@ -48,14 +48,14 @@ int main(int argc, char *argv[]) {
     float ppm;
     int np;
 
-    const float r = 1.695;
-    const float d = 10^3;
+    /*const float r = 1.695;
+    const float d = 1e3;
     const float ps = 3.0;
-    const float sc = 3*10^4;
+    const float sc = 3e4;
     const float dv = 128.0;
     const float mu = 0.4; // Asume un valor para μ_p
-    const float dp = 2*10^-4;
-    const float pt = 10^-3; // Asume un valor para Δt
+    const float dp = 2e-4;
+    const float pt = 1e-3; // Asume un valor para Δt
 
     const float gx = 0.0;
     const float gy = -9.8;
