@@ -47,8 +47,8 @@ int main(int argc, char *argv[]) {
     std::ifstream inputfile(args.inputfile, std::ios::binary);
     std::ofstream outputfile(args.outputfile, std::ios::binary);
 
-    float ppm;
-    int np;
+    float ppm = 0.0;
+    int numparticulas = 0;
 
     const float radio = 1.695;
     const float densidad = 1e3;
