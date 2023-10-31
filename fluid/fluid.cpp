@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     float h = r/ppm;
     
     
-    Malla n;
+    Malla n; */
 
 
 
