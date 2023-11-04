@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     const float g_y = -9.8;
     const float g_z = 0.0;
 
-    const float bmax_x = 0.65;
+    const float bmax_x = 0.065;
     const float bmax_y = 0.1;
     const float bmax_z = 0.065; 
 
