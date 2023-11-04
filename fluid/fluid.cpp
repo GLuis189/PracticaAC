@@ -39,7 +39,6 @@ struct Malla{
 
 };
 
-
 int main(int argc, char *argv[]) {
     ProgArgs args(argc, argv);
 
@@ -80,8 +79,26 @@ int main(int argc, char *argv[]) {
       exit(-5);
     }
 
+    const float suavizado = radio/ppm;
+    int nx = static_cast<int>((bmax_x - bmin_x)/suavizado);
+    int ny = static_cast<int>((bmax_y - bmin_y)/suavizado);
+    int nz = static_cast<int>((bmax_z - bmin_z)/suavizado);
+    grid malla(nx, ny, nz);
+
+    float sx = (bmax_x - bmin_x)/nx;
+    float sy = (bmax_y - bmin_y)/ny;
+    float sz = (bmax_z - bmin_z)/nz;
+
+    //block Block(bmax_x, bmax_y, bmax_z, bmin_x, bmin_y, bmin_z, malla);
     std::cout << "Partículas por metro: " << ppm << std::endl;
     std::cout << "Número de partículas: " << numparticulas << std::endl;
+    std::cout << "suavizado: " << suavizado << std::endl;
+    std::cout << "nx: " << nx << std::endl;
+    std::cout << "ny: " << ny << std::endl;
+    std::cout << "nz: " << nz << std::endl;
+    std::cout << "sx: " << sx << std::endl;
+    std::cout << "sy: " << sy << std::endl;
+    std::cout << "sz: " << sz << std::endl;
 
     // Lectura de la información de cada partícula
     std::vector<Particle> particles;

@@ -7,7 +7,12 @@
 
 
 class grid {
+  public:
+    int nx;
+    int ny;
+    int nz;
 
+    grid(float bmax_x, float bmax_y, float bmax_z, float bmin_x, float bmin_y, float bmin_z, float suavizado);
 };
 
 

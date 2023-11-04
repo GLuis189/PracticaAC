@@ -6,10 +6,15 @@
 #define PRACTICAAC_BLOCK_HPP
 
 
+
 class block {
+  public:
+    float sx;
+    float sy;
+    float sz;
 
+    block(float bmax_x, float bmax_y, float bmax_z, float bmin_x, float bmin_y, float bmin_z, grid malla);
 };
-
 
 #endif //PRACTICAAC_BLOCK_HPP*/
 // Block.hpp
