@@ -4,6 +4,9 @@
 #include <fstream>
 #include <cstdlib>
 #include "../sim/progargs.hpp"
+#include "../sim/grid.hpp"
+#include "../sim/block.hpp"
+#include "../sim/particle.hpp"
 #include <vector>
 
 /* template <typename T>
@@ -29,11 +32,7 @@ void write_binary_value(T value, std::ostream & os) {
 } */
 
 // Estructura para representar cada partícula
-struct Particle {
-    double px, py, pz;   // Coordenadas de posición
-    double hvx, hvy, hvz; // Coordenadas del vector hv
-    double vx, vy, vz;   // Coordenadas de la velocidad
-};
+
 
 struct Malla{
   int x, y, z;
@@ -66,33 +65,30 @@ int main(int argc, char *argv[]) {
     const float bmax_x = 0.65;
     const float bmax_y = 0.1;
     const float bmax_z = 0.065; 
-    
+
     const float bmin_x = -0.065;
     const float bmin_y = -0.08;
     const float bmin_z = -0.065;
 
     const float masa = densidad/(ppm*ppm*ppm);
-    const float suavizado = radio/ppm;
-    
-    
-    Malla malla;
-
-    malla.x = static_cast<int>((bmax_x - bmin_x)/suavizado);
-    malla.y = static_cast<int>((bmax_y - bmin_y)/suavizado);
-    malla.z = static_cast<int>((bmax_z - bmin_z)/suavizado);
     
     // Lectura de la cabecera
     inputfile.read(reinterpret_cast<char *>(&ppm), sizeof(float));
     inputfile.read(reinterpret_cast<char *>(&numparticulas), sizeof(int));
+    if (numparticulas<=0){
+      std::cerr << "Error: Invalid number of particles: 0.\n";
+      exit(-5);
+    }
 
     std::cout << "Partículas por metro: " << ppm << std::endl;
     std::cout << "Número de partículas: " << numparticulas << std::endl;
 
     // Lectura de la información de cada partícula
-        std::vector<Particle> particles;
+    std::vector<Particle> particles;
     particles.reserve(numparticulas);
+    int contar_particulas = 0;
 
-    for (int i = 0; i < numparticulas; ++i) {
+    while(!inputfile.eof()) {
         Particle particle;
 
         float tempValue;
@@ -123,18 +119,45 @@ int main(int argc, char *argv[]) {
         inputfile.read(reinterpret_cast<char *>(&tempValue), sizeof(float));
         particle.vz = tempValue;
 
-        particles.push_back(particle);
-    }
+        particle.i = static_cast<int>((particle.px-bmin_x)/sx);
+        if (particle.i>nx -1){
+          particle.i = nx -1;
+        }
+        particle.j = static_cast<int>((particle.py-bmin_y)/sy);
+        if (particle.j>ny -1){
+          particle.j = ny-1;
+        }
+        particle.k = static_cast<int>((particle.pz-bmin_z)/sz);
+        if (particle.k>nz -1){
+          particle.k = nz -1;
+        }
 
+        std::string block_key = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" + std::to_string(particle.k);
+        malla.blocks[block_key].addParticle(particle);
+        particles.push_back(particle);
+        ++contar_particulas;
+    }
+    if (outputfile.is_open()) {
+        for (const auto& block : malla.blocks) {
+          outputfile << "Block Key: " << block.first << std::endl;
+          // Aquí puedes imprimir detalles específicos de los bloques si es necesario
+        }
+        outputfile.close();
+    } else {
+        std::cerr << "Unable to open file: " << std::endl;
+    }
+    if (numparticulas!=contar_particulas){
+        std::cerr << "Error: Number of particles mismatch. Header:"<< numparticulas <<"Found:" << contar_particulas<<"\n";
+    }
     // Mostrar los datos de las partículas
-    for (int i = 0; i < numparticulas; ++i) {
+    /*for (int i = 0; i < numparticulas; ++i) {
         outputfile << "Partícula " << i + 1 << ":\n";
         outputfile << "Posición: (" << particles[i].px << ", " << particles[i].py << ", " << particles[i].pz << ")\n";
         outputfile << "Vector hv: (" << particles[i].hvx << ", " << particles[i].hvy << ", " << particles[i].hvz << ")\n";
         outputfile << "Velocidad: (" << particles[i].vx << ", " << particles[i].vy << ", " << particles[i].vz << ")\n\n";
     }
  
-    inputfile.close();
+    inputfile.close();*/
 
    /*  int x = read_binary_value<int>(inputfile);
     std::cout << "El valor leído es: " << x << '\n';
