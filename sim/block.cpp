@@ -18,7 +18,6 @@ block::block(float bmax_x, float bmax_y, float bmax_z, float bmin_x, float bmin_
 
 void Block::addParticle(Particle& p) {
   particles.push_back(p);
-  // Lógica adicional de añadir partículas al bloque si es necesario
 }
 
 void Block::removeParticle(Particle& p){

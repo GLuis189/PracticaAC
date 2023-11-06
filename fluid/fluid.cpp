@@ -1,5 +1,4 @@
-#include <math.h>
-
+//#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -122,8 +121,8 @@ int main(int argc, char *argv[]) {
         }
         outputfile.close();
     } else {
-        std::cerr << "Unable to open file: " << std::endl;
-    }
+        std::cerr << "Unable to open file: " << "\n";
+    }*/
     if (numparticulas!=contar_particulas){
         std::cerr << "Error: Number of particles mismatch. Header:"<< numparticulas <<" Found:" << contar_particulas<<"\n";
         exit(-5);
