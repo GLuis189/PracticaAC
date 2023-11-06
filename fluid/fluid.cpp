@@ -114,7 +114,9 @@ int main(int argc, char *argv[]) {
         particles.push_back(particle);
         ++contar_particulas;
     }
-    if (outputfile.is_open()) {
+
+    //Crear archivo con los bloques
+    /*if (outputfile.is_open()) {
         for (const auto& block : malla.blocks) {
           outputfile << "Block Key: " << block.first << "\n";
           // Aquí puedes imprimir detalles específicos de los bloques si es necesario
