@@ -29,7 +29,7 @@ class grid {
     std::unordered_map<std::string, Block> blocks; // Almacena los bloques
 
     grid(int nx, int ny, int nz);
-    void printBlocks();
+    //void printBlocks();
 
     // Otros métodos relacionados con la malla
 };

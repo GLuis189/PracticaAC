@@ -25,12 +25,11 @@ class block {
 #include "particle.hpp"
 
 class Block {
-  private:
-    std::vector<Particle> particles;
-
   public:
-    void addParticle(const Particle& p);
-    // Otros métodos para trabajar con las partículas en el bloque si es necesario
+    void addParticle(Particle& p);
+    void removeParticle(Particle& p);
+    void printParticles();  // Nuevo método para imprimir las partículas
+    std::vector<Particle> particles;
 };
 
 #endif // BLOCK_HPP
