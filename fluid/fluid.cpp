@@ -155,5 +155,40 @@ int main(int argc, char *argv[]) {
     float y = read_binary_value<float>(inputfile); */
     // Procede con la simulación aquí
 
+
+    //Inicio de simulación
+    for (int time = 0; time < args.nts; time++) {
+        for (int part = 0; part < numparticulas; part++) {
+            Particle& particle = particles[part];
+
+            int i_anterior = particle.i;
+            int j_anterior = particle.j;
+            int k_anterior = particle.k;
+
+            particle.i = static_cast<int>((particle.px-bmin_x)/sx);
+            if (particle.i>nx -1){
+              particle.i = nx -1;
+            }
+
+            particle.j = static_cast<int>((particle.py-bmin_y)/sy);
+            if (particle.j>ny -1){
+              particle.j = ny-1;
+            }
+            particle.k = static_cast<int>((particle.pz-bmin_z)/sz);
+            if (particle.k>nz -1){
+              particle.k = nz -1;
+            }
+
+            if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
+                std::string block_key = std::to_string(i_anterior) + "_" + std::to_string(j_anterior) + "_" + std::to_string(k_anterior);
+                malla.blocks[block_key].removeParticle(particle);
+                std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" + std::to_string(particle.k);
+                malla.blocks[block_key2].addParticle(particle);
+            }
+
+
+        }
+    }
+
     return 0;
 }
