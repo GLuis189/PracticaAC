@@ -33,6 +33,17 @@ typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, 
 
 // Estructura para representar cada partícula
 
+void calcularBloquesAdyacentes(Particle& p, std::vector<Block> bloques_ady, grid malla){
+  for (int i = -1; i < 2; i++){
+    for (int j = -1; i < 2; i++){
+      for (int k = -1; i < 2; i++){
+        std::string block_key = std::to_string(p.i + i) + "_" + std::to_string(p.j + j) + "_" + std::to_string(p.k + k);
+        bloques_ady.push_back(malla.blocks[block_key]);
+      }
+    }
+  }
+}
+
 void calcularParticulasAdyacentes(Particle& p, std::vector<Particle> particulas_ady, grid malla){
   std::vector<Block> bloques_ady;
   calcularBloquesAdyacentes(p, bloques_ady, malla);
