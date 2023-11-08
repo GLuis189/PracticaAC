@@ -19,7 +19,6 @@ grid::grid(float bmax_x, float bmax_y, float bmax_z, float bmin_x, float bmin_y,
 #include "grid.hpp"
 
 
-
 grid::grid(int nx, int ny, int nz) {
   // Generar bloques para toda la malla
   for (int a = 0; a < nx; ++a) {

@@ -13,6 +13,7 @@ class Particle {
     int i, j, k;
     double densidad;
     static void calcularBloque(Particle& p, float bmin_x, float sx, float bmin_y, float sy, float bmin_z, float sz , int nx, int ny, int nz);
+    //void calcularDensidad(Particle& p_i, std::vector<Particle>& particles, int numparticulas, float suavizado);
     bool operator==(const Particle& other) const;
 };
 #endif  // FLUID_PARTICLE_HPP
