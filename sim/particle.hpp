@@ -5,7 +5,6 @@
 #ifndef FLUID_PARTICLE_HPP
 #define FLUID_PARTICLE_HPP
 class Particle {
-
   public:
     int id;
     double px, py, pz;   // Coordenadas de posición

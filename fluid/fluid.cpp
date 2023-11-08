@@ -44,27 +44,6 @@ void calcularBloquesAdyacentes(Particle& p, std::vector<Block> bloques_ady, grid
   }
 }
 
-void calcularParticulasAdyacentes(Particle& p, std::vector<Particle> particulas_ady, grid malla){
-  std::vector<Block> bloques_ady;
-  calcularBloquesAdyacentes(p, bloques_ady, malla);
-  for (Block& block : bloques_ady){
-    for (Particle& particle : block.particles){
-      particulas_ady.push_back(particle);
-    }
-  }
-}
-void calcularDensidad(Particle& p_i, Particle& p_j, float suavizado){
-  double p_dif = p_i.densidad - p_j.densidad;
-  double p_dif_2 = p_dif * p_dif;
-  double variacion_densidad_3 = 0;
-  if (p_dif_2 < (suavizado*suavizado)){
-      double variacion_desidad = ((suavizado*suavizado)-p_dif_2);
-      variacion_densidad_3 = variacion_desidad*variacion_desidad*variacion_desidad;
-  }
-  p_i.densidad = p_i.densidad + variacion_densidad_3;
-  p_j.densidad = p_j.densidad + variacion_densidad_3;
-}
-
 int main(int argc, char *argv[]) {
     ProgArgs args(argc, argv);
 
@@ -185,7 +164,6 @@ int main(int argc, char *argv[]) {
 
     // Inicio de simulación
     for (int time = 0; time < args.nts; time++) {
-      std::vector<Particle> particulas_visitadas;
       for (int part = 0; part < numparticulas; part++) {
         Particle & particle = particles[part];
 
@@ -212,13 +190,40 @@ int main(int argc, char *argv[]) {
           std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" + std::to_string(particle.k);
           malla.blocks[block_key2].addParticle(particle);
         }
+        std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" + std::to_string(particle.k);
+        std::vector<std::string> bloquesAdy = malla.blocks[block_key2].bloques_ady;
+        for(std::string bloque : bloquesAdy){
+          std::vector<Particle> particulas_ady = malla.blocks[bloque].particles;
+          for (Particle & particula : particulas_ady){
+            if (particula > particle) {
+              double p_dif              = particle.densidad - particula.densidad;
+              double variacion_densidad = 0;
+              if (pow(p_dif, 2) < pow(suavizado, 2)) {
+                variacion_densidad = (pow(suavizado, 2) - pow(p_dif, 2));
+              }
+              particle.densidad = particle.densidad + pow(variacion_densidad, 3);
+              particles[particula.id].densidad = particles[particula.id].densidad + pow(variacion_densidad, 3);
+            }
+          }
+        }
 
-        std::vector<Particle> particulas_ady;
-        calcularParticulasAdyacentes(particle, particulas_ady, malla);
-        particulas_visitadas.push_back(particle);
-        for (Particle & particula : particulas_ady) {
+        /*for (int pos = particle.id +1; pos<numparticulas; pos++) {
+          if (particle.i == particles[pos].i - 1 || particle.i == particles[pos].i || particle.i == particles[pos].i+1) {
+            if (particle.j == particles[pos].j - 1 || particle.j == particles[pos].j || particle.j == particles[pos].j+1) {
+              if (particle.k == particles[pos].j - 1 || particle.k == particles[pos].k || particle.k == particles[pos].k+1) {
+                double p_dif = particle.densidad - particles[pos].densidad;
+                double variacion_densidad = 0;
+                if (pow(p_dif,2) < pow(suavizado,2)){
+                  variacion_densidad = (pow(suavizado,2)-pow(p_dif,2));
+                }
+                particle.densidad = particle.densidad + pow(variacion_densidad,3);
+                particles[pos].densidad = particles[pos].densidad + pow(variacion_densidad,3);
+              }
+            }
+          }
+        }*/
+        /*for (Particle & particula : particulas_ady) {
           auto find = std::find(particulas_ady.begin(), particles.end(), particula);
-          if (find != particulas_visitadas.end()) {
             calcularDensidad(particle, particula, suavizado);
           }
         }

@@ -23,6 +23,7 @@ class block {
 
 #include <vector>
 #include "particle.hpp"
+#include <iostream>
 
 class Block {
   public:
@@ -30,6 +31,7 @@ class Block {
     void removeParticle(Particle& p);
     void printParticles();  // Nuevo método para imprimir las partículas
     std::vector<Particle> particles;
+    std::vector<std::string> bloques_ady;
 };
 
 #endif // BLOCK_HPP
