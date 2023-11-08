@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     const float bmin_y = -0.08;
     const float bmin_z = -0.065;
 
-    const float masa = densidad / (ppm * ppm * ppm);
+    const float masa = densidad / pow(ppm, 3);
 
     if (numparticulas <= 0) {
       std::cerr << "Error: Invalid number of particles: 0.\n";
@@ -225,8 +225,8 @@ int main(int argc, char *argv[]) {
         /*for (Particle & particula : particulas_ady) {
           auto find = std::find(particulas_ady.begin(), particles.end(), particula);
             calcularDensidad(particle, particula, suavizado);
-          }
-        }
+          }*/
+
       }
     }
     return 0;
