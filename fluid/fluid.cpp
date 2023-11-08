@@ -131,10 +131,12 @@ int main(int argc, char *argv[]) {
     } else {
         std::cerr << "Unable to open file: " << "\n";
     }*/
+
     if (numparticulas != contar_particulas) {
       std::cerr << "Error: Number of particles mismatch. Header:" << numparticulas << " Found:" << contar_particulas << "\n";
       exit(-5);
     }
+
     // Mostrar los datos
     std::cout << "Number of particles: " << numparticulas << "\n";
     std::cout << "Particles per meter: " << ppm << "\n";

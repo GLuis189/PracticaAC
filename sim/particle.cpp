@@ -43,3 +43,10 @@ void Particle::calcularBloque(Particle& particle, float bmin_x, float sx, float 
 bool Particle::operator==(const Particle& other) const {
     return id == other.id;
 }
+bool Particle::operator<(const Particle& other) const {
+    return id < other.id;
+}
+bool Particle::operator>(const Particle& other) const {
+    return id > other.id;
+}
+
