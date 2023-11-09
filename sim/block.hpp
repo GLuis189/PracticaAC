@@ -27,6 +27,7 @@ class block {
 
 class Block {
   public:
+    int i, j ,k;
     void addParticle(Particle& p);
     void removeParticle(Particle& p);
     void printParticles();  // Nuevo método para imprimir las partículas

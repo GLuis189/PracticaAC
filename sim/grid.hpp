@@ -27,6 +27,9 @@ class grid {
 class grid {
   public:
     std::unordered_map<std::string, Block> blocks; // Almacena los bloques
+    std::vector<std::string> colisionesCx;
+    std::vector<std::string> colisionesCy;
+    std::vector<std::string> colisionesCz;
 
     grid(int nx, int ny, int nz);
     //void printBlocks();

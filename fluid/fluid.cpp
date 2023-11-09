@@ -31,18 +31,6 @@ typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, 
   return value;
 }
 
-// Estructura para representar cada partícula
-
-void calcularBloquesAdyacentes(Particle& p, std::vector<Block> bloques_ady, grid malla){
-  for (int i = -1; i < 2; i++){
-    for (int j = -1; i < 2; i++){
-      for (int k = -1; i < 2; i++){
-        std::string block_key = std::to_string(p.i + i) + "_" + std::to_string(p.j + j) + "_" + std::to_string(p.k + k);
-        bloques_ady.push_back(malla.blocks[block_key]);
-      }
-    }
-  }
-}
 
 int main(int argc, char *argv[]) {
     ProgArgs args(argc, argv);
@@ -61,17 +49,17 @@ int main(int argc, char *argv[]) {
     const float tparticula      = 2e-4;
     const float ptiempo         = 1e-3;  // Asume un valor para Δt
 
-    const float g_x = 0.0;
-    const float g_y = -9.8;
-    const float g_z = 0.0;
+  const float g_x = 0.0;
+  const float g_y = -9.8;
+  const float g_z = 0.0;
 
-    const float bmax_x = 0.065;
-    const float bmax_y = 0.1;
-    const float bmax_z = 0.065;
+  const float bmax_x = 0.065;
+  const float bmax_y = 0.1;
+  const float bmax_z = 0.065;
 
-    const float bmin_x = -0.065;
-    const float bmin_y = -0.08;
-    const float bmin_z = -0.065;
+  const float bmin_x = -0.065;
+  const float bmin_y = -0.08;
+  const float bmin_z = -0.065;
 
     const float masa = densidad / pow(ppm, 3);
 
@@ -173,63 +161,152 @@ int main(int argc, char *argv[]) {
         int j_anterior = particle.j;
         int k_anterior = particle.k;
 
-        particle.i = static_cast<int>((particle.px - bmin_x) / sx);
-        if (particle.i > nx - 1) {
-            particle.i = nx - 1;
-        }
-        particle.j = static_cast<int>((particle.py - bmin_y) / sy);
-        if (particle.j > ny - 1) {
-            particle.j = ny - 1;
-        }
-        particle.k = static_cast<int>((particle.pz - bmin_z) / sz);
-        if (particle.k > nz - 1) {
-            particle.k = nz - 1;
-        }
+      particle.i = static_cast<int>((particle.px - bmin_x) / sx);
+      if (particle.i > nx - 1) { particle.i = nx - 1; }
+      particle.j = static_cast<int>((particle.py - bmin_y) / sy);
+      if (particle.j > ny - 1) { particle.j = ny - 1; }
+      particle.k = static_cast<int>((particle.pz - bmin_z) / sz);
+      if (particle.k > nz - 1) { particle.k = nz - 1; }
 
-        if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
-          std::string block_key = std::to_string(i_anterior) + "_" + std::to_string(j_anterior) + "_" + std::to_string(k_anterior);
-          malla.blocks[block_key].removeParticle(particle);
-          std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" + std::to_string(particle.k);
-          malla.blocks[block_key2].addParticle(particle);
-        }
-        std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" + std::to_string(particle.k);
-        std::vector<std::string> bloquesAdy = malla.blocks[block_key2].bloques_ady;
-        for(std::string bloque : bloquesAdy){
-          std::vector<Particle> particulas_ady = malla.blocks[bloque].particles;
-          for (Particle & particula : particulas_ady){
-            if (particula > particle) {
-              double p_dif              = particle.densidad - particula.densidad;
-              double variacion_densidad = 0;
-              if (pow(p_dif, 2) < pow(suavizado, 2)) {
-                variacion_densidad = (pow(suavizado, 2) - pow(p_dif, 2));
-              }
-              particle.densidad = particle.densidad + pow(variacion_densidad, 3);
-              particles[particula.id].densidad = particles[particula.id].densidad + pow(variacion_densidad, 3);
+      if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
+        std::string block_key = std::to_string(i_anterior) + "_" + std::to_string(j_anterior) +
+                                "_" + std::to_string(k_anterior);
+        malla.blocks[block_key].removeParticle(particle);
+        std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) +
+                                 "_" + std::to_string(particle.k);
+        malla.blocks[block_key2].addParticle(particle);
+      }
+      std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
+                               std::to_string(particle.k);
+      std::vector<std::string> bloquesAdy = malla.blocks[block_key2].bloques_ady;
+      for (std::string bloque : bloquesAdy) {
+        std::vector<Particle> particulas_ady = malla.blocks[bloque].particles;
+        for (Particle & particula : particulas_ady) {
+          if (particula > particle) {
+            double p_dif_x = particle.px- particula.px;
+            double p_dif_y = particle.py- particula.py;
+            double p_dif_z = particle.pz- particula.pz;
+            double distancia = std::sqrt(p_dif_x* p_dif_x +p_dif_y * p_dif_y +p_dif_z* p_dif_z);
+            double variacion_densidad = 0;
+            if(distancia*distancia< suavizado*suavizado) {
+              variacion_densidad = (suavizado*suavizado -distancia*distancia);
+              particle.densidad = particle.densidad + variacion_densidad*variacion_densidad*variacion_densidad;
+              particles[particula.id].densidad = particles[particula.id].densidad + variacion_densidad*variacion_densidad*variacion_densidad;
             }
           }
         }
+      }
+      // Transformación de densidad
+      particle.densidad = (particle.densidad + pow(suavizado, 6) * 315 / (64 * M_PI * pow(suavizado, 9)) * masa);
 
-        /*for (int pos = particle.id +1; pos<numparticulas; pos++) {
-          if (particle.i == particles[pos].i - 1 || particle.i == particles[pos].i || particle.i == particles[pos].i+1) {
-            if (particle.j == particles[pos].j - 1 || particle.j == particles[pos].j || particle.j == particles[pos].j+1) {
-              if (particle.k == particles[pos].j - 1 || particle.k == particles[pos].k || particle.k == particles[pos].k+1) {
-                double p_dif = particle.densidad - particles[pos].densidad;
-                double variacion_densidad = 0;
-                if (pow(p_dif,2) < pow(suavizado,2)){
-                  variacion_densidad = (pow(suavizado,2)-pow(p_dif,2));
-                }
-                particle.densidad = particle.densidad + pow(variacion_densidad,3);
-                particles[pos].densidad = particles[pos].densidad + pow(variacion_densidad,3);
-              }
+      //Aceleraciones
+
+    }
+    for (int part = 0; part < numparticulas; part++) {
+      Particle & particle = particles[part];
+      std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
+                               std::to_string(particle.k);
+      std::vector<std::string> bloquesAdy = malla.blocks[block_key2].bloques_ady;
+      for (std::string bloque : bloquesAdy) {
+        std::vector<Particle> particulas_ady = malla.blocks[bloque].particles;
+        for (Particle & particula : particulas_ady) {
+          if (particula > particle) {
+            double p_dif_x = particle.px- particula.px;
+            double p_dif_y = particle.py- particula.py;
+            double p_dif_z = particle.pz- particula.pz;
+            double modulo = std::sqrt(p_dif_x* p_dif_x +p_dif_y * p_dif_y +p_dif_z* p_dif_z);
+            double distancia = modulo*modulo;
+            if(distancia< suavizado*suavizado) {
+              const double pi_sua_6 = M_PI*suavizado*suavizado*suavizado*suavizado*suavizado*suavizado;
+              double dist_ij = std::sqrt(std::max(distancia, 1e-12));
+
+              double var_ax = ((((particle.px - particula.px)* (15/pi_sua_6) * ((3*masa * presion)/2) *
+                               ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
+                              ((particula.vx - particle.vx) * (45/pi_sua_6) * (vis * masa))) / (particle.densidad * particula.densidad);
+              particle.ax = particle.ax + var_ax;
+              particles[particula.id].ax = particles[particula.id].ax -var_ax;
+
+              double var_ay = ((((particle.py - particula.py)* (15/pi_sua_6) * ((3*masa * presion)/2) *
+                                 ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
+                               ((particula.vy - particle.vy) * (45/pi_sua_6) * (vis * masa))) / (particle.densidad * particula.densidad);
+              particle.ay = particle.ay + var_ay;
+              particles[particula.id].ay = particles[particula.id].ay -var_ay;
+
+              double var_az = ((((particle.pz - particula.pz)* (15/pi_sua_6) * ((3*masa * presion)/2) *
+                                 ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
+                               ((particula.vz - particle.vz) * (45/pi_sua_6) * (vis * masa))) / (particle.densidad * particula.densidad);
+              particle.az = particle.az + var_az;
+              particles[particula.id].az = particles[particula.id].az -var_az;
+
             }
           }
-        }*/
-        /*for (Particle & particula : particulas_ady) {
-          auto find = std::find(particulas_ady.begin(), particles.end(), particula);
-            calcularDensidad(particle, particula, suavizado);
-          }*/
-
+        }
       }
     }
-    return 0;
+    for (std::string bloque: malla.colisionesCx){
+      std::vector<Particle> particulas_0x = malla.blocks[bloque].particles;
+      for (Particle & particula : particulas_0x) {
+        particula.px = particula.px + particula.hvx*ptiempo;
+        double var_px;
+        if (malla.blocks[bloque].i == 0){
+          var_px = tparticula - (particula.px - bmin_x);
+        }
+        else{
+          var_px = tparticula - ( bmax_x - particula.px);
+        }
+        if (var_px > 1e-10){
+          if(malla.blocks[bloque].i == 0){
+            particula.ax = particula.ax + (colisiones*var_px - amortiguamiento*particula.vx);
+          }
+          else{
+            particula.ax = particula.ax - (colisiones*var_px + amortiguamiento*particula.vx);
+          }
+        }
+      }
+
+    }
+    for (std::string bloque: malla.colisionesCy){
+      std::vector<Particle> particulas_0y = malla.blocks[bloque].particles;
+      for (Particle & particula : particulas_0y) {
+        particula.py = particula.py + particula.hvy*ptiempo;
+        double var_py;
+        if (malla.blocks[bloque].j == 0){
+          var_py = tparticula - (particula.py - bmin_y);
+        }
+        else{
+          var_py = tparticula - ( bmax_y - particula.py);
+        }
+        if (var_py > 1e-10){
+          if(malla.blocks[bloque].j == 0){
+            particula.ay = particula.ay + (colisiones*var_py - amortiguamiento*particula.vy);
+          }
+          else{
+            particula.ay = particula.ay - (colisiones*var_py + amortiguamiento*particula.vy);
+          }
+        }
+      }
+
+    }
+    for (std::string bloque: malla.colisionesCz){
+      std::vector<Particle> particulas_0z = malla.blocks[bloque].particles;
+      for (Particle & particula : particulas_0z) {
+        particula.pz = particula.pz+ particula.hvz*ptiempo;
+        double var_pz;
+        if (malla.blocks[bloque].k == 0){
+          var_pz = tparticula - (particula.pz - bmin_z);
+        }
+        else{
+          var_pz = tparticula - ( bmax_z - particula.pz);
+        }
+        if (var_pz > 1e-10){
+          if(malla.blocks[bloque].k == 0){
+            particula.az = particula.az + (colisiones*var_pz - amortiguamiento*particula.vz);
+          }
+          else{
+            particula.az = particula.az - (colisiones*var_pz + amortiguamiento*particula.vz);
+          }
+        }
+      }
+
+    }
   }

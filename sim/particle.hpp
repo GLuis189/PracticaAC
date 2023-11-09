@@ -10,6 +10,7 @@ class Particle {
     double px, py, pz;   // Coordenadas de posición
     double hvx, hvy, hvz; // Coordenadas del vector hv
     double vx, vy, vz;   // Coordenadas de la velocidad
+    double ax, ay, az;
     int i, j, k;
     double densidad;
     static void calcularBloque(Particle& p, float bmin_x, float sx, float bmin_y, float sy, float bmin_z, float sz , int nx, int ny, int nz);

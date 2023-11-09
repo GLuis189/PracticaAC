@@ -26,7 +26,19 @@ grid::grid(int nx, int ny, int nz) {
       for (int c = 0; c < nz; ++c) {
         std::string block_key = std::to_string(a) + "_" + std::to_string(b) + "_" + std::to_string(c);
         Block newBlock;
+        newBlock.i = a;
+        newBlock.j = b;
+        newBlock.k = c;
         blocks[block_key] = newBlock;
+        if(a==0|| a==(nx-1)){
+          colisionesCx.push_back(block_key);
+        }
+        if(b==0|| b==(ny-1)){
+          colisionesCy.push_back(block_key);
+        }
+        if(c==0||c==(nz-1)){
+          colisionesCz.push_back(block_key);
+        }
         for (int i = -1; i < 2; i++){
           for (int j = -1; i < 2; i++){
             for (int k = -1; i < 2; i++){
@@ -41,3 +53,4 @@ grid::grid(int nx, int ny, int nz) {
     }
   }
 }
+
