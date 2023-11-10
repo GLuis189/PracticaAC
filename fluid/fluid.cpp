@@ -173,8 +173,8 @@ int main(int argc, char *argv[]) {
             double p_dif_z = particle.pz- particula.pz;
             double distancia = std::sqrt(p_dif_x* p_dif_x +p_dif_y * p_dif_y +p_dif_z* p_dif_z);
             double variacion_densidad = 0;
-            if(distancia*distancia< suavizado*suavizado) {
-              variacion_densidad = (suavizado*suavizado -distancia*distancia);
+            if((distancia*distancia) < (suavizado*suavizado)) {
+              variacion_densidad = (suavizado*suavizado - distancia*distancia);
               particle.densidad = particle.densidad + variacion_densidad*variacion_densidad*variacion_densidad;
               particles[particula.id].densidad = particles[particula.id].densidad + variacion_densidad*variacion_densidad*variacion_densidad;
             }
