@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
 
       for (std::string bloque : bloquesAdy) {
         std::vector<Particle> particulas_ady = malla.blocks[bloque].particles;
-        for (Particle & particula : particulas_ady) {
+        for (Particle& particula : particulas_ady) {
           if (particula > particle) {
             double p_dif_x = particle.px- particula.px;
             double p_dif_y = particle.py- particula.py;
@@ -292,6 +292,21 @@ int main(int argc, char *argv[]) {
           }
         }
       }
+    }
+    for (int part = 0; part < numparticulas; part++){
+      Particle & particle = particles[part];
+
+      particle.px = particle.px + particle.hvx * ptiempo + particle.ax * (ptiempo * ptiempo);
+      particle.py = particle.py + particle.hvy * ptiempo + particle.ay * (ptiempo * ptiempo);
+      particle.pz = particle.pz + particle.hvz * ptiempo + particle.az * (ptiempo * ptiempo);
+
+      particle.vx = particle.hvx + (particle.ax * ptiempo) / 2;
+      particle.vy = particle.hvy + (particle.ay * ptiempo) / 2;
+      particle.vz = particle.hvz + (particle.az * ptiempo) / 2;
+
+      particle.hvx = particle.hvx + particle.ax * ptiempo;
+      particle.hvy = particle.hvy + particle.ay * ptiempo;
+      particle.hvz = particle.hvz + particle.az * ptiempo;
 
     }
     for (std::string bloque: malla.colisionesCx) {
