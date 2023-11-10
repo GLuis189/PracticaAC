@@ -30,6 +30,7 @@ class Block {
     int i, j ,k;
     void addParticle(Particle& p);
     void removeParticle(Particle& p);
+    void printBlockAndAdyacentes();
     void printParticles();  // Nuevo método para imprimir las partículas
     std::vector<Particle> particles;
     std::vector<std::string> bloques_ady;

@@ -40,11 +40,13 @@ grid::grid(int nx, int ny, int nz) {
           colisionesCz.push_back(block_key);
         }
         for (int i = -1; i < 2; i++){
-          for (int j = -1; i < 2; i++){
-            for (int k = -1; i < 2; i++){
+          for (int j = -1; j < 2; j++){
+            for (int k = -1; k < 2; k++){
+              //std::cout<< "Añadir bloque \n";
               if (a+i>=0 && a+i<nx && b+j>=0 && b+j<ny && c+k>=0 && c+k<nz){
                 std::string block_key2 = std::to_string(a + i) + "_" + std::to_string(b + j) + "_" + std::to_string(c + k);
                 blocks[block_key].bloques_ady.push_back(block_key2);
+
               }
             }
           }

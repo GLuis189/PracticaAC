@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   const float ppm             = read_binary_value<float>(inputfile);
   const int numparticulas     = read_binary_value<int>(inputfile);
   const float radio           = 1.695;
-  const float densidad        = 1e3;
+  const double densidad        = 1e3;
   const float presion         = 3.0;
   const float colisiones      = 3e4;
   const float amortiguamiento = 128.0;
@@ -61,14 +61,14 @@ int main(int argc, char *argv[]) {
   const float bmin_y = -0.08;
   const float bmin_z = -0.065;
 
-  const float masa = densidad / ppm*ppm*ppm;
+  const float masa = densidad / (ppm*ppm*ppm);
 
   if (numparticulas <= 0) {
     std::cerr << "Error: Invalid number of particles: 0.\n";
     exit(-5);
   }
 
-  const float suavizado = radio / ppm;
+  const double suavizado = radio / ppm;
 
   int nx                = static_cast<int>((bmax_x - bmin_x) / suavizado);
   int ny                = static_cast<int>((bmax_y - bmin_y) / suavizado);
@@ -100,6 +100,7 @@ int main(int argc, char *argv[]) {
     particle.vy       = read_binary_value<float>(inputfile);
     particle.vz       = read_binary_value<float>(inputfile);
     particle.densidad = 0;
+    particle.ay = -9.8;
 
     Particle::calcularBloque(particle, bmin_x, sx, bmin_y, sy, bmin_z, sz, nx, ny, nz);
 
@@ -125,6 +126,15 @@ int main(int argc, char *argv[]) {
   std::cout << "Number of blocks: " << nx * ny * nz << "\n";
   std::cout << "Block size: " << sx << " x " << sy << " x " << sz << "\n";
 
+  /*for (int a = 0; a < nx; ++a) {
+    for (int b = 0; b < ny; ++b) {
+      for (int c = 0; c < nz; ++c) {
+        std::string block_key =
+            std::to_string(a) + "_" + std::to_string(b) + "_" + std::to_string(c);
+        malla.blocks[block_key].printBlockAndAdyacentes();
+      }
+    }
+  }*/
   // Inicio de simulación
 
   for (int time = 0; time < args.nts; time++) {
@@ -153,6 +163,7 @@ int main(int argc, char *argv[]) {
       std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
                                std::to_string(particle.k);
       std::vector<std::string> bloquesAdy = malla.blocks[block_key2].bloques_ady;
+
       for (std::string bloque : bloquesAdy) {
         std::vector<Particle> particulas_ady = malla.blocks[bloque].particles;
         for (Particle & particula : particulas_ady) {
@@ -171,7 +182,7 @@ int main(int argc, char *argv[]) {
         }
       }
       // Transformación de densidad
-      particle.densidad = (particle.densidad + pow(suavizado, 6) * 315 / (64 * M_PI * pow(suavizado, 9)) * masa);
+      particle.densidad = (particle.densidad + pow(suavizado, 6)) * 315 / (64 * M_PI * pow(suavizado, 9)) * masa;
 
       //Aceleraciones
 
@@ -283,6 +294,86 @@ int main(int argc, char *argv[]) {
       }
 
     }
+    for (std::string bloque: malla.colisionesCx) {
+      std::vector<Particle> particulas_0x = malla.blocks[bloque].particles;
+      for (Particle & particula : particulas_0x) {
+        double d_x;
+        if (malla.blocks[bloque].i == 0){
+          d_x = particula.px - bmin_x;
+        }
+        else{
+          d_x = bmax_x - particula.px;
+        }
+        if(d_x<0){
+          if (malla.blocks[bloque].i == 0){
+            particula.px = bmin_x - d_x;
+          }
+          else{
+            particula.px = bmax_x + d_x;
+          }
+          particula.vx = -particula.vx;
+          particula.hvx = -particula.hvx;
+        }
+      }
+    }
+
+    for (std::string bloque: malla.colisionesCy) {
+      std::vector<Particle> particulas_0y = malla.blocks[bloque].particles;
+      for (Particle & particula : particulas_0y) {
+        double d_y;
+        if (malla.blocks[bloque].j == 0){
+          d_y = particula.py - bmin_y;
+        }
+        else{
+          d_y = bmax_y - particula.py;
+        }
+        if(d_y<0){
+          if (malla.blocks[bloque].j == 0){
+            particula.py = bmin_y - d_y;
+          }
+          else{
+            particula.py = bmax_y + d_y;
+          }
+          particula.vy = -particula.vy;
+          particula.hvy = -particula.hvy;
+        }
+      }
+    }
+    for (std::string bloque: malla.colisionesCz) {
+      std::vector<Particle> particulas_0z = malla.blocks[bloque].particles;
+      for (Particle & particula : particulas_0z) {
+        double d_z;
+        if (malla.blocks[bloque].i == 0){
+          d_z = particula.pz - bmin_z;
+        }
+        else{
+          d_z = bmax_z - particula.pz;
+        }
+        if(d_z<0){
+          if (malla.blocks[bloque].i == 0){
+            particula.pz = bmin_z - d_z;
+          }
+          else{
+            particula.pz = bmax_z + d_z;
+          }
+          particula.vz = -particula.vz;
+          particula.hvz = -particula.hvz;
+        }
+      }
+    }
   }
+  // Mostrar los datos de las partículas
+  for (int i = 0; i < numparticulas; ++i) {
+        outputfile << "Partícula " << i + 1 << ":\n";
+        outputfile << "Desidad " << particles[i].densidad << ":\n";
+        outputfile << "Aceleracion " << particles[i].ax << ", " << particles[i].ay << ", " << particles[i].az<< ":\n";
+        outputfile << "hv " << particles[i].hvx << ", " << particles[i].hvy << ", " << particles[i].hvz << ":\n";
+        outputfile << "Velocidad " << particles[i].vx << ", " << particles[i].vx << ", " << particles[i].vz<< ":\n";
+        outputfile << "Posición: (" << particles[i].px << ", " << particles[i].py << ", " <<
+    particles[i].pz << ")\n"; outputfile << "Vector hv: (" << particles[i].hvx << ", " <<
+    particles[i].hvy << ", " << particles[i].hvz << ")\n"; outputfile << "Velocidad: (" <<
+    particles[i].vx << ", " << particles[i].vy << ", " << particles[i].vz << ")\n\n";
+    }
+    inputfile.close();
   return 0;
 }
