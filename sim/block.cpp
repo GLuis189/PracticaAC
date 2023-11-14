@@ -16,15 +16,15 @@ block::block(float bmax_x, float bmax_y, float bmax_z, float bmin_x, float bmin_
 #include <iostream>
 
 
-void Block::addParticle(Particle& p) {
+void Block::addParticle(int p) {
   particles.push_back(p);
 }
 
-void Block::removeParticle(Particle& p){
-  auto pos = std::find(particles.begin(), particles.end(), p);
-  particles.erase(pos);
+void Block::removeParticle(int p){
+  //auto pos = std::find(particles.begin(), particles.end(), p);
+  particles.erase(std::remove(particles.begin(), particles.end(), p), particles.end());
 }
-void Block::printParticles() {
+/*void Block::printParticles() {
   std::cout << "Particles in the block:" << std::endl;
   for (const auto& particle : particles) {
     std::cout << "Hay particulas " << std::endl;
@@ -46,7 +46,7 @@ void Block::printBlockAndAdyacentes() {
     std::cout << adyacente << std::endl;
   }
   std::cout << std::endl;
-}
+}*/
 
 
 

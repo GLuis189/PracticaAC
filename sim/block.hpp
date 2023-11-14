@@ -28,11 +28,11 @@ class block {
 class Block {
   public:
     int i, j ,k;
-    void addParticle(Particle& p);
-    void removeParticle(Particle& p);
+    void addParticle(int p);
+    void removeParticle(int  p);
     void printBlockAndAdyacentes();
-    void printParticles();  // Nuevo método para imprimir las partículas
-    std::vector<Particle> particles;
+    //void printParticles();  // Nuevo método para imprimir las partículas
+    std::vector<int> particles;
     std::vector<std::string> bloques_ady;
 };
 

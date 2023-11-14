@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
 
     std::string block_key = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
                             std::to_string(particle.k);
-    malla.blocks[block_key].addParticle(particle);
+    malla.blocks[block_key].addParticle(particle.id);
     particles.push_back(particle);
     ++contar_particulas;
   }
@@ -155,18 +155,19 @@ int main(int argc, char *argv[]) {
       if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
         std::string block_key = std::to_string(i_anterior) + "_" + std::to_string(j_anterior) +
                                 "_" + std::to_string(k_anterior);
-        malla.blocks[block_key].removeParticle(particle);
+        malla.blocks[block_key].removeParticle(particle.id);
         std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) +
                                  "_" + std::to_string(particle.k);
-        malla.blocks[block_key2].addParticle(particle);
+        malla.blocks[block_key2].addParticle(particle.id);
       }
       std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
                                std::to_string(particle.k);
       std::vector<std::string> bloquesAdy = malla.blocks[block_key2].bloques_ady;
 
       for (std::string bloque : bloquesAdy) {
-        std::vector<Particle> particulas_ady = malla.blocks[bloque].particles;
-        for (Particle& particula : particulas_ady) {
+        std::vector<int> particulas_ady = malla.blocks[bloque].particles;
+        for (int id: particulas_ady) {
+          Particle & particula = particles[id];
           if (particula > particle) {
             double p_dif_x = particle.px- particula.px;
             double p_dif_y = particle.py- particula.py;
@@ -174,15 +175,22 @@ int main(int argc, char *argv[]) {
             double distancia = std::sqrt(p_dif_x* p_dif_x +p_dif_y * p_dif_y +p_dif_z* p_dif_z);
             double variacion_densidad = 0;
             if((distancia*distancia) < (suavizado*suavizado)) {
-              variacion_densidad = (suavizado*suavizado - distancia*distancia);
-              particle.densidad = particle.densidad + variacion_densidad*variacion_densidad*variacion_densidad;
-              particles[particula.id].densidad = particles[particula.id].densidad + variacion_densidad*variacion_densidad*variacion_densidad;
+              variacion_densidad = (suavizado*suavizado - distancia*distancia)*(suavizado*suavizado - distancia*distancia)* (suavizado*suavizado - distancia*distancia);
+
+              //std::cout<<"Variacion de densidad "<<variacion_densidad;
+              particle.densidad = particle.densidad + variacion_densidad;
+              //std::cout <<"Densidad actual "<< particle.densidad;
+              particles[particula.id].densidad = particles[particula.id].densidad + variacion_densidad;
+              particula.densidad = particula.densidad + variacion_densidad;
             }
           }
         }
       }
       // Transformación de densidad
-      particle.densidad = (particle.densidad + pow(suavizado, 6)) * 315 / (64 * M_PI * pow(suavizado, 9)) * masa;
+      //std::cout<< "Densidad nueva "<<particle.densidad;
+      //std::cout<< "Suavizado "<<suavizado;
+      particle.densidad = (particle.densidad + pow(suavizado, 6)) * 315 * masa/ (64 * M_PI * pow(suavizado, 9));
+      //std::cout<< "Densidad nueva "<<particle.densidad;
 
       //Aceleraciones
 
@@ -193,21 +201,24 @@ int main(int argc, char *argv[]) {
                                std::to_string(particle.k);
       std::vector<std::string> bloquesAdy = malla.blocks[block_key2].bloques_ady;
       for (std::string bloque : bloquesAdy) {
-        std::vector<Particle> particulas_ady = malla.blocks[bloque].particles;
-        for (Particle & particula : particulas_ady) {
+        std::vector<int> particulas_ady = malla.blocks[bloque].particles;
+        for (int id: particulas_ady) {
+          Particle & particula = particles[id];
           if (particula > particle) {
             double p_dif_x = particle.px- particula.px;
             double p_dif_y = particle.py- particula.py;
             double p_dif_z = particle.pz- particula.pz;
             double modulo = std::sqrt(p_dif_x* p_dif_x +p_dif_y * p_dif_y +p_dif_z* p_dif_z);
             double distancia = modulo*modulo;
+
+
             if(distancia< suavizado*suavizado) {
               const double pi_sua_6 = M_PI*suavizado*suavizado*suavizado*suavizado*suavizado*suavizado;
               double dist_ij = std::sqrt(std::max(distancia, 1e-12));
 
               double var_ax = ((((particle.px - particula.px)* (15/pi_sua_6) * ((3*masa * presion)/2) *
                                ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
-                              ((particula.vx - particle.vx) * (45/pi_sua_6) * (vis * masa))) / (particle.densidad * particula.densidad);
+                              ((particula.vx - particle.vx) * (45/pi_sua_6) * (vis * masa)))/(particle.densidad * particula.densidad) ;
               particle.ax = particle.ax + var_ax;
               particles[particula.id].ax = particles[particula.id].ax -var_ax;
 
@@ -229,8 +240,9 @@ int main(int argc, char *argv[]) {
       }
     }
     for (std::string bloque: malla.colisionesCx){
-      std::vector<Particle> particulas_0x = malla.blocks[bloque].particles;
-      for (Particle & particula : particulas_0x) {
+      std::vector<int> particulas_0x = malla.blocks[bloque].particles;
+      for (int id : particulas_0x) {
+        Particle & particula = particles[id];
         particula.px = particula.px + particula.hvx*ptiempo;
         double var_px;
         if (malla.blocks[bloque].i == 0){
@@ -251,8 +263,9 @@ int main(int argc, char *argv[]) {
 
     }
     for (std::string bloque: malla.colisionesCy){
-      std::vector<Particle> particulas_0y = malla.blocks[bloque].particles;
-      for (Particle & particula : particulas_0y) {
+      std::vector<int> particulas_0y = malla.blocks[bloque].particles;
+      for (int id : particulas_0y) {
+        Particle & particula = particles[id];
         particula.py = particula.py + particula.hvy*ptiempo;
         double var_py;
         if (malla.blocks[bloque].j == 0){
@@ -273,8 +286,9 @@ int main(int argc, char *argv[]) {
 
     }
     for (std::string bloque: malla.colisionesCz){
-      std::vector<Particle> particulas_0z = malla.blocks[bloque].particles;
-      for (Particle & particula : particulas_0z) {
+      std::vector<int> particulas_0z = malla.blocks[bloque].particles;
+      for (int id : particulas_0z) {
+        Particle & particula = particles[id];
         particula.pz = particula.pz+ particula.hvz*ptiempo;
         double var_pz;
         if (malla.blocks[bloque].k == 0){
@@ -310,8 +324,9 @@ int main(int argc, char *argv[]) {
 
     }
     for (std::string bloque: malla.colisionesCx) {
-      std::vector<Particle> particulas_0x = malla.blocks[bloque].particles;
-      for (Particle & particula : particulas_0x) {
+      std::vector<int> particulas_0x = malla.blocks[bloque].particles;
+      for (int id : particulas_0x) {
+        Particle & particula = particles[id];
         double d_x;
         if (malla.blocks[bloque].i == 0){
           d_x = particula.px - bmin_x;
@@ -333,8 +348,9 @@ int main(int argc, char *argv[]) {
     }
 
     for (std::string bloque: malla.colisionesCy) {
-      std::vector<Particle> particulas_0y = malla.blocks[bloque].particles;
-      for (Particle & particula : particulas_0y) {
+      std::vector<int> particulas_0y = malla.blocks[bloque].particles;
+      for (int id : particulas_0y) {
+        Particle & particula = particles[id];
         double d_y;
         if (malla.blocks[bloque].j == 0){
           d_y = particula.py - bmin_y;
@@ -355,8 +371,9 @@ int main(int argc, char *argv[]) {
       }
     }
     for (std::string bloque: malla.colisionesCz) {
-      std::vector<Particle> particulas_0z = malla.blocks[bloque].particles;
-      for (Particle & particula : particulas_0z) {
+      std::vector<int> particulas_0z = malla.blocks[bloque].particles;
+      for (int id : particulas_0z) {
+        Particle & particula = particles[id];
         double d_z;
         if (malla.blocks[bloque].i == 0){
           d_z = particula.pz - bmin_z;
@@ -379,12 +396,12 @@ int main(int argc, char *argv[]) {
   }
   // Mostrar los datos de las partículas
   for (int i = 0; i < numparticulas; ++i) {
-        outputfile << "Partícula " << i + 1 << ":\n";
-        outputfile << "Desidad " << particles[i].densidad << ":\n";
-        outputfile << "Aceleracion " << particles[i].ax << ", " << particles[i].ay << ", " << particles[i].az<< ":\n";
-        outputfile << "hv " << particles[i].hvx << ", " << particles[i].hvy << ", " << particles[i].hvz << ":\n";
-        outputfile << "Velocidad " << particles[i].vx << ", " << particles[i].vx << ", " << particles[i].vz<< ":\n";
-        outputfile << "Posición: (" << particles[i].px << ", " << particles[i].py << ", " <<
+    outputfile << "Partícula " << i + 1 << ":\n";
+    outputfile << "Desidad " << particles[i].densidad << ":\n";
+    outputfile << "Aceleracion " << particles[i].ax << ", " << particles[i].ay << ", " << particles[i].az<< ":\n";
+    outputfile << "hv " << particles[i].hvx << ", " << particles[i].hvy << ", " << particles[i].hvz << ":\n";
+    outputfile << "Velocidad " << particles[i].vx << ", " << particles[i].vx << ", " << particles[i].vz<< ":\n";
+    outputfile << "Posición: (" << particles[i].px << ", " << particles[i].py << ", " <<
     particles[i].pz << ")\n"; outputfile << "Vector hv: (" << particles[i].hvx << ", " <<
     particles[i].hvy << ", " << particles[i].hvz << ")\n"; outputfile << "Velocidad: (" <<
     particles[i].vx << ", " << particles[i].vy << ", " << particles[i].vz << ")\n\n";
