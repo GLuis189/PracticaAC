@@ -38,30 +38,30 @@ int main(int argc, char *argv[]) {
   std::ifstream inputfile(args.inputfile, std::ios::binary);
   std::ofstream outputfile(args.outputfile, std::ios::binary);
 
-  const float ppm             = read_binary_value<float>(inputfile);
+  const double ppm             = read_binary_value<float>(inputfile);
   const int numparticulas     = read_binary_value<int>(inputfile);
-  const float radio           = 1.695;
+  const double radio           = 1.695;
   const double densidad        = 1e3;
-  const float presion         = 3.0;
-  const float colisiones      = 3e4;
-  const float amortiguamiento = 128.0;
-  const float vis             = 0.4;  // Asume un valor para μ_p
-  const float tparticula      = 2e-4;
-  const float ptiempo         = 1e-3;  // Asume un valor para Δt
+  const double presion         = 3.0;
+  const double colisiones      = 3e4;
+  const double amortiguamiento = 128.0;
+  const double vis             = 0.4;  // Asume un valor para μ_p
+  const double tparticula      = 2e-4;
+  const double ptiempo         = 1e-3;  // Asume un valor para Δt
 
-  const float g_x = 0.0;
-  const float g_y = -9.8;
-  const float g_z = 0.0;
+  const double g_x = 0.0;
+  const double g_y = -9.8;
+  const double g_z = 0.0;
 
-  const float bmax_x = 0.065;
-  const float bmax_y = 0.1;
-  const float bmax_z = 0.065;
+  const double bmax_x = 0.065;
+  const double bmax_y = 0.1;
+  const double bmax_z = 0.065;
 
-  const float bmin_x = -0.065;
-  const float bmin_y = -0.08;
-  const float bmin_z = -0.065;
+  const double bmin_x = -0.065;
+  const double bmin_y = -0.08;
+  const double bmin_z = -0.065;
 
-  const float masa = densidad / (ppm*ppm*ppm);
+  const double masa = densidad / (ppm*ppm*ppm);
 
   if (numparticulas <= 0) {
     std::cerr << "Error: Invalid number of particles: 0.\n";
@@ -75,9 +75,9 @@ int main(int argc, char *argv[]) {
   int nz                = static_cast<int>((bmax_z - bmin_z) / suavizado);
   grid malla(nx, ny, nz);
 
-  float sx = (bmax_x - bmin_x) / nx;
-  float sy = (bmax_y - bmin_y) / ny;
-  float sz = (bmax_z - bmin_z) / nz;
+  double sx = (bmax_x - bmin_x) / nx;
+  double sy = (bmax_y - bmin_y) / ny;
+  double sz = (bmax_z - bmin_z) / nz;
 
   // Lectura de la información de cada partícula
   std::vector<Particle> particles;
@@ -141,9 +141,9 @@ int main(int argc, char *argv[]) {
     for (int part = 0; part < numparticulas; part++) {
       Particle & particle = particles[part];
       particle.densidad = 0;
-      particle.ax = 0;
-      particle.ay = -9.8;
-      particle.az = 0;
+      particle.ax = g_x;
+      particle.ay = g_y;
+      particle.az = g_z;
     }
     for (int part = 0; part < numparticulas; part++) {
       Particle & particle = particles[part];
@@ -182,6 +182,9 @@ int main(int argc, char *argv[]) {
             double distancia = std::sqrt(p_dif_x* p_dif_x +p_dif_y * p_dif_y +p_dif_z* p_dif_z);
             double variacion_densidad = 0;
             if((distancia*distancia) < (suavizado*suavizado)) {
+              if(time==3){
+                std::cout<<"Entro "<<particle.id;
+              }
               variacion_densidad = (suavizado*suavizado - distancia*distancia)*(suavizado*suavizado - distancia*distancia)* (suavizado*suavizado - distancia*distancia);
 
               //std::cout<<"Variacion de densidad "<<variacion_densidad;
@@ -367,10 +370,14 @@ int main(int argc, char *argv[]) {
         }
         else{
           d_y = bmax_y - particula.py;
+
         }
         if(d_y<0){
+          //std::cout<<"Entra "<<particula.id <<"Bloque: "<<particula.i<<particula.j<<particula.k<<"\n";
+
           if (malla.blocks[bloque].j == 0){
             particula.py = bmin_y - d_y;
+            //std::cout<<"Entra "<<particula.id <<"Bloque: "<<particula.i<<particula.j<<particula.k<<"\n";
           }
           else{
             particula.py = bmax_y + d_y;
