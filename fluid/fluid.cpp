@@ -180,7 +180,7 @@ int main(int argc, char *argv[]) {
               //std::cout<<"Variacion de densidad "<<variacion_densidad;
               particle.densidad = particle.densidad + variacion_densidad;
               //std::cout <<"Densidad actual "<< particle.densidad;
-              particles[particula.id].densidad = particles[particula.id].densidad + variacion_densidad;
+              //particles[particula.id].densidad = particles[particula.id].densidad + variacion_densidad;
               particula.densidad = particula.densidad + variacion_densidad;
             }
           }
@@ -220,19 +220,22 @@ int main(int argc, char *argv[]) {
                                ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
                               ((particula.vx - particle.vx) * (45/pi_sua_6) * (vis * masa)))/(particle.densidad * particula.densidad) ;
               particle.ax = particle.ax + var_ax;
-              particles[particula.id].ax = particles[particula.id].ax -var_ax;
+              //particles[particula.id].ax = particles[particula.id].ax -var_ax;
+              particula.ax = particula.ax -var_ax;
 
               double var_ay = ((((particle.py - particula.py)* (15/pi_sua_6) * ((3*masa * presion)/2) *
                                  ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
                                ((particula.vy - particle.vy) * (45/pi_sua_6) * (vis * masa))) / (particle.densidad * particula.densidad);
               particle.ay = particle.ay + var_ay;
-              particles[particula.id].ay = particles[particula.id].ay -var_ay;
+              //particles[particula.id].ay = particles[particula.id].ay -var_ay;
+              particula.ay = particula.ay -var_ay;
 
               double var_az = ((((particle.pz - particula.pz)* (15/pi_sua_6) * ((3*masa * presion)/2) *
                                  ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
                                ((particula.vz - particle.vz) * (45/pi_sua_6) * (vis * masa))) / (particle.densidad * particula.densidad);
               particle.az = particle.az + var_az;
-              particles[particula.id].az = particles[particula.id].az -var_az;
+              //particles[particula.id].az = particles[particula.id].az -var_az;
+              particula.az = particula.az -var_az;
 
             }
           }
@@ -243,13 +246,13 @@ int main(int argc, char *argv[]) {
       std::vector<int> particulas_0x = malla.blocks[bloque].particles;
       for (int id : particulas_0x) {
         Particle & particula = particles[id];
-        particula.px = particula.px + particula.hvx*ptiempo;
+        double x = particula.px + particula.hvx*ptiempo;
         double var_px;
         if (malla.blocks[bloque].i == 0){
-          var_px = tparticula - (particula.px - bmin_x);
+          var_px = tparticula - (x - bmin_x);
         }
         else{
-          var_px = tparticula - ( bmax_x - particula.px);
+          var_px = tparticula - ( bmax_x - x);
         }
         if (var_px > 1e-10){
           if(malla.blocks[bloque].i == 0){
@@ -266,13 +269,13 @@ int main(int argc, char *argv[]) {
       std::vector<int> particulas_0y = malla.blocks[bloque].particles;
       for (int id : particulas_0y) {
         Particle & particula = particles[id];
-        particula.py = particula.py + particula.hvy*ptiempo;
+        double y = particula.py + particula.hvy*ptiempo;
         double var_py;
         if (malla.blocks[bloque].j == 0){
-          var_py = tparticula - (particula.py - bmin_y);
+          var_py = tparticula - (y- bmin_y);
         }
         else{
-          var_py = tparticula - ( bmax_y - particula.py);
+          var_py = tparticula - ( bmax_y - y);
         }
         if (var_py > 1e-10){
           if(malla.blocks[bloque].j == 0){
@@ -289,13 +292,13 @@ int main(int argc, char *argv[]) {
       std::vector<int> particulas_0z = malla.blocks[bloque].particles;
       for (int id : particulas_0z) {
         Particle & particula = particles[id];
-        particula.pz = particula.pz+ particula.hvz*ptiempo;
+        double z = particula.pz+ particula.hvz*ptiempo;
         double var_pz;
         if (malla.blocks[bloque].k == 0){
-          var_pz = tparticula - (particula.pz - bmin_z);
+          var_pz = tparticula - (z - bmin_z);
         }
         else{
-          var_pz = tparticula - ( bmax_z - particula.pz);
+          var_pz = tparticula - ( bmax_z - z);
         }
         if (var_pz > 1e-10){
           if(malla.blocks[bloque].k == 0){
@@ -375,14 +378,14 @@ int main(int argc, char *argv[]) {
       for (int id : particulas_0z) {
         Particle & particula = particles[id];
         double d_z;
-        if (malla.blocks[bloque].i == 0){
+        if (malla.blocks[bloque].k == 0){
           d_z = particula.pz - bmin_z;
         }
         else{
           d_z = bmax_z - particula.pz;
         }
         if(d_z<0){
-          if (malla.blocks[bloque].i == 0){
+          if (malla.blocks[bloque].k == 0){
             particula.pz = bmin_z - d_z;
           }
           else{
@@ -396,15 +399,13 @@ int main(int argc, char *argv[]) {
   }
   // Mostrar los datos de las partículas
   for (int i = 0; i < numparticulas; ++i) {
-    outputfile << "Partícula " << i + 1 << ":\n";
+    outputfile << "Partícula " << i << ":\n";
     outputfile << "Desidad " << particles[i].densidad << ":\n";
     outputfile << "Aceleracion " << particles[i].ax << ", " << particles[i].ay << ", " << particles[i].az<< ":\n";
     outputfile << "hv " << particles[i].hvx << ", " << particles[i].hvy << ", " << particles[i].hvz << ":\n";
-    outputfile << "Velocidad " << particles[i].vx << ", " << particles[i].vx << ", " << particles[i].vz<< ":\n";
+    outputfile << "Velocidad " << particles[i].vx << ", " << particles[i].vy << ", " << particles[i].vz<< ":\n";
     outputfile << "Posición: (" << particles[i].px << ", " << particles[i].py << ", " <<
-    particles[i].pz << ")\n"; outputfile << "Vector hv: (" << particles[i].hvx << ", " <<
-    particles[i].hvy << ", " << particles[i].hvz << ")\n"; outputfile << "Velocidad: (" <<
-    particles[i].vx << ", " << particles[i].vy << ", " << particles[i].vz << ")\n\n";
+    particles[i].pz << ")\n\n";
     }
     inputfile.close();
   return 0;
