@@ -140,6 +140,13 @@ int main(int argc, char *argv[]) {
   for (int time = 0; time < args.nts; time++) {
     for (int part = 0; part < numparticulas; part++) {
       Particle & particle = particles[part];
+      particle.densidad = 0;
+      particle.ax = 0;
+      particle.ay = -9.8;
+      particle.az = 0;
+    }
+    for (int part = 0; part < numparticulas; part++) {
+      Particle & particle = particles[part];
 
       int i_anterior = particle.i;
       int j_anterior = particle.j;
