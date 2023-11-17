@@ -38,7 +38,7 @@ bool read_binary_values(std::ifstream& inputfile, Args&... args) {
 
 
 int main(int argc, char *argv[]) {
-  ProgArgs args(argc, argv);
+  ProgArgs const args(argc, argv);
 
   std::ifstream inputfile(args.inputfile, std::ios::binary);
   std::ofstream outputfile(args.outputfile, std::ios::binary);
@@ -107,8 +107,8 @@ int main(int argc, char *argv[]) {
     particle.densidad = 0;
     particle.ay = -9.8;
     Particle::calcularBloque(particle, bmin_x, sx, bmin_y, sy, bmin_z, sz, nx, ny, nz);
-    std::string block_key = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
-                            std::to_string(particle.k);
+    std::string block_key = std::to_string(particle.i) + "_" + std::to_string(particle.j) +
+                            "_" + std::to_string(particle.k);
     malla.blocks[block_key].addParticle(particle.id);
     particles.push_back(particle);
     ++contar_particulas;
@@ -186,8 +186,7 @@ int main(int argc, char *argv[]) {
         if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
           std::string block_key = std::to_string(i_anterior) + "_" + std::to_string(j_anterior) +
                                   "_" + std::to_string(k_anterior);
-          malla.blocks[std::to_string(i_anterior) + "_" + std::to_string(j_anterior) +
-                       "_" + std::to_string(k_anterior)].removeParticle(particle.id);
+          malla.blocks[block_key].removeParticle(particle.id);
           std::string block_key2 = std::to_string(particle.i) + "_" + std::to_string(particle.j) +
                                    "_" + std::to_string(particle.k);
           malla.blocks[block_key2].addParticle(particle.id);
@@ -211,8 +210,9 @@ int main(int argc, char *argv[]) {
             double p_dif_z = particle.pz- particula.pz;
             double distancia = std::sqrt(p_dif_x* p_dif_x +p_dif_y * p_dif_y +p_dif_z* p_dif_z);
             double variacion_densidad = 0;
-            if((distancia*distancia) < (suavizado_2)) {
-              variacion_densidad = (suavizado_2 - distancia*distancia)*(suavizado_2 - distancia*distancia)* (suavizado_2 - distancia*distancia);
+            double distancia_2 = distancia*distancia;
+            if((distancia_2) < (suavizado_2)) {
+              variacion_densidad = (suavizado_2 - distancia_2)*(suavizado_2 - distancia_2)* (suavizado_2 - distancia_2);
 
               particle.densidad = particle.densidad + variacion_densidad;
               particula.densidad = particula.densidad + variacion_densidad;
@@ -423,12 +423,12 @@ int main(int argc, char *argv[]) {
   }
   // Mostrar los datos de las partículas
   for (Particle & particle: particles) {
-    outputfile << "ID: " << particle.id << std::endl;
-    outputfile << "Posición (x, y, z): " << particle.px << ", " << particle.py << ", " << particle.pz << std::endl;
-    outputfile << "Velocidad (vx, vy, vz): " << particle.vx << ", " << particle.vy << ", " << particle.vz << std::endl;
-    outputfile << "Hvx, Hvy, Hvz: " << particle.hvx << ", " << particle.hvy << ", " << particle.hvz << std::endl;
-    outputfile << "Densidad: " << particle.densidad << std::endl;
-    outputfile << "Aceleración (accx, accy, accz): " << particle.ax << ", " << particle.ay << ", " << particle.az << std::endl;
+    outputfile << "ID: " << particle.id << "\n";
+    outputfile << "Posición (x, y, z): " << particle.px << ", " << particle.py << ", " << particle.pz << "\n";
+    outputfile << "Velocidad (vx, vy, vz): " << particle.vx << ", " << particle.vy << ", " << particle.vz << "\n";
+    outputfile << "Hvx, Hvy, Hvz: " << particle.hvx << ", " << particle.hvy << ", " << particle.hvz << "\n";
+    outputfile << "Densidad: " << particle.densidad << "\n";
+    outputfile << "Aceleración (accx, accy, accz): " << particle.ax << ", " << particle.ay << ", " << particle.az << "\n";
   }
   inputfile.close();
   return 0;
