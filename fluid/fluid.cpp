@@ -254,15 +254,13 @@ int main(int argc, char *argv[]) {
                                ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
                               ((particula.vx - particle.vx) * (45/pi_sua_6) * (vis * masa)))/(particle.densidad * particula.densidad) ;
               particle.ax = particle.ax + var_ax;
-              //particles[particula.id].ax = particles[particula.id].ax -var_ax;
-              particula.ax = particula.ax -var_ax;
+              particula.ax = particula.ax - var_ax;
 
               double var_ay = ((((particle.py - particula.py)* (15/pi_sua_6) * ((3*masa * presion)/2) *
                                  ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
                                ((particula.vy - particle.vy) * (45/pi_sua_6) * (vis * masa))) / (particle.densidad * particula.densidad);
               particle.ay = particle.ay + var_ay;
-              //particles[particula.id].ay = particles[particula.id].ay -var_ay;
-              particula.ay = particula.ay -var_ay;
+              particula.ay = particula.ay - var_ay;
 
               double var_az = ((((particle.pz - particula.pz)* (15/pi_sua_6) * ((3*masa * presion)/2) *
                                  ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
@@ -281,7 +279,7 @@ int main(int argc, char *argv[]) {
         Particle & particula = particles[id];
         double x = particula.px + particula.hvx*ptiempo;
         double var_px;
-        if (malla.blocks[bloque].i == 0){
+          if (malla.blocks[bloque].i == 0){
           var_px = tparticula - (x - bmin_x);
         }
         else{

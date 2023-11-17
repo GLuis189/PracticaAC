@@ -7,7 +7,7 @@
 #include <cmath>
 #include <vector>
 
-void Particle::calcularBloque(Particle& particle, float bmin_x, float sx, float bmin_y, float sy, float bmin_z, float sz, int nx, int ny, int nz){
+void Particle::calcularBloque(Particle& particle, double bmin_x, double sx, double bmin_y, double sy, double bmin_z, double sz, int nx, int ny, int nz){
     particle.i = static_cast<int>((particle.px-bmin_x)/sx);
     if (particle.i>nx -1){
       particle.i = nx -1;
