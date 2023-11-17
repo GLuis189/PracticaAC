@@ -39,6 +39,7 @@ grid::grid(int nx, int ny, int nz) {
         if(c==0||c==(nz-1)){
           colisionesCz.push_back(block_key);
         }
+
         for (int i = -1; i < 2; i++){
           for (int j = -1; j < 2; j++){
             for (int k = -1; k < 2; k++){
