@@ -31,6 +31,11 @@ typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, 
   return value;
 }
 
+template <typename... Args>
+bool read_binary_values(std::ifstream& inputfile, Args&... args) {
+  return (inputfile.read(as_writable_buffer(args), sizeof(args)) && ...);
+}
+
 
 int main(int argc, char *argv[]) {
   ProgArgs args(argc, argv);
@@ -86,8 +91,30 @@ int main(int argc, char *argv[]) {
   std::vector<Particle> particles;
   particles.reserve(numparticulas);
   int contar_particulas = 0;
+  float px, py, pz, hvx, hvy, hvz, vx, vy, vz;
+  while (read_binary_values(inputfile, px, py, pz, hvx, hvy, hvz, vx, vy, vz)){
+    Particle  particle;
+    particle.id = contar_particulas;
+    particle.px = px;
+    particle.py = py;
+    particle.pz = pz;
+    particle.hvx = hvx;
+    particle.hvy = hvy;
+    particle.hvz = hvz;
+    particle.vx = vx;
+    particle.vy = vy;
+    particle.vz = vz;
+    particle.densidad = 0;
+    particle.ay = -9.8;
+    Particle::calcularBloque(particle, bmin_x, sx, bmin_y, sy, bmin_z, sz, nx, ny, nz);
+    std::string block_key = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
+                            std::to_string(particle.k);
+    malla.blocks[block_key].addParticle(particle.id);
+    particles.push_back(particle);
+    ++contar_particulas;
+  }
 
-  while (!inputfile.eof()) {
+  /*while (!inputfile.eof()) {
     Particle  particle;
     particle.px = read_binary_value<float>(inputfile);
     if (inputfile.eof()) {  // Verificar si se alcanzó el final del archivo después de la lectura
@@ -112,7 +139,7 @@ int main(int argc, char *argv[]) {
     malla.blocks[block_key].addParticle(particle.id);
     particles.push_back(particle);
     ++contar_particulas;
-  }
+  }*/
 
   if (numparticulas != contar_particulas) {
     std::cerr << "Error: Number of particles mismatch. Header:" << numparticulas
