@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
   // Inicio de simulación
 
   for (int time = 0; time < args.nts; time++) {
-    /*for (int part = 0; part < numparticulas; part++) {
+    for (int part = 0; part < numparticulas; part++) {
       Particle & particle = particles[part];
       particle.densidad = 0;
       particle.ax = g_x;
@@ -182,7 +182,7 @@ int main(int argc, char *argv[]) {
                                  "_" + std::to_string(particle.k);
         malla.blocks[block_key2].addParticle(particle.id);
       }
-    }*/
+    }
     for (int part = 0; part < numparticulas; part++) {
       Particle & particle = particles[part];
       /*if(particle.id==1120){
@@ -359,7 +359,7 @@ int main(int argc, char *argv[]) {
       particle.hvz = particle.hvz + particle.az * ptiempo;
 
     }
-    for (int part = 0; part < numparticulas; part++){
+    /*for (int part = 0; part < numparticulas; part++){
       Particle & particula = particles[part];
       double d_x = 1;
       if(particula.i == 0){
@@ -463,8 +463,8 @@ int main(int argc, char *argv[]) {
                                  "_" + std::to_string(particula.k);
         malla.blocks[block_key2].addParticle(particula.id);
       }
-    }
-    /*for (std::string bloque: malla.colisionesCx) {
+    }*/
+    for (std::string bloque: malla.colisionesCx) {
       std::vector<int> particulas_0x = malla.blocks[bloque].particles;
       for (int id : particulas_0x) {
         Particle & particula = particles[id];
@@ -537,7 +537,7 @@ int main(int argc, char *argv[]) {
           particula.hvz = -particula.hvz;
         }
       }
-    }*/
+    }
     /*Particle particle = particles[1120];
     std::cout<<"--------------------------------------------\n";
     std::cout<<"Después del bucle. Densidad" << particle.densidad;
@@ -547,14 +547,14 @@ int main(int argc, char *argv[]) {
     std::cout<<"--------------------------------------------\n";*/
   }
   // Mostrar los datos de las partículas
-  /*for (Particle & particle: particles) {
+  for (Particle & particle: particles) {
     outputfile << "ID: " << particle.id << std::endl;
     outputfile << "Posición (x, y, z): " << particle.px << ", " << particle.py << ", " << particle.pz << std::endl;
     outputfile << "Velocidad (vx, vy, vz): " << particle.vx << ", " << particle.vy << ", " << particle.vz << std::endl;
     outputfile << "Hvx, Hvy, Hvz: " << particle.hvx << ", " << particle.hvy << ", " << particle.hvz << std::endl;
     outputfile << "Densidad: " << particle.densidad << std::endl;
     outputfile << "Aceleración (accx, accy, accz): " << particle.ax << ", " << particle.ay << ", " << particle.az << std::endl;
-  }*/
+  }
   inputfile.close();
   return 0;
 }
