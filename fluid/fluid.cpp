@@ -315,7 +315,7 @@ int main(int argc, char *argv[]) {
             particula.ay = particula.ay + (colisiones*var_py- amortiguamiento*particula.vy);
           }
           else{
-            particula.ay = particula.ay - (colisiones*var_py + amortiguamiento*particula.vy);
+            particula.ay = particula.ay - (colisiones*var_py  + amortiguamiento*particula.vy);
           }
         }
       }
