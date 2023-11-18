@@ -91,109 +91,7 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
   }
 }
 
-void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & malla, std::vector<Particle>& particles){
-  for (int time = 0; time < args.nts; time++) {
-    if(time>0) {
-     reposicionar(malla, particles);
-    }
-    malla.calcularDensidades(particles, numparticulas, masa, suavizado, suavizado_2);
-
-    malla.calcularAceleraciones(particles, numparticulas, pi_sua_6, masa, suavizado);
-
-    malla.ColisionesEjeX_1(particles);
-    malla.ColisionesEjeY_1(particles);
-    malla.ColisionesEjeZ_1(particles);
-
-    for (int part = 0; part < numparticulas; part++){
-      Particle & particle = particles[part];
-
-      particle.px = particle.px + particle.hvx * ptiempo + particle.ax * (ptiempo * ptiempo);
-      particle.py = particle.py + particle.hvy * ptiempo + particle.ay * (ptiempo * ptiempo);
-      particle.pz = particle.pz + particle.hvz * ptiempo + particle.az * (ptiempo * ptiempo);
-
-      particle.vx = particle.hvx + (particle.ax * ptiempo) / 2;
-      particle.vy = particle.hvy + (particle.ay * ptiempo) / 2;
-      particle.vz = particle.hvz + (particle.az * ptiempo) / 2;
-
-      particle.hvx = particle.hvx + particle.ax * ptiempo;
-      particle.hvy = particle.hvy + particle.ay * ptiempo;
-      particle.hvz = particle.hvz + particle.az * ptiempo;
-
-    }
-
-    for (std::string& bloque: malla.colisionesCx) {
-      std::vector<int>& particulas_0x = malla.blocks[bloque].particles;
-      for (int id : particulas_0x) {
-        Particle & particula = particles[id];
-        double d_x;
-        if (malla.blocks[bloque].i == 0){
-          d_x = particula.px - bmin_x;
-        }
-        else{
-          d_x = bmax_x - particula.px;
-        }
-        if(d_x<0){
-          if (malla.blocks[bloque].i == 0){
-            particula.px = bmin_x - d_x;
-          }
-          else{
-            particula.px = bmax_x + d_x;
-          }
-          particula.vx = -particula.vx;
-          particula.hvx = -particula.hvx;
-        }
-      }
-    }
-
-    for (std::string& bloque: malla.colisionesCy) {
-      std::vector<int>& particulas_0y = malla.blocks[bloque].particles;
-      for (int id : particulas_0y) {
-        Particle & particula = particles[id];
-        double d_y;
-        if (malla.blocks[bloque].j == 0){
-          d_y = particula.py - bmin_y;
-        }
-        else{
-          d_y = bmax_y - particula.py;
-
-        }
-        if(d_y<0){
-          if (malla.blocks[bloque].j == 0){
-            particula.py = bmin_y - d_y;
-          }
-          else{
-            particula.py = bmax_y + d_y;
-          }
-          particula.vy = -particula.vy;
-          particula.hvy = -particula.hvy;
-        }
-      }
-    }
-    for (std::string& bloque: malla.colisionesCz) {
-      std::vector<int>& particulas_0z = malla.blocks[bloque].particles;
-      for (int id : particulas_0z) {
-        Particle & particula = particles[id];
-        double d_z;
-        if (malla.blocks[bloque].k == 0){
-          d_z = particula.pz - bmin_z;
-        }
-        else{
-          d_z = bmax_z - particula.pz;
-        }
-        if(d_z<0){
-          if (malla.blocks[bloque].k == 0){
-            particula.pz = bmin_z - d_z;
-          }
-          else{
-            particula.pz = bmax_z + d_z;
-          }
-          particula.vz = -particula.vz;
-          particula.hvz = -particula.hvz;
-        }
-      }
-    }
-  }
-  // Mostrar los datos de las partículas
+void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
   for (Particle & particle: particles) {
     outputfile << "ID: " << particle.id << "\n";
     outputfile << "Posición (x, y, z): " << particle.px << ", " << particle.py << ", " << particle.pz << "\n";
@@ -204,6 +102,31 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
   }
   outputfile.close();
 }
+
+void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & malla, std::vector<Particle>& particles){
+  for (int time = 0; time < args.nts; time++) {
+    if(time>0) {
+     reposicionar(malla, particles);
+    }
+    malla.calcularDensidades(particles, numparticulas, masa, suavizado, suavizado_2);
+    malla.calcularAceleraciones(particles, numparticulas, pi_sua_6, masa, suavizado);
+    malla.ColisionesEjeX_1(particles);
+    malla.ColisionesEjeY_1(particles);
+    malla.ColisionesEjeZ_1(particles);
+    for (int part = 0; part < numparticulas; part++){
+      Particle & particle = particles[part];
+      particle.MoverParticulas();
+    }
+
+    malla.ColisionesEjeX_2(particles);
+    malla.ColisionesEjeY_2(particles);
+    malla.ColisionesEjeZ_2(particles);
+  }
+
+  // Mostrar los datos de las partículas
+  mostrarResultados(particles, outputfile);
+}
+
 
 void mostrarDatos(){
   // Mostrar los datos

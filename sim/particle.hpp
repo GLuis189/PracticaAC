@@ -27,6 +27,12 @@ class Particle {
     void ColisionesEjeX_1();
     void ColisionesEjeY_1();
     void ColisionesEjeZ_1();
+
+    void MoverParticulas();
+
+    void ColisionesEjeX_2();
+    void ColisionesEjeY_2();
+    void ColisionesEjeZ_2();
     bool operator==(const Particle& other) const;
     bool operator<(const Particle& other) const;
     bool operator>(const Particle& other) const;

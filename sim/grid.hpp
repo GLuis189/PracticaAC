@@ -42,6 +42,9 @@ class grid {
     void ColisionesEjeX_1(std::vector<Particle> & particles);
     void ColisionesEjeY_1(std::vector<Particle> & particles);
     void ColisionesEjeZ_1(std::vector<Particle> & particles);
+    void ColisionesEjeX_2(std::vector<Particle> & particles);
+    void ColisionesEjeY_2(std::vector<Particle> & particles);
+    void ColisionesEjeZ_2(std::vector<Particle> & particles);
 
     //void printBlocks();
 

@@ -154,24 +154,77 @@ void Particle::ColisionesEjeZ_1(){
       }
     }
 }
-/*void Particle::calcularDensidad(Particle& p_i, std::vector<Particle>& particles, int numparticulas, float suavizado) {
-    for (int pos = p_i.id +1; pos<numparticulas; pos++) {
-      if (p_i.i == particles[pos].i - 1 || p_i.i == particles[pos].i || p_i.i == particles[pos].i+1) {
-        if (p_i.j == particles[pos].j - 1 || p_i.j == particles[pos].j || p_i.j == particles[pos].j+1) {
-          if (p_i.k == particles[pos].j - 1 || p_i.k == particles[pos].k || p_i.k == particles[pos].k+1) {
-            double p_dif = p_i.densidad - particles[pos].densidad;
-            double variacion_densidad = 0;
-            if (pow(p_dif,2) < pow(suavizado,2)){
-              variacion_densidad = (pow(suavizado,2)-pow(p_dif,2));
-            }
-            p_i.densidad = p_i.densidad + pow(variacion_densidad,3);
-            particles[pos].densidad = particles[pos].densidad + pow(variacion_densidad,3);
-          }
-        }
-      }
-    }
-}*/
+void Particle::MoverParticulas(){
+    px = px + hvx * ptiempo + ax * (ptiempo * ptiempo);
+    py = py + hvy * ptiempo + ay * (ptiempo * ptiempo);
+    pz = pz + hvz * ptiempo + az * (ptiempo * ptiempo);
 
+    vx = hvx + (ax * ptiempo) / 2;
+    vy = hvy + (ay * ptiempo) / 2;
+    vz = hvz + (az * ptiempo) / 2;
+
+    hvx = hvx + ax * ptiempo;
+    hvy = hvy + ay * ptiempo;
+    hvz = hvz + az * ptiempo;
+}
+
+void Particle::ColisionesEjeX_2() {
+    double d_x;
+    if (i == 0){
+      d_x = px - bmin_x;
+    }
+    else{
+      d_x = bmax_x - px;
+    }
+    if(d_x<0){
+      if (i == 0){
+        px = bmin_x - d_x;
+      }
+      else{
+        px = bmax_x + d_x;
+      }
+      vx = -vx;
+      hvx = -hvx;
+    }
+}
+void Particle::ColisionesEjeY_2() {
+    double d_y;
+    if (j == 0){
+      d_y = py - bmin_y;
+    }
+    else{
+      d_y = bmax_y - py;
+    }
+    if(d_y<0){
+      if (j == 0){
+        py = bmin_y - d_y;
+      }
+      else{
+        py = bmax_y + d_y;
+      }
+      vy = -vy;
+      hvy = -hvy;
+    }
+}
+void Particle::ColisionesEjeZ_2() {
+    double d_z;
+    if (k == 0){
+      d_z = pz - bmin_z;
+    }
+    else{
+      d_z = bmax_z - pz;
+    }
+    if(d_z<0){
+      if (k == 0){
+        pz = bmin_z - d_z;
+      }
+      else{
+        pz = bmax_z + d_z;
+      }
+      vz = -vz;
+      hvz= -hvz;
+    }
+}
 bool Particle::operator==(const Particle& other) const {
     return id == other.id;
 }
