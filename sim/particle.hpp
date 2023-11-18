@@ -20,12 +20,14 @@ class Particle {
     //void calcularDensidad(Particle& p_i, std::vector<Particle>& particles, int numparticulas, float suavizado);
     void Inicializar();
     void VariacionDensidad(Particle & particula, double suavizado_2);
-    double CalcularDistancia(Particle & particula);
-    double VariacionAcelaracionX(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa);
+    double CalcularDistancia(Particle & particula) const;
+    void VariacionAcelaracionX(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa);
     void VariacionAcelaracionY(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa);
     void VariacionAcelaracionZ(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa);
-    void ColisionesEjeX_1();
-    void ColisionesEjeY_1();
+    void ColisionesEjeX0_1();
+    void ColisionesEjeXnx_1();
+    void ColisionesEjeY0_1();
+    void ColisionesEjeYnx_1();
     void ColisionesEjeZ_1();
 
     void MoverParticulas();

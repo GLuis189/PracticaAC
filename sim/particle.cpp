@@ -65,7 +65,7 @@ void Particle::VariacionDensidad(Particle & particula, double suavizado_2){
     }
 }
 
-double Particle::CalcularDistancia(Particle & particula) {
+double Particle::CalcularDistancia(Particle & particula) const {
     double const p_dif_x   = px - particula.px;
     double const p_dif_y   = py - particula.py;
     double const p_dif_z   = pz - particula.pz;
@@ -74,14 +74,16 @@ double Particle::CalcularDistancia(Particle & particula) {
     return distancia;
 }
 
-double Particle::VariacionAcelaracionX(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa){
+void Particle::VariacionAcelaracionX(Particle& particula, double suavizado, double pi_sua_6,
+                                     double dist_ij, double masa){
     double const var_ax =
         ((((px - particula.px) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
            ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
-          (densidad + particula.densidad - 2 * densidad)) +
+          (densidad + particula.densidad - 2 * 1e3)) +
          ((particula.vx - vx) * (45 / pi_sua_6) * (vis * masa))) /
         (densidad * particula.densidad);
-    return var_ax;
+    ax  = ax + var_ax;
+    particula.ax = particula.ax - var_ax;
 }
 
 void Particle::VariacionAcelaracionY(Particle & particula, double suavizado, double pi_sua_6,
@@ -89,7 +91,7 @@ void Particle::VariacionAcelaracionY(Particle & particula, double suavizado, dou
     double const var_ay =
         ((((py - particula.py) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
            ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
-          (densidad + particula.densidad - 2 * densidad)) +
+          (densidad + particula.densidad - 2 * 1e3)) +
          ((particula.vy - vy) * (45 / pi_sua_6) * (vis * masa))) /
         (densidad * particula.densidad);
     ay  = ay + var_ay;
@@ -101,45 +103,49 @@ void Particle::VariacionAcelaracionZ(Particle & particula, double suavizado, dou
     double const var_az =
         ((((pz - particula.pz) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
            ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
-          (densidad + particula.densidad - 2 * densidad)) +
+          (densidad + particula.densidad - 2 * 1e3)) +
          ((particula.vz - vz) * (45 / pi_sua_6) * (vis * masa))) /
         (densidad * particula.densidad);
     az  = az + var_az;
     particula.az = particula.az - var_az;
 }
 
-void Particle::ColisionesEjeX_1(){
+void Particle::ColisionesEjeX0_1(){
     double x = px + hvx * ptiempo;
     double var_px;
-    if (i == 0) {
-      var_px = tparticula - (x - bmin_x);
-    } else {
-      var_px = tparticula - (bmax_x - x);
-    }
+    var_px = tparticula - (x - bmin_x);
     if (var_px > 1e-10) {
-      if (i == 0) {
-        ax = ax + (colisiones * var_px - amortiguamiento * vx);
-      } else {
-        ax = ax - (colisiones * var_px + amortiguamiento * vx);
-      }
+      ax = ax + (colisiones * var_px - amortiguamiento * vx);
     }
 }
-void Particle::ColisionesEjeY_1(){
+
+void Particle::ColisionesEjeXnx_1(){
+    double x = px + hvx * ptiempo;
+    double var_px;
+    var_px = tparticula - (bmax_x - x);
+    if (var_px > 1e-10) {
+      ax = ax - (colisiones * var_px + amortiguamiento * vx);
+    }
+}
+
+void Particle::ColisionesEjeY0_1(){
     double y = py + hvy * ptiempo;
     double var_py;
-    if (j == 0) {
-      var_py = tparticula - (y - bmin_y);
-    } else {
-      var_py = tparticula - (bmax_y - y);
-    }
+    var_py= tparticula - (y - bmin_y);
     if (var_py > 1e-10) {
-      if (j == 0) {
-        ay = ay + (colisiones * var_py - amortiguamiento * vy);
-      } else {
-        ay = ay - (colisiones * var_py + amortiguamiento * vy);
-      }
+      ay = ay + (colisiones * var_py - amortiguamiento * vy);
     }
 }
+
+void Particle::ColisionesEjeYnx_1(){
+    double y = py + hvy * ptiempo;
+    double var_py;
+    var_py = tparticula - (bmax_y - y);
+    if (var_py > 1e-10) {
+      ay = ay - (colisiones * var_py + amortiguamiento * vy);
+    }
+}
+
 void Particle::ColisionesEjeZ_1(){
     double z = pz + hvz * ptiempo;
     double var_pz;
