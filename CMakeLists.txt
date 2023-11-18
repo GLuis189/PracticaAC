@@ -28,6 +28,10 @@ FetchContent_MakeAvailable(GSL)
 
 # All includes relative to source tree root.
 include_directories (PUBLIC .)
+# Run clang−tidy on the whole source tree
+# Note this will slow down compilation.
+# You may temporarily disable but do not forget to enable again.
+#set(CMAKE_CXX_CLANG_TIDY clang−tidy −header−filter=.∗)
 # Process cmake from sim and fluid directories
 add_subdirectory(sim)
 add_subdirectory(fluid)

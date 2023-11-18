@@ -2,7 +2,7 @@
 // Created by luis on 30/10/23.
 //
 // test_grid.cpp
-#include "../gtest/gtest.h"
+#include "gtest/gtest.h"
 #include "../sim/grid.hpp"
 
 TEST(GridTest, BlockCreation) {
