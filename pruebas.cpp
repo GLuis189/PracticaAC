@@ -18,7 +18,7 @@ bool compararPorId(const Particle& a, const Particle& b) {
 }
 
 int main() {
-  std::string nombreArchivo = "boundint-base-1.trz";
+  std::string nombreArchivo = "large-1.fld";
   std::ifstream archivo(nombreArchivo, std::ios::binary);
 
   if (!archivo.is_open()) {
