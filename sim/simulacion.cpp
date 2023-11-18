@@ -91,6 +91,40 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
   }
 }
 
+void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& outputfile){
+  outputfile.write(as_buffer(ppm), sizeof(ppm));
+  outputfile.write(as_buffer(numparticulas), sizeof(numparticulas));
+  for (const auto& particula : particulas) {
+    // Convertir los valores de doble precisión a precisión simple antes de escribirlos
+    float px = static_cast<float>(particula.px);
+    float py = static_cast<float>(particula.py);
+    float pz = static_cast<float>(particula.pz);
+
+    float hvx = static_cast<float>(particula.hvx);
+    float hvy = static_cast<float>(particula.hvy);
+    float hvz = static_cast<float>(particula.hvz);
+
+    float vx = static_cast<float>(particula.vx);
+    float vy = static_cast<float>(particula.vy);
+    float vz = static_cast<float>(particula.vz);
+
+    // Escribir los valores en el archivo
+    outputfile.write(as_buffer(px), sizeof(px));
+    outputfile.write(as_buffer(py), sizeof(py));
+    outputfile.write(as_buffer(pz), sizeof(pz));
+
+    outputfile.write(as_buffer(hvx), sizeof(hvx));
+    outputfile.write(as_buffer(hvy), sizeof(hvy));
+    outputfile.write(as_buffer(hvz), sizeof(hvz));
+
+    outputfile.write(as_buffer(vx), sizeof(vx));
+    outputfile.write(as_buffer(vy), sizeof(vy));
+    outputfile.write(as_buffer(vz), sizeof(vz));
+  }
+
+  outputfile.close();
+}
+
 void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
   for (Particle  const& particle: particles) {
     outputfile << "ID: " << particle.id << "\n";
@@ -124,7 +158,7 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
   }
 
   // Mostrar los datos de las partículas
-  mostrarResultados(particles, outputfile);
+  ResultadosBinarios(particles, outputfile);
 }
 
 
