@@ -135,7 +135,7 @@ void grid::ColisionesEjeZ_1(std::vector<Particle> & particles) {
 
 void grid::ColisionesEjeX_2(std::vector<Particle> & particles) {
   for (std::string const& bloque: colisionesCx) {
-    std::vector<int>  const& particulas_0x = blocks[bloque].particles;
+    std::vector<int> const& particulas_0x = blocks[bloque].particles;
     for (int const id_p : particulas_0x) {
       Particle & particula = particles[id_p];
       particula.ColisionesEjeX_2();
@@ -144,7 +144,7 @@ void grid::ColisionesEjeX_2(std::vector<Particle> & particles) {
 }
 void grid::ColisionesEjeY_2(std::vector<Particle> & particles) {
   for (std::string const& bloque: colisionesCy) {
-    std::vector<int>  const& particulas_0y = blocks[bloque].particles;
+    std::vector<int> const& particulas_0y = blocks[bloque].particles;
     for (int const id_p : particulas_0y) {
       Particle & particula = particles[id_p];
       particula.ColisionesEjeY_2();
@@ -153,7 +153,7 @@ void grid::ColisionesEjeY_2(std::vector<Particle> & particles) {
 }
 void grid::ColisionesEjeZ_2(std::vector<Particle> & particles) {
   for (std::string const& bloque: colisionesCz) {
-    std::vector<int>  const& particulas_0z = blocks[bloque].particles;
+    std::vector<int> const& particulas_0z = blocks[bloque].particles;
     for (int const id_p : particulas_0z) {
       Particle & particula = particles[id_p];
       particula.ColisionesEjeZ_2();
