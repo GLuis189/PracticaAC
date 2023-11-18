@@ -73,3 +73,29 @@ int main() {
 
   return 0;
 }
+/*while (!inputfile.eof()) {
+  Particle  particle;
+  particle.px = read_binary_value<float>(inputfile);
+  if (inputfile.eof()) {  // Verificar si se alcanzó el final del archivo después de la lectura
+    break;                // Si se alcanza el final del archivo, salir del bucle
+  }
+  particle.id       = contar_particulas;
+  particle.py       = read_binary_value<float>(inputfile);
+  particle.pz       = read_binary_value<float>(inputfile);
+  particle.hvx      = read_binary_value<float>(inputfile);
+  particle.hvy      = read_binary_value<float>(inputfile);
+  particle.hvz      = read_binary_value<float>(inputfile);
+  particle.vx       = read_binary_value<float>(inputfile);
+  particle.vy       = read_binary_value<float>(inputfile);
+  particle.vz       = read_binary_value<float>(inputfile);
+  particle.densidad = 0;
+  particle.ay = -9.8;
+
+Particle::calcularBloque(particle, bmin_x, sx, bmin_y, sy, bmin_z, sz, nx, ny, nz);
+
+std::string block_key = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
+                        std::to_string(particle.k);
+malla.blocks[block_key].addParticle(particle.id);
+particles.push_back(particle);
+++contar_particulas;
+}*/
