@@ -1,62 +1,89 @@
-#include "../sim/block.hpp"
 #include "../sim/grid.hpp"
 #include "../sim/particle.hpp"
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
+#include "../sim/progargs.hpp"
+#include "../sim/variablesglobales.hpp"
+#include "../sim/simulacion.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cmath>
 
-template <typename T>
-typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, char*>
-    as_writable_buffer(T& value) {
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-  return reinterpret_cast<char*>(&value);
+double ppm;
+int numparticulas;
+double masa;
+double suavizado;
+double pi_sua_6;
+double suavizado_2;
+int nx ;
+int ny ;
+int nz ;
+double sx;
+double sy;
+double sz;
+
+grid CalcularVariables(std::ifstream& inputfile) {
+  ppm           = read_binary_value<float>(inputfile);
+  numparticulas = read_binary_value<int>(inputfile);
+
+  if (numparticulas <= 0) {
+    std::cerr << "Error: Invalid number of particles: 0.\n";
+    exit(-5);
+  }
+
+  masa      = densidad / (ppm * ppm * ppm);
+  suavizado = radio / ppm;
+  pi_sua_6 = M_PI * suavizado * suavizado * suavizado * suavizado * suavizado * suavizado;
+  suavizado_2 = suavizado * suavizado;
+
+  nx    = static_cast<int>((bmax_x - bmin_x) / suavizado);
+  ny    = static_cast<int>((bmax_y - bmin_y) / suavizado);
+  nz    = static_cast<int>((bmax_z - bmin_z) / suavizado);
+  sx = (bmax_x - bmin_x) / nx;
+  sy = (bmax_y - bmin_y) / ny;
+  sz = (bmax_z - bmin_z) / nz;
+  grid malla(nx, ny, nz);
+  return malla;
 }
 
-template <typename T>
-typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, const char*>
-    as_buffer(const T& value) {
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-  return reinterpret_cast<const char*>(&value);
+std::vector<Particle> leerparticulas(std::ifstream& inputfile, grid & malla) {
+  std::vector<Particle> particles;
+  particles.reserve(numparticulas);
+  int contar_particulas = 0;
+  float px, py, pz, hvx, hvy, hvz, vx, vy, vz;
+  while (read_binary_values(inputfile, px, py, pz, hvx, hvy, hvz, vx, vy, vz)) {
+    Particle particle;
+    particle.id = contar_particulas, particle.densidad = 0;
+    particle.px = px, particle.py = py, particle.pz = pz;
+    particle.hvx = px, particle.hvy = py, particle.hvz = pz;
+    particle.vx = vx, particle.vy = vy, particle.vz = vz;
+    particle.ay = -9.8, particle.ax = 0, particle.az =0;
+    Particle::calcularBloque(particle, bmin_x, sx, bmin_y, sy, bmin_z, sz, nx, ny, nz);
+    std::string block_key = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
+                            std::to_string(particle.k);
+    malla.blocks[block_key].addParticle(particle.id);
+    particles.push_back(particle);
+    ++contar_particulas;
+  }
+  inputfile.close();
+  if (numparticulas != contar_particulas) {
+    std::cerr << "Error: Number of particles mismatch. Header:" << numparticulas
+              << " Found:" << contar_particulas << "\n";
+    exit(-5);
+  }
+ return particles;
 }
 
-template <typename T>
-typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, T>
-    read_binary_value(std::istream& is) {
-  T value{};
-  is.read(as_writable_buffer(value), sizeof(value));
-  return value;
-}
 
-template <typename... Args>
-bool read_binary_values(std::ifstream& inputfile, Args&... args) {
-  return (inputfile.read(as_writable_buffer(args), sizeof(args)) && ...);
-}
-
-
-int main(int argc, char *argv[]) {
-  ProgArgs const args(argc, argv);
-
-  std::ifstream inputfile(args.inputfile, std::ios::binary);
-  std::ofstream outputfile(args.outputfile, std::ios::binary);
-
-  grid malla = CalcularVariables(inputfile);
-
-  std::vector<Particle> particles = leerparticulas(inputfile, malla);
-
-  mostrardatos();
-  // Inicio de simulación
-
+void IniciarSimulacion(ProgArgs args, std::ofstream& outputfile, grid & malla, std::vector<Particle>& particles){
   for (int time = 0; time < args.nts; time++) {
     if(time>0) {
       for (int part = 0; part < numparticulas; part++) {
         Particle & particle = particles[part];
         particle.densidad   = 0;
-        particle.ax         = g_x;
-        particle.ay         = g_y;
-        particle.az         = g_z;
+        particle.ax         = 0;
+        particle.ay         = -9.8;
+        particle.az         = 0;
 
         int i_anterior = particle.i;
         int j_anterior = particle.j;
@@ -134,8 +161,8 @@ int main(int argc, char *argv[]) {
               double dist_ij = std::sqrt(std::max(distancia, 1e-12));
 
               double var_ax = ((((particle.px - particula.px)* (15/pi_sua_6) * ((3*masa * presion)/2) *
-                               ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
-                              ((particula.vx - particle.vx) * (45/pi_sua_6) * (vis * masa)))/(particle.densidad * particula.densidad) ;
+                                 ((suavizado - dist_ij)*(suavizado - dist_ij))/dist_ij) * (particle.densidad + particula.densidad - 2*densidad)) +
+                               ((particula.vx - particle.vx) * (45/pi_sua_6) * (vis * masa)))/(particle.densidad * particula.densidad) ;
               particle.ax = particle.ax + var_ax;
               particula.ax = particula.ax - var_ax;
 
@@ -161,7 +188,7 @@ int main(int argc, char *argv[]) {
         Particle & particula = particles[id];
         double x = particula.px + particula.hvx*ptiempo;
         double var_px;
-          if (malla.blocks[bloque].i == 0){
+        if (malla.blocks[bloque].i == 0){
           var_px = tparticula - (x - bmin_x);
         }
         else{
@@ -321,6 +348,16 @@ int main(int argc, char *argv[]) {
     outputfile << "Densidad: " << particle.densidad << "\n";
     outputfile << "Aceleración (accx, accy, accz): " << particle.ax << ", " << particle.ay << ", " << particle.az << "\n";
   }
-  inputfile.close();
-  return 0;
+  outputfile.close();
+}
+
+void mostrardatos(){
+  // Mostrar los datos
+  std::cout << "Number of particles: " << numparticulas << "\n";
+  std::cout << "Particles per meter: " << ppm << "\n";
+  std::cout << "Smoothing length: " << suavizado << "\n";
+  std::cout << "Particle mass: " << masa << "\n";
+  std::cout << "Grid size: " << nx << " x " << ny << " x " << nz << "\n";
+  std::cout << "Number of blocks: " << nx * ny * nz << "\n";
+  std::cout << "Block size: " << sx << " x " << sy << " x " << sz << "\n";
 }
