@@ -55,12 +55,11 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
     Particle particle;
     particle.id = contar_particulas, particle.densidad = 0;
     particle.px = px, particle.py = py, particle.pz = pz;
-    particle.hvx = px, particle.hvy = py, particle.hvz = pz;
+    particle.hvx = hvx, particle.hvy = hvy, particle.hvz = hvz;
     particle.vx = vx, particle.vy = vy, particle.vz = vz;
-    particle.ay = -9.8, particle.ax = 0, particle.az =0;
-    Particle::calcularBloque(particle, bmin_x, sx, bmin_y, sy, bmin_z, sz, nx, ny, nz);
-    std::string block_key = std::to_string(particle.i) + "_" + std::to_string(particle.j) + "_" +
-                            std::to_string(particle.k);
+    particle.ay = -9.8, particle.ax = 0, particle.az = 0;
+    particle.calcularBloqueInicial(sx, sy, sz, nx, ny, nz);
+    std::string const block_key = malla.generarClaveBloque(particle.i, particle.j, particle.k);
     malla.blocks[block_key].addParticle(particle.id);
     particles.push_back(particle);
     ++contar_particulas;

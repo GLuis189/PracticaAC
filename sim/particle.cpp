@@ -74,6 +74,86 @@ double Particle::CalcularDistancia(Particle & particula) {
     return distancia;
 }
 
+double Particle::VariacionAcelaracionX(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa){
+    double const var_ax =
+        ((((px - particula.px) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
+           ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
+          (densidad + particula.densidad - 2 * densidad)) +
+         ((particula.vx - vx) * (45 / pi_sua_6) * (vis * masa))) /
+        (densidad * particula.densidad);
+    return var_ax;
+}
+
+void Particle::VariacionAcelaracionY(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa ){
+    double const var_ay =
+        ((((py - particula.py) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
+           ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
+          (densidad + particula.densidad - 2 * densidad)) +
+         ((particula.vy - vy) * (45 / pi_sua_6) * (vis * masa))) /
+        (densidad * particula.densidad);
+    ay  = ay + var_ay;
+    particula.ay = particula.ay - var_ay;
+}
+
+void Particle::VariacionAcelaracionZ(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa ){
+    double const var_az =
+        ((((pz - particula.pz) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
+           ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
+          (densidad + particula.densidad - 2 * densidad)) +
+         ((particula.vz - vz) * (45 / pi_sua_6) * (vis * masa))) /
+        (densidad * particula.densidad);
+    az  = az + var_az;
+    particula.az = particula.az - var_az;
+}
+
+void Particle::ColisionesEjeX_1(){
+    double x = px + hvx * ptiempo;
+    double var_px;
+    if (i == 0) {
+      var_px = tparticula - (x - bmin_x);
+    } else {
+      var_px = tparticula - (bmax_x - x);
+    }
+    if (var_px > 1e-10) {
+      if (i == 0) {
+        ax = ax + (colisiones * var_px - amortiguamiento * vx);
+      } else {
+        ax = ax - (colisiones * var_px + amortiguamiento * vx);
+      }
+    }
+}
+void Particle::ColisionesEjeY_1(){
+    double y = py + hvy * ptiempo;
+    double var_py;
+    if (j == 0) {
+      var_py = tparticula - (y - bmin_y);
+    } else {
+      var_py = tparticula - (bmax_y - y);
+    }
+    if (var_py > 1e-10) {
+      if (j == 0) {
+        ay = ay + (colisiones * var_py - amortiguamiento * vy);
+      } else {
+        ay = ay - (colisiones * var_py + amortiguamiento * vy);
+      }
+    }
+}
+void Particle::ColisionesEjeZ_1(){
+    double z = pz + hvz * ptiempo;
+    double var_pz;
+    if (k == 0) {
+      var_pz = tparticula - (z - bmin_z);
+    } else {
+      var_pz = tparticula - (bmax_z - z);
+    }
+    if (var_pz > 1e-10) {
+      if (k == 0) {
+        az = az + (colisiones * var_pz - amortiguamiento * vz);
+      } else {
+        az = az - (colisiones * var_pz + amortiguamiento * vz);
+      }
+    }
+}
 /*void Particle::calcularDensidad(Particle& p_i, std::vector<Particle>& particles, int numparticulas, float suavizado) {
     for (int pos = p_i.id +1; pos<numparticulas; pos++) {
       if (p_i.i == particles[pos].i - 1 || p_i.i == particles[pos].i || p_i.i == particles[pos].i+1) {
