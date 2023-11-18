@@ -84,7 +84,8 @@ double Particle::VariacionAcelaracionX(Particle & particula, double suavizado, d
     return var_ax;
 }
 
-void Particle::VariacionAcelaracionY(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa ){
+void Particle::VariacionAcelaracionY(Particle & particula, double suavizado, double pi_sua_6,
+                                     double dist_ij, double masa ){
     double const var_ay =
         ((((py - particula.py) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
            ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
@@ -95,7 +96,8 @@ void Particle::VariacionAcelaracionY(Particle & particula, double suavizado, dou
     particula.ay = particula.ay - var_ay;
 }
 
-void Particle::VariacionAcelaracionZ(Particle & particula, double suavizado, double pi_sua_6, double dist_ij, double masa ){
+void Particle::VariacionAcelaracionZ(Particle & particula, double suavizado, double pi_sua_6,
+                                     double dist_ij, double masa ){
     double const var_az =
         ((((pz - particula.pz) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
            ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *

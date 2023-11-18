@@ -92,7 +92,7 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
 }
 
 void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
-  for (Particle & particle: particles) {
+  for (Particle  const& particle: particles) {
     outputfile << "ID: " << particle.id << "\n";
     outputfile << "Posición (x, y, z): " << particle.px << ", " << particle.py << ", " << particle.pz << "\n";
     outputfile << "Velocidad (vx, vy, vz): " << particle.vx << ", " << particle.vy << ", " << particle.vz << "\n";
