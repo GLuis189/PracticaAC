@@ -18,11 +18,11 @@ int main(int argc, char *argv[]) {
   std::ifstream inputfile(args.inputfile, std::ios::binary);
   std::ofstream outputfile(args.outputfile, std::ios::binary);
 
-  grid malla = CalcularVariables(inputfile);
+  grid malla = calcularMalla(inputfile);
 
-  std::vector<Particle> particles = leerparticulas(inputfile, malla);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
 
-  mostrardatos();
+  mostrarDatos();
   // Inicio de simulación
   IniciarSimulacion(args, outputfile, malla, particles);
 
