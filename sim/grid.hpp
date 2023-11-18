@@ -22,6 +22,8 @@ class grid {
 #define MESH_HPP
 
 #include "block.hpp"
+
+#include <string>
 #include <unordered_map>
 
 class grid {
