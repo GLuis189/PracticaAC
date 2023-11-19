@@ -121,6 +121,7 @@ void Particle::ColisionesEjeXnx_1(){
     double x = px + hvx * ptiempo;
     const double var_px = tparticula - (bmax_x - x);
     if (var_px > 1e-10) {
+
       ax = ax - (colisiones * var_px + amortiguamiento * vx);
     }
 }
@@ -129,6 +130,7 @@ void Particle::ColisionesEjeY0_1(){
     double y = py + hvy * ptiempo;
     const double var_py = tparticula - (y - bmin_y);
     if (var_py > 1e-10) {
+      //std::cout << "Py: "<<py << " hvy: "<< hvy<<"vy:"<<vy<<"\n";
       ay = ay + (colisiones * var_py - amortiguamiento * vy);
     }
 }
@@ -145,7 +147,8 @@ void Particle::ColisionesEjeZ0_1(){
     double z = pz + hvz * ptiempo;
     const double var_pz = tparticula - (z - bmin_z);
     if (var_pz > 1e-10) {
-        az = az + (colisiones * var_pz - amortiguamiento * vz);
+      //std::cout << "Pz: "<<pz << " hvz: "<< hvz<<"vz:"<<vz<<"\n";
+      az = az + (colisiones * var_pz - amortiguamiento * vz);
     }
 }
 void Particle::ColisionesEjeZnz_1(){
