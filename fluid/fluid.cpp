@@ -1,13 +1,9 @@
 #include "../sim/block.hpp"
 #include "../sim/grid.hpp"
-#include "../sim/particle.hpp"
 #include "../sim/progargs.hpp"
 #include "../sim/variablesglobales.hpp"
 #include "../sim/simulacion.hpp"
 
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <vector>

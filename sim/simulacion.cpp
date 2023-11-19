@@ -149,7 +149,8 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
     malla.ColisionesEjeZ_1(particles);
     for (int part = 0; part < numparticulas; part++){
       Particle & particle = particles[part];
-      particle.MoverParticulas();
+
+      particle.MoverParticulas(nx, ny, nz);
     }
 
     malla.ColisionesEjeX_2(particles);
@@ -158,7 +159,8 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
   }
 
   // Mostrar los datos de las partículas
-  ResultadosBinarios(particles, outputfile);
+  //ResultadosBinarios(particles, outputfile);
+  mostrarResultados(particles, outputfile);
 }
 
 

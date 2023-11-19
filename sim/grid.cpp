@@ -83,7 +83,7 @@ void grid::calcularAceleraciones(std::vector<Particle> & particles, int numparti
       for (int const id_p : particulas_ady) {
         Particle & particula = particles[id_p];
         if (particula > particle) {
-            double distancia = particle.CalcularDistancia(particula);
+            double const distancia = particle.CalcularDistancia(particula);
             if (distancia < suavizado * suavizado) {
 
               double const dist_ij = std::sqrt(std::max(distancia, 1e-12));
@@ -121,7 +121,7 @@ void grid::ColisionesEjeY_1(std::vector<Particle> & particles) {
         particula.ColisionesEjeY0_1();
       }
       else{
-        particula.ColisionesEjeYnx_1();
+        particula.ColisionesEjeYny_1();
       }
     }
   }
@@ -132,7 +132,12 @@ void grid::ColisionesEjeZ_1(std::vector<Particle> & particles) {
     std::vector<int> const& particulas_0z = blocks[bloque].particles;
     for (int const id_p : particulas_0z) {
       Particle & particula = particles[id_p];
-      particula.ColisionesEjeZ_1();
+      if (particula.k == 0){
+        particula.ColisionesEjeZ0_1();
+      }
+      else {
+        particula.ColisionesEjeZnz_1();
+      }
     }
   }
 }
