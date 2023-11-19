@@ -162,7 +162,7 @@ void Particle::ColisionesEjeZnz_1(){
         az = az - (colisiones * var_pz + amortiguamiento * vz);
     }
 }
-void Particle::MoverParticulas(int nx, int ny, int nz){
+void Particle::MoverParticulas(/*int nx, int ny, int nz*/){
     /*if (i == 0){
       ColisionesEjeX0_1();
     }

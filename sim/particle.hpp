@@ -32,7 +32,7 @@ class Particle {
     void ColisionesEjeZ0_1();
     void ColisionesEjeZnz_1();
 
-    void MoverParticulas(int nx, int ny, int nz);
+    void MoverParticulas(/*int nx, int ny, int nz*/);
 
     void ColisionesEjeX_2();
     void ColisionesEjeY_2();

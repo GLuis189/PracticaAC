@@ -1,5 +1,5 @@
 #include "../sim/grid.hpp"
-#include "../sim/particle.hpp"
+// #include "../sim/particle.hpp"
 #include "../sim/progargs.hpp"
 #include "../sim/variablesglobales.hpp"
 #include "../sim/simulacion.hpp"
@@ -150,7 +150,7 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
     for (int part = 0; part < numparticulas; part++){
       Particle & particle = particles[part];
 
-      particle.MoverParticulas(nx, ny, nz);
+      particle.MoverParticulas(/*nx, ny, nz*/);
     }
 
     malla.ColisionesEjeX_2(particles);
