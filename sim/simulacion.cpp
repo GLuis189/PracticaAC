@@ -67,7 +67,7 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
   inputfile.close();
   if (numparticulas != contar_particulas) {
     std::cerr << "Error: Number of particles mismatch. Header:" << numparticulas
-              << " Found:" << contar_particulas << "\n";
+              << ", Found:" << contar_particulas << ".\n";
     exit(-5);
   }
  return particles;
