@@ -112,6 +112,7 @@ void Particle::ColisionesEjeX0_1(){
     double x = px + hvx * ptiempo;
     const double var_px = tparticula - (x - bmin_x);
     if (var_px > 1e-10) {
+      //std::cout << "Px: "<<px << " hvx: "<< hvx<<"vx:"<<vx <<"\n";
       ax = ax + (colisiones * var_px - amortiguamiento * vx);
     }
 }

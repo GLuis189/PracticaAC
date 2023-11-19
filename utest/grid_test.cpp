@@ -4,6 +4,7 @@
 // test_grid.cpp
 #include "gtest/gtest.h"
 #include "../sim/grid.hpp"
+#include "../sim/variablesglobales.hpp"
 
 TEST(GridTest, BlockCreation) {
   int nx = 3;
