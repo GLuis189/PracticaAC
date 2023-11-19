@@ -4,10 +4,8 @@
 
 #include "particle.hpp"
 #include "variablesglobales.hpp"
-#include <iostream>
 #include <cmath>
-#include <string>
-#include <vector>
+
 
 void Particle::calcularBloqueInicial(double sx, double sy, double sz, int nx, int ny, int nz){
     i = static_cast<int>((px-bmin_x)/sx);
