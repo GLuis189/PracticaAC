@@ -93,7 +93,8 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
 }
 
 void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& outputfile){
-  outputfile.write(as_buffer(ppm), sizeof(ppm));
+  float ppm2 = static_cast<float>(ppm);
+  outputfile.write(as_buffer(ppm2), sizeof(ppm2));
   outputfile.write(as_buffer(numparticulas), sizeof(numparticulas));
   for (const auto& particula : particulas) {
     // Convertir los valores de doble precisión a precisión simple antes de escribirlos
@@ -160,8 +161,8 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
   }
 
   // Mostrar los datos de las partículas
-  //ResultadosBinarios(particles, outputfile);
-  mostrarResultados(particles, outputfile);
+  ResultadosBinarios(particles, outputfile);
+  //mostrarResultados(particles, outputfile);
 }
 
 

@@ -110,8 +110,7 @@ void Particle::VariacionAcelaracionZ(Particle & particula, double suavizado, dou
 
 void Particle::ColisionesEjeX0_1(){
     double x = px + hvx * ptiempo;
-    double var_px;
-    var_px = tparticula - (x - bmin_x);
+    const double var_px = tparticula - (x - bmin_x);
     if (var_px > 1e-10) {
       ax = ax + (colisiones * var_px - amortiguamiento * vx);
     }
@@ -119,8 +118,7 @@ void Particle::ColisionesEjeX0_1(){
 
 void Particle::ColisionesEjeXnx_1(){
     double x = px + hvx * ptiempo;
-    double var_px;
-    var_px = tparticula - (bmax_x - x);
+    const double var_px = tparticula - (bmax_x - x);
     if (var_px > 1e-10) {
       ax = ax - (colisiones * var_px + amortiguamiento * vx);
     }
@@ -128,8 +126,7 @@ void Particle::ColisionesEjeXnx_1(){
 
 void Particle::ColisionesEjeY0_1(){
     double y = py + hvy * ptiempo;
-    double var_py;
-    var_py= tparticula - (y - bmin_y);
+    const double var_py = tparticula - (y - bmin_y);
     if (var_py > 1e-10) {
       ay = ay + (colisiones * var_py - amortiguamiento * vy);
     }
@@ -137,8 +134,7 @@ void Particle::ColisionesEjeY0_1(){
 
 void Particle::ColisionesEjeYny_1(){
     double y = py + hvy * ptiempo;
-    double var_py;
-    var_py = tparticula - (bmax_y - y);
+    const double var_py = tparticula - (bmax_y - y);
     if (var_py > 1e-10) {
       ay = ay - (colisiones * var_py + amortiguamiento * vy);
     }
@@ -146,16 +142,14 @@ void Particle::ColisionesEjeYny_1(){
 
 void Particle::ColisionesEjeZ0_1(){
     double z = pz + hvz * ptiempo;
-    double var_pz;
-    var_pz = tparticula - (z - bmin_z);
+    const double var_pz = tparticula - (z - bmin_z);
     if (var_pz > 1e-10) {
         az = az + (colisiones * var_pz - amortiguamiento * vz);
     }
 }
 void Particle::ColisionesEjeZnz_1(){
     double z = pz + hvz * ptiempo;
-    double var_pz;
-    var_pz = tparticula - (bmax_z - z);
+    const double var_pz = tparticula - (bmax_z - z);
     if (var_pz > 1e-10) {
         az = az - (colisiones * var_pz + amortiguamiento * vz);
     }
