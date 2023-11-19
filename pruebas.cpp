@@ -18,7 +18,7 @@ bool compararPorId(const Particle& a, const Particle& b) {
 }
 
 int main() {
-  std::string nombreArchivo = "large-1.fld";
+  std::string nombreArchivo = "boundint-base-1.trz";
   std::ifstream archivo(nombreArchivo, std::ios::binary);
 
   if (!archivo.is_open()) {
@@ -60,16 +60,38 @@ int main() {
 
   // Ordenar el vector de partículas por ID
   std::sort(particles.begin(), particles.end(), compararPorId);
+  std::ofstream archivoSalida("trazas_small_1_binario.out", std::ios::binary);
+  if (!archivoSalida.is_open()) {
+    std::cerr << "Error al abrir el archivo de salida." << std::endl;
+    return 1;
+  }
 
+  // Escribir el número de bloques y partículas en el archivo de salida
+
+  // Escribir cada partícula en el archivo de salida
+  for (Particle& particle : particles) {
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.posx), sizeof(particle.posx));
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.posy), sizeof(particle.posy));
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.posz), sizeof(particle.posz));
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.hvx), sizeof(particle.hvx));
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.hvy), sizeof(particle.hvy));
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.hvz), sizeof(particle.hvz));
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.velx), sizeof(particle.velx));
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.vely), sizeof(particle.vely));
+    archivoSalida.write(reinterpret_cast<const char*>(&particle.vlez), sizeof(particle.vlez));
+  }
+
+  archivoSalida.close();
   // Imprimir el vector ordenado
-  for (const Particle& particle : particles) {
+
+  /*for (const Particle& particle : particles) {
     std::cout << "ID: " << particle.id << std::endl;
     std::cout << "Posición (x, y, z): " << particle.posx << ", " << particle.posy << ", " << particle.posz << std::endl;
     std::cout << "Velocidad (vx, vy, vz): " << particle.velx << ", " << particle.vely << ", " << particle.vlez << std::endl;
     std::cout << "Hvx, Hvy, Hvz: " << particle.hvx << ", " << particle.hvy << ", " << particle.hvz << std::endl;
     std::cout << "Densidad: " << particle.density << std::endl;
     std::cout << "Aceleración (accx, accy, accz): " << particle.accx << ", " << particle.accy << ", " << particle.accz << std::endl;
-  }
+  }*/
 
   return 0;
 }

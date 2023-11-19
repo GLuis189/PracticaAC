@@ -3,6 +3,7 @@
 #include "../sim/progargs.hpp"
 #include "../sim/variablesglobales.hpp"
 #include "../sim/simulacion.hpp"
+#include <sstream>
 
 #include <fstream>
 #include <iostream>
@@ -174,3 +175,57 @@ void mostrarDatos(){
   std::cout << "Number of blocks: " << nx * ny * nz << "\n";
   std::cout << "Block size: " << sx << " x " << sy << " x " << sz << "\n";
 }
+
+std::vector<Particle> leerArchivo(const std::string& nombreArchivo, bool sonTrazas) {
+  std::ifstream archivo(nombreArchivo, std::ios::binary);
+  std::vector<Particle> particles;
+
+  if (!archivo.is_open()) {
+    std::cerr << "Error al abrir el archivo." << std::endl;
+    return particles;
+  }
+  if (!sonTrazas) {
+    int ppm_salida;
+    int64_t numparticulas_salida;
+    archivo.read(reinterpret_cast<char *>(&ppm_salida), sizeof(ppm_salida));
+    archivo.read(reinterpret_cast<char *>(&numparticulas_salida), sizeof(numparticulas_salida));
+  }
+  while (!archivo.eof()) {
+    Particle particle;
+
+    float px, py, pz;
+    float hvx, hvy, hvz;
+    float vx, vy, vz;
+
+    archivo.read(reinterpret_cast<char*>(&px), sizeof(px));
+    archivo.read(reinterpret_cast<char*>(&py), sizeof(py));
+    archivo.read(reinterpret_cast<char*>(&pz), sizeof(pz));
+
+    archivo.read(reinterpret_cast<char*>(&hvx), sizeof(hvx));
+    archivo.read(reinterpret_cast<char*>(&hvy), sizeof(hvy));
+    archivo.read(reinterpret_cast<char*>(&hvz), sizeof(hvz));
+
+    archivo.read(reinterpret_cast<char*>(&vx), sizeof(vx));
+    archivo.read(reinterpret_cast<char*>(&vy), sizeof(vy));
+    archivo.read(reinterpret_cast<char*>(&vz), sizeof(vz));
+
+    // Convertir los valores de precisión simple a doble precisión
+    particle.px = static_cast<double>(px);
+    particle.py = static_cast<double>(py);
+    particle.pz = static_cast<double>(pz);
+
+    particle.hvx = static_cast<double>(hvx);
+    particle.hvy = static_cast<double>(hvy);
+    particle.hvz = static_cast<double>(hvz);
+
+    particle.vx = static_cast<double>(vx);
+    particle.vy = static_cast<double>(vy);
+    particle.vz = static_cast<double>(vz);
+
+    particles.push_back(particle);
+  }
+
+  archivo.close();
+  return particles;
+}
+

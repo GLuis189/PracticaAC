@@ -8,6 +8,7 @@ struct ProgArgs {
     std::string inputfile;
     std::string outputfile;
 
+    ProgArgs() {};
     ProgArgs(int argc, char *argv[]);
 };
 

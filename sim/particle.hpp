@@ -40,5 +40,6 @@ class Particle {
     bool operator==(const Particle& other) const;
     bool operator<(const Particle& other) const;
     bool operator>(const Particle& other) const;
+
 };
 #endif  // FLUID_PARTICLE_HPP
