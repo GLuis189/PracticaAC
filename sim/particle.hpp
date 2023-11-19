@@ -27,8 +27,10 @@ class Particle {
     void ColisionesEjeX0_1();
     void ColisionesEjeXnx_1();
     void ColisionesEjeY0_1();
-    void ColisionesEjeYnx_1();
-    void ColisionesEjeZ_1();
+    void ColisionesEjeYny_1();
+    //void ColisionesEjeZ_1();
+    void ColisionesEjeZ0_1();
+    void ColisionesEjeZnz_1();
 
     void MoverParticulas();
 

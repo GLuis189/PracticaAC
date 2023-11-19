@@ -33,11 +33,15 @@ std::string grid::generarClaveBloque(int a, int b, int c) {
   return std::to_string(a) + "_" + std::to_string(b) + "_" + std::to_string(c);
 }
 
+bool grid::esValido(int indice, int max) {
+  return indice >= 0 && indice < max;
+}
+
 void grid::calcularBloquesAdyacentes(const std::string& block_key, int a, int b, int c, int nx, int ny, int nz) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         for (int k = -1; k < 2; k++) {
-          if (a + i >= 0 && a + i < nx && b + j >= 0 && b + j < ny && c + k >= 0 && c + k < nz) {
+          if (esValido(a+i, nx) && esValido(b+j, ny) && esValido(c+k, nz)) {
             std::string const block_key2 = generarClaveBloque(a+i, b+j, c+k);
             blocks[block_key].bloques_ady.push_back(block_key2);
           }

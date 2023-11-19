@@ -137,7 +137,7 @@ void Particle::ColisionesEjeY0_1(){
     }
 }
 
-void Particle::ColisionesEjeYnx_1(){
+void Particle::ColisionesEjeYny_1(){
     double y = py + hvy * ptiempo;
     double var_py;
     var_py = tparticula - (bmax_y - y);
