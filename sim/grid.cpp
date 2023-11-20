@@ -28,9 +28,8 @@ grid::grid(int n_x, int n_y, int n_z) {
     }
   }
 }
-
-std::string grid::generarClaveBloque(int a, int b, int c) {
-  return std::to_string(a) + "_" + std::to_string(b) + "_" + std::to_string(c);
+int grid::generarClaveBloque(int var_a, int var_b, int var_c) {
+  return var_a*10000 + var_b*100 + var_c;
 }
 
 bool grid::esValido(int indice, int max) {

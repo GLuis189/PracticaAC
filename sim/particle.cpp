@@ -51,7 +51,7 @@ void Particle::calcularBloque(double s_x, double s_y, double s_z, int n_x, int n
 void Particle::Inicializar(){
     densidad   = 0;
     a_x         = 0;
-    a_y         = -9.8;
+    a_y         = g_y;
     a_z         = 0;
 }
 
