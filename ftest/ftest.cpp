@@ -82,17 +82,17 @@ ArchivoData leerArchivo(const std::string& nombreArchivo) {
   while (!archivo.eof()) {
     Particle particle;
 
-    archivo.read(reinterpret_cast<char*>(&particle.px), sizeof(particle.px));
-    archivo.read(reinterpret_cast<char*>(&particle.py), sizeof(particle.py));
-    archivo.read(reinterpret_cast<char*>(&particle.pz), sizeof(particle.pz));
+    archivo.read(reinterpret_cast<char*>(&particle.p_x), sizeof(particle.p_x));
+    archivo.read(reinterpret_cast<char*>(&particle.p_y), sizeof(particle.p_y));
+    archivo.read(reinterpret_cast<char*>(&particle.p_z), sizeof(particle.p_z));
 
     archivo.read(reinterpret_cast<char*>(&particle.hvx), sizeof(particle.hvx));
     archivo.read(reinterpret_cast<char*>(&particle.hvy), sizeof(particle.hvy));
     archivo.read(reinterpret_cast<char*>(&particle.hvz), sizeof(particle.hvz));
 
-    archivo.read(reinterpret_cast<char*>(&particle.vx), sizeof(particle.vx));
-    archivo.read(reinterpret_cast<char*>(&particle.vy), sizeof(particle.vy));
-    archivo.read(reinterpret_cast<char*>(&particle.vz), sizeof(particle.vz));
+    archivo.read(reinterpret_cast<char*>(&particle.v_x), sizeof(particle.v_x));
+    archivo.read(reinterpret_cast<char*>(&particle.v_y), sizeof(particle.v_y));
+    archivo.read(reinterpret_cast<char*>(&particle.v_z), sizeof(particle.v_z));
 
     archivoData.particles.push_back(particle);
   }
@@ -140,16 +140,16 @@ TEST(PruebaFuncional, CompararConTrazas1_small) {
   ASSERT_EQ(resultado.numParticulas, trazas.numParticulas)
       << "El número de partículas no coincide con las trazas";
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
-    EXPECT_EQ(resultado.particles[i].id, trazas.particles[i].id) << "Fallo en la id de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].px, trazas.particles[i].px) << "Fallo en px de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].py, trazas.particles[i].py) << "Fallo en py de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].pz, trazas.particles[i].pz) << "Fallo en pz de la partícula " << i;
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
     EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
     EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
     EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].vx, trazas.particles[i].vx) << "Fallo en vx de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].vy, trazas.particles[i].vy) << "Fallo en vy de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].vz, trazas.particles[i].vz) << "Fallo en vz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
   }
 }
 /*TEST(ArchivoTest, ArchivosIguales) {

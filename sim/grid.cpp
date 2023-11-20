@@ -37,11 +37,11 @@ bool grid::esValido(int indice, int max) {
   return indice >= 0 && indice < max;
 }
 
-void grid::calcularBloquesAdyacentes(const std::string& block_key, int a, int b, int c, int nx, int ny, int nz) {
+void grid::calcularBloquesAdyacentes(const std::string& block_key, int a, int b, int c, int n_x, int n_y, int n_z) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         for (int k = -1; k < 2; k++) {
-          if (esValido(a+i, nx) && esValido(b+j, ny) && esValido(c+k, nz)) {
+          if (esValido(a+i, n_x) && esValido(b+j, n_y) && esValido(c+k, n_z)) {
             std::string const block_key2 = generarClaveBloque(a+i, b+j, c+k);
             blocks[block_key].bloques_ady.push_back(block_key2);
           }

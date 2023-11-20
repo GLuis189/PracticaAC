@@ -51,17 +51,17 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
   std::vector<Particle> particles;
   particles.reserve(numparticulas);
   int contar_particulas = 0;
-  float px, py, pz, hvx, hvy, hvz, vx, vy, vz;
-  while(read_binary_values(inputfile,  px, py, pz, hvx, hvy, hvz, vx, vy, vz)) {
+  float p_x, p_y, p_z, hvx, hvy, hvz, v_x, v_y, v_z;
+  while(read_binary_values(inputfile,  p_x, p_y, p_z, hvx, hvy, hvz, v_x, v_y, v_z)) {
     Particle particle;
-    particle.id = contar_particulas, particle.densidad = 0;
-    particle.px = px, particle.py = py, particle.pz = pz;
+    particle.ide = contar_particulas, particle.densidad = 0;
+    particle.p_x = p_x, particle.p_y = p_y, particle.p_z = p_z;
     particle.hvx = hvx, particle.hvy = hvy, particle.hvz = hvz;
-    particle.vx = vx, particle.vy = vy, particle.vz = vz;
-    particle.ay = -9.8, particle.ax = 0, particle.az = 0;
-    particle.calcularBloqueInicial(sx, sy, sz, nx, ny, nz);
+    particle.v_x = v_x, particle.v_y = v_y, particle.v_z = v_z;
+    particle.a_y = -9.8, particle.a_x = 0, particle.a_z = 0;
+    particle.calcularBloqueInicial(s_x, s_y, s_z, n_x, n_y, n_z);
     std::string const block_key = malla.generarClaveBloque(particle.i, particle.j, particle.k);
-    malla.blocks[block_key].addParticle(particle.id);
+    malla.blocks[block_key].addParticle(particle.ide);
     particles.push_back(particle);
     ++contar_particulas;
   }
@@ -87,7 +87,7 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
     particle.calcularBloque(sx, sy, sz, nx, ny, nz);
 
     if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
-      malla.CambiarBloque(particle.id, particle.i, particle.j, particle.k, i_anterior, j_anterior, k_anterior);
+      malla.CambiarBloque(particle.ide, particle.i, particle.j, particle.k, i_anterior, j_anterior, k_anterior);
     }
   }
 }
@@ -98,30 +98,30 @@ void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& output
   outputfile.write(as_buffer(numparticulas), sizeof(numparticulas));
   for (const auto& particula : particulas) {
     // Convertir los valores de doble precisión a precisión simple antes de escribirlos
-    float px = static_cast<float>(particula.px);
-    float py = static_cast<float>(particula.py);
-    float pz = static_cast<float>(particula.pz);
+    float p_x = static_cast<float>(particula.p_x);
+    float p_y = static_cast<float>(particula.p_y);
+    float p_z = static_cast<float>(particula.p_z);
 
     float hvx = static_cast<float>(particula.hvx);
     float hvy = static_cast<float>(particula.hvy);
     float hvz = static_cast<float>(particula.hvz);
 
-    float vx = static_cast<float>(particula.vx);
-    float vy = static_cast<float>(particula.vy);
-    float vz = static_cast<float>(particula.vz);
+    float v_x = static_cast<float>(particula.v_x);
+    float v_y = static_cast<float>(particula.v_y);
+    float v_z = static_cast<float>(particula.v_z);
 
     // Escribir los valores en el archivo
-    outputfile.write(as_buffer(px), sizeof(px));
-    outputfile.write(as_buffer(py), sizeof(py));
-    outputfile.write(as_buffer(pz), sizeof(pz));
+    outputfile.write(as_buffer(p_x), sizeof(p_x));
+    outputfile.write(as_buffer(p_y), sizeof(p_y));
+    outputfile.write(as_buffer(p_z), sizeof(p_z));
 
     outputfile.write(as_buffer(hvx), sizeof(hvx));
     outputfile.write(as_buffer(hvy), sizeof(hvy));
     outputfile.write(as_buffer(hvz), sizeof(hvz));
 
-    outputfile.write(as_buffer(vx), sizeof(vx));
-    outputfile.write(as_buffer(vy), sizeof(vy));
-    outputfile.write(as_buffer(vz), sizeof(vz));
+    outputfile.write(as_buffer(v_x), sizeof(v_x));
+    outputfile.write(as_buffer(v_y), sizeof(v_y));
+    outputfile.write(as_buffer(v_z), sizeof(v_z));
   }
 
   outputfile.close();
@@ -129,12 +129,12 @@ void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& output
 
 void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
   for (Particle  const& particle: particles) {
-    outputfile << "ID: " << particle.id << "\n";
-    outputfile << "Posición (x, y, z): " << particle.px << ", " << particle.py << ", " << particle.pz << "\n";
-    outputfile << "Velocidad (vx, vy, vz): " << particle.vx << ", " << particle.vy << ", " << particle.vz << "\n";
+    outputfile << "ID: " << particle.ide << "\n";
+    outputfile << "Posición (x, y, z): " << particle.p_x << ", " << particle.p_y << ", " << particle.p_z << "\n";
+    outputfile << "Velocidad (vx, vy, vz): " << particle.v_x << ", " << particle.v_y << ", " << particle.v_z << "\n";
     outputfile << "Hvx, Hvy, Hvz: " << particle.hvx << ", " << particle.hvy << ", " << particle.hvz << "\n";
     outputfile << "Densidad: " << particle.densidad << "\n";
-    outputfile << "Aceleración (accx, accy, accz): " << particle.ax << ", " << particle.ay << ", " << particle.az << "\n";
+    outputfile << "Aceleración (accx, accy, accz): " << particle.a_x << ", " << particle.a_y << ", " << particle.a_z << "\n";
   }
   outputfile.close();
 }
@@ -193,11 +193,11 @@ void mostrarDatos(){
   while (!archivo.eof()) {
     Particle particle;
 
-    float px, py, pz;
+    float p_x, py, pz;
     float hvx, hvy, hvz;
     float vx, vy, vz;
 
-    archivo.read(reinterpret_cast<char*>(&px), sizeof(px));
+    archivo.read(reinterpret_cast<char*>(&p_x), sizeof(p_x));
     archivo.read(reinterpret_cast<char*>(&py), sizeof(py));
     archivo.read(reinterpret_cast<char*>(&pz), sizeof(pz));
 
@@ -210,7 +210,7 @@ void mostrarDatos(){
     archivo.read(reinterpret_cast<char*>(&vz), sizeof(vz));
 
     // Convertir los valores de precisión simple a doble precisión
-    particle.px = static_cast<double>(px);
+    particle.p_x = static_cast<double>(p_x);
     particle.py = static_cast<double>(py);
     particle.pz = static_cast<double>(pz);
 

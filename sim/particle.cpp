@@ -7,10 +7,12 @@
 #include <cmath>
 
 
-void Particle::calcularBloqueInicial(double sx, double sy, double sz, int nx, int ny, int nz){
-    i = static_cast<int>((px-bmin_x)/sx);
-    if (i>nx -1){
-      i = nx -1;
+
+
+void Particle::calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z){
+    i = static_cast<int>((p_x-bmin_x)/ s_x);
+    if (i> n_x -1){
+      i = n_x -1;
     }
     j = static_cast<int>((py-bmin_y)/sy);
     if (j>ny -1){
@@ -162,19 +164,19 @@ void Particle::MoverParticulas(/*int nx, int ny, int nz*/){
     /*if (i == 0){
       ColisionesEjeX0_1();
     }
-    else if (i == nx -1) {
+    else if (i == n_x -1) {
       ColisionesEjeXnx_1();
     }
     if (j == 0){
       ColisionesEjeY0_1();
     }
-    else if (j == ny -1){
+    else if (j == n_y -1){
       ColisionesEjeYny_1();
     }
     if (k == 0){
       ColisionesEjeZ0_1();
     }
-    else if (k == nz -1) {
+    else if (k == n_z -1) {
       ColisionesEjeZnz_1();
     }*/
     px = px + hvx * ptiempo + ax * (ptiempo * ptiempo);
@@ -192,10 +194,10 @@ void Particle::MoverParticulas(/*int nx, int ny, int nz*/){
     /*if(i == 0 || i == nx-1){
       ColisionesEjeX_2();
     }
-    if(j == 0 || j == ny-1){
+    if(j == 0 || j == n_y-1){
       ColisionesEjeY_2();
     }
-    if(k == 0 || k == nz-1){
+    if(k == 0 || k == n_z-1){
       ColisionesEjeZ_2();
     }*/
 }
