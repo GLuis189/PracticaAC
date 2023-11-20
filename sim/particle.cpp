@@ -6,6 +6,7 @@
 
 #include <math.h>
 #include "variablesglobales.hpp"
+#include <algorithm>
 #include <cmath>
 
 
@@ -24,28 +25,10 @@ void Particle::calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x
     }
 }
 
-void Particle::calcularBloque(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z){
-    i = static_cast<int>((p_x-bmin_x)/s_x);
-    if (i>n_x -1){
-      i = n_x -1;
-    }
-    if (i<0){
-      i = 0;
-    }
-    j = static_cast<int>((p_y-bmin_y)/s_y);
-    if (j>n_y -1){
-      j = n_y-1;
-    }
-    if (j<0){
-      j = 0;
-    }
-    k = static_cast<int>((p_z-bmin_z)/s_z);
-    if (k>n_z -1){
-      k = n_z -1;
-    }
-    if (k<0){
-      k = 0;
-    }
+void Particle::calcularBloque(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z) {
+    i = std::clamp(static_cast<int>((p_x - bmin_x) / s_x), 0, n_x - 1);
+    j = std::clamp(static_cast<int>((p_y - bmin_y) / s_y), 0, n_y - 1);
+    k = std::clamp(static_cast<int>((p_z - bmin_z) / s_z), 0, n_z - 1);
 }
 
 void Particle::Inicializar(){

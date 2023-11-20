@@ -7,7 +7,7 @@
 
 
 void Block::addParticle(int parti) {
-  particles.push_back(parti);
+  particles.emplace_back(parti);
 }
 
 void Block::removeParticle(int parti){

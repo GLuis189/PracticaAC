@@ -41,7 +41,7 @@ ArchivoData leerArchivo(const std::string& nombreArchivo) {
     archivo.read(reinterpret_cast<char*>(&particle.v_y), sizeof(particle.v_y));
     archivo.read(reinterpret_cast<char*>(&particle.v_z), sizeof(particle.v_z));
 
-    archivoData.particles.push_back(particle);
+    archivoData.particles.emplace_back(particle);
   }
 
   archivo.close();

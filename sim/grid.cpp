@@ -42,7 +42,7 @@ void grid::calcularBloquesAdyacentes(const int block_key, int a, int b, int c, i
         for (int k = -1; k < 2; k++) {
           if (esValido(a+i, n_x) && esValido(b+j, n_y) && esValido(c+k, n_z)){
             int const block_key2 = generarClaveBloque(a+i, b+j, c+k);
-            blocks[block_key].bloques_ady.push_back(block_key2);
+            blocks[block_key].bloques_ady.emplace_back(block_key2);
           }
         }
       }
@@ -56,9 +56,9 @@ void grid::CambiarBloque(int id, int i, int j, int k, int i_anterior, int j_ante
   blocks[block_key2].addParticle(id);
 }
 
-void grid::calcularDensidades(std::vector<Particle> & particles, int numparticulas, double masa, double suavizado, double suavizado_2) {
-  for (int part = 0; part < numparticulas; part++) {
-    Particle & particle = particles[part];
+void grid::calcularDensidades(std::vector<Particle> & particles, double masa, double suavizado, double suavizado_2) {
+  for (Particle& particle : particles) {
+    //Particle & particle = particles[part];
     int const block_key2 = generarClaveBloque(particle.i, particle.j, particle.k);
     std::vector<int> const bloquesAdy = blocks[block_key2].bloques_ady;
     for (int const& bloque : bloquesAdy) {
@@ -72,9 +72,9 @@ void grid::calcularDensidades(std::vector<Particle> & particles, int numparticul
   }
 }
 
-void grid::calcularAceleraciones(std::vector<Particle> & particles, int numparticulas, double pi_sua_6, double masa, double suavizado){
-  for (int part = 0; part < numparticulas; part++) {
-    Particle & particle          = particles[part];
+void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_sua_6, double masa, double suavizado){
+  for (Particle& particle : particles) {
+    //Particle & particle          = particles[part];
     int const block_key2 = generarClaveBloque(particle.i, particle.j, particle.k);
     std::vector<int> const bloquesAdy = blocks[block_key2].bloques_ady;
     for (int const & bloque : bloquesAdy) {

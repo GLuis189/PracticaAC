@@ -62,7 +62,7 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
     particle.calcularBloqueInicial(s_x, s_y, s_z, n_x, n_y, n_z);
     int const block_key = malla.generarClaveBloque(particle.i, particle.j, particle.k);
     malla.blocks[block_key].addParticle(particle.ide);
-    particles.push_back(particle);
+    particles.emplace_back(particle);
     ++contar_particulas;
   }
   inputfile.close();
@@ -75,8 +75,8 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
 }
 
 void reposicionar(grid & malla, std::vector<Particle> & particles) {
-  for (int part = 0; part < numparticulas; part++) {
-    Particle & particle = particles[part];
+  for (Particle& particle : particles) {
+    //Particle & particle = particles[part];
 
     particle.Inicializar();
 
@@ -92,7 +92,31 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
   }
 }
 
-void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& outputfile){
+void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& outputfile) {
+  float ppm2 = static_cast<float>(ppm);
+  outputfile.write(reinterpret_cast<const char*>(&ppm2), sizeof(ppm2));
+  outputfile.write(reinterpret_cast<const char*>(&numparticulas), sizeof(numparticulas));
+
+  for (const auto& particula : particulas) {
+    float values[] = {
+      static_cast<float>(particula.p_x),
+      static_cast<float>(particula.p_y),
+      static_cast<float>(particula.p_z),
+      static_cast<float>(particula.hvx),
+      static_cast<float>(particula.hvy),
+      static_cast<float>(particula.hvz),
+      static_cast<float>(particula.v_x),
+      static_cast<float>(particula.v_y),
+      static_cast<float>(particula.v_z)
+    };
+
+    outputfile.write(reinterpret_cast<const char*>(values), sizeof(values));
+  }
+
+  outputfile.close();
+}
+
+/*void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& outputfile){
   float ppm2 = static_cast<float>(ppm);
   outputfile.write(as_buffer(ppm2), sizeof(ppm2));
   outputfile.write(as_buffer(numparticulas), sizeof(numparticulas));
@@ -125,7 +149,7 @@ void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& output
   }
 
   outputfile.close();
-}
+}*/
 
 void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
   for (Particle  const& particle: particles) {
@@ -144,13 +168,13 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
     if(time>0) {
      reposicionar(malla, particles);
     }
-    malla.calcularDensidades(particles, numparticulas, masa, suavizado, suavizado_2);
-    malla.calcularAceleraciones(particles, numparticulas, pi_sua_6, masa, suavizado);
+    malla.calcularDensidades(particles, masa, suavizado, suavizado_2);
+    malla.calcularAceleraciones(particles, pi_sua_6, masa, suavizado);
     /*malla.ColisionesEjeX_1(particles);
     malla.ColisionesEjeY_1(particles);
     malla.ColisionesEjeZ_1(particles);*/
-    for (int part = 0; part < numparticulas; part++){
-      Particle & particle = particles[part];
+    for (Particle& particle : particles){
+      //Particle & particle = particles[part];
 
       particle.MoverParticulas(n_x, n_y, n_z);
     }
