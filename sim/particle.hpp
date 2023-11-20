@@ -6,6 +6,7 @@
 #define FLUID_PARTICLE_HPP
 //#include "../sim/grid.hpp"
 
+
 class Particle {
   public:
     int ide;
