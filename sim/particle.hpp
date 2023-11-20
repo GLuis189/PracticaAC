@@ -8,15 +8,15 @@
 
 class Particle {
   public:
-    int id;
-    double px, py, pz;   // Coordenadas de posición
+    int ide;
+    double p_x, p_y, p_z;   // Coordenadas de posición
     double hvx, hvy, hvz; // Coordenadas del vector hv
-    double vx, vy, vz;   // Coordenadas de la velocidad
-    double ax, ay, az;
+    double v_x, v_y, v_z;   // Coordenadas de la velocidad
+    double a_x, a_y, a_z;
     int i, j, k;
     double densidad;
-    void calcularBloqueInicial(double sx, double sy, double sz, int nx, int ny, int nz);
-    void calcularBloque(double sx, double sy, double sz, int nx, int ny, int nz);
+    void calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z);
+    void calcularBloque(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z);
     //void calcularDensidad(Particle& p_i, std::vector<Particle>& particles, int numparticulas, float suavizado);
     void Inicializar();
     void VariacionDensidad(Particle & particula, double suavizado_2);

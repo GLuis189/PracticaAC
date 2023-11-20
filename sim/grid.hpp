@@ -33,7 +33,7 @@ class grid {
     std::vector<std::string> colisionesCy;
     std::vector<std::string> colisionesCz;
 
-    grid(int nx, int ny, int nz);
+    grid(int n_x, int n_y, int n_z);
     void CambiarBloque(int id, int i, int j, int k, int i_anterior, int j_anterior, int k_anterior);
     void calcularDensidades(std::vector<Particle> & particles, int numparticulas, double masa, double suavizado, double suavizado_2);
     static bool esValido(int indice, int max);

@@ -16,12 +16,12 @@ double masa;
 double suavizado;
 double pi_sua_6;
 double suavizado_2;
-int nx ;
-int ny ;
-int nz ;
-double sx;
-double sy;
-double sz;
+int n_x ;
+int n_y ;
+int n_z ;
+double s_x;
+double s_y;
+double s_z;
 
 grid calcularMalla(std::ifstream& inputfile) {
   ppm           = read_binary_value<float>(inputfile);
@@ -37,13 +37,13 @@ grid calcularMalla(std::ifstream& inputfile) {
   pi_sua_6 = M_PI * suavizado * suavizado * suavizado * suavizado * suavizado * suavizado;
   suavizado_2 = suavizado * suavizado;
 
-  nx    = static_cast<int>((bmax_x - bmin_x) / suavizado);
-  ny    = static_cast<int>((bmax_y - bmin_y) / suavizado);
-  nz    = static_cast<int>((bmax_z - bmin_z) / suavizado);
-  sx = (bmax_x - bmin_x) / nx;
-  sy = (bmax_y - bmin_y) / ny;
-  sz = (bmax_z - bmin_z) / nz;
-  grid malla(nx, ny, nz);
+  n_x    = static_cast<int>((bmax_x - bmin_x) / suavizado);
+  n_y    = static_cast<int>((bmax_y - bmin_y) / suavizado);
+  n_z    = static_cast<int>((bmax_z - bmin_z) / suavizado);
+  s_x = (bmax_x - bmin_x) / n_x;
+  s_y = (bmax_y - bmin_y) / n_y;
+  s_z = (bmax_z - bmin_z) / n_z;
+  grid malla(n_x, n_y, n_z);
   return malla;
 }
 
@@ -84,7 +84,7 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
     int j_anterior = particle.j;
     int k_anterior = particle.k;
 
-    particle.calcularBloque(sx, sy, sz, nx, ny, nz);
+    particle.calcularBloque(s_x, s_y, s_z, n_x, n_y, n_z);
 
     if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
       malla.CambiarBloque(particle.ide, particle.i, particle.j, particle.k, i_anterior, j_anterior, k_anterior);
@@ -172,9 +172,9 @@ void mostrarDatos(){
   std::cout << "Particles per meter: " << ppm << "\n";
   std::cout << "Smoothing length: " << suavizado << "\n";
   std::cout << "Particle mass: " << masa << "\n";
-  std::cout << "Grid size: " << nx << " x " << ny << " x " << nz << "\n";
-  std::cout << "Number of blocks: " << nx * ny * nz << "\n";
-  std::cout << "Block size: " << sx << " x " << sy << " x " << sz << "\n";
+  std::cout << "Grid size: " << n_x << " x " << n_y << " x " << n_z << "\n";
+  std::cout << "Number of blocks: " << n_x * n_y * n_z << "\n";
+  std::cout << "Block size: " << s_x << " x " << s_y << " x " << s_z << "\n";
 }
 
 /*std::vector<Particle> leerArchivo(const std::string& nombreArchivo) {

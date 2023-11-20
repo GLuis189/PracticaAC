@@ -14,34 +14,34 @@ void Particle::calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x
     if (i> n_x -1){
       i = n_x -1;
     }
-    j = static_cast<int>((py-bmin_y)/sy);
-    if (j>ny -1){
-      j = ny-1;
+    j = static_cast<int>((p_y-bmin_y)/ s_y);
+    if (j>n_y -1){
+      j = n_y-1;
     }
-    k = static_cast<int>((pz-bmin_z)/sz);
-    if (k>nz -1){
-      k = nz -1;
+    k = static_cast<int>((p_z-bmin_z)/ s_z);
+    if (k>n_z -1){
+      k = n_z -1;
     }
 }
 
-void Particle::calcularBloque(double sx, double sy, double sz, int nx, int ny, int nz){
-    i = static_cast<int>((px-bmin_x)/sx);
-    if (i>nx -1){
-      i = nx -1;
+void Particle::calcularBloque(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z){
+    i = static_cast<int>((p_x-bmin_x)/s_x);
+    if (i>n_x -1){
+      i = n_x -1;
     }
     if (i<0){
       i = 0;
     }
-    j = static_cast<int>((py-bmin_y)/sy);
-    if (j>ny -1){
-      j = ny-1;
+    j = static_cast<int>((p_y-bmin_y)/s_y);
+    if (j>n_y -1){
+      j = n_y-1;
     }
     if (j<0){
       j = 0;
     }
-    k = static_cast<int>((pz-bmin_z)/sz);
-    if (k>nz -1){
-      k = nz -1;
+    k = static_cast<int>((p_z-bmin_z)/s_z);
+    if (k>n_z -1){
+      k = n_z -1;
     }
     if (k<0){
       k = 0;
@@ -50,9 +50,9 @@ void Particle::calcularBloque(double sx, double sy, double sz, int nx, int ny, i
 
 void Particle::Inicializar(){
     densidad   = 0;
-    ax         = 0;
-    ay         = -9.8;
-    az         = 0;
+    a_x         = 0;
+    a_y         = -9.8;
+    a_z         = 0;
 }
 
 void Particle::VariacionDensidad(Particle & particula, double suavizado_2){
@@ -66,9 +66,9 @@ void Particle::VariacionDensidad(Particle & particula, double suavizado_2){
 }
 
 double Particle::CalcularDistancia(Particle & particula) const {
-    double const p_dif_x   = px - particula.px;
-    double const p_dif_y   = py - particula.py;
-    double const p_dif_z   = pz - particula.pz;
+    double const p_dif_x   = p_x - particula.p_x;
+    double const p_dif_y   = p_y - particula.p_y;
+    double const p_dif_z   = p_z - particula.p_z;
     double const modulo    = std::sqrt(p_dif_x * p_dif_x + p_dif_y * p_dif_y + p_dif_z * p_dif_z);
     double const distancia = modulo * modulo;
     return distancia;
@@ -77,87 +77,87 @@ double Particle::CalcularDistancia(Particle & particula) const {
 void Particle::VariacionAcelaracionX(Particle& particula, double suavizado, double pi_sua_6,
                                      double dist_ij, double masa){
     double const var_ax =
-        ((((px - particula.px) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
+        ((((p_x - particula.p_x) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
            ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
           (densidad + particula.densidad - 2 * 1e3)) +
-         ((particula.vx - vx) * (45 / pi_sua_6) * (vis * masa))) /
+         ((particula.v_x - v_x) * (45 / pi_sua_6) * (vis * masa))) /
         (densidad * particula.densidad);
-    ax  = ax + var_ax;
-    particula.ax = particula.ax - var_ax;
+    a_x  = a_x + var_ax;
+    particula.a_x = particula.a_x - var_ax;
 }
 
 void Particle::VariacionAcelaracionY(Particle & particula, double suavizado, double pi_sua_6,
                                      double dist_ij, double masa ){
     double const var_ay =
-        ((((py - particula.py) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
+        ((((p_y - particula.p_y) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
            ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
           (densidad + particula.densidad - 2 * 1e3)) +
-         ((particula.vy - vy) * (45 / pi_sua_6) * (vis * masa))) /
+         ((particula.v_y - v_y) * (45 / pi_sua_6) * (vis * masa))) /
         (densidad * particula.densidad);
-    ay  = ay + var_ay;
-    particula.ay = particula.ay - var_ay;
+    a_y  = a_y + var_ay;
+    particula.a_y = particula.a_y - var_ay;
 }
 
 void Particle::VariacionAcelaracionZ(Particle & particula, double suavizado, double pi_sua_6,
                                      double dist_ij, double masa ){
     double const var_az =
-        ((((pz - particula.pz) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
+        ((((p_z - particula.p_z) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
            ((suavizado - dist_ij) * (suavizado - dist_ij)) / dist_ij) *
           (densidad + particula.densidad - 2 * 1e3)) +
-         ((particula.vz - vz) * (45 / pi_sua_6) * (vis * masa))) /
+         ((particula.v_z - v_z) * (45 / pi_sua_6) * (vis * masa))) /
         (densidad * particula.densidad);
-    az  = az + var_az;
-    particula.az = particula.az - var_az;
+    a_z  = a_z + var_az;
+    particula.a_z = particula.a_z - var_az;
 }
 
 void Particle::ColisionesEjeX0_1(){
-    double x = px + hvx * ptiempo;
+    double x = p_x + hvx * ptiempo;
     const double var_px = tparticula - (x - bmin_x);
     if (var_px > 1e-10) {
-      //std::cout << "Px: "<<px << " hvx: "<< hvx<<"vx:"<<vx <<"\n";
-      ax = ax + (colisiones * var_px - amortiguamiento * vx);
+      //std::cout << "Px: "<<px << " hvx: "<< hvx<<"v_x:"<<v_x <<"\n";
+      a_x = a_x + (colisiones * var_px - amortiguamiento * v_x);
     }
 }
 
 void Particle::ColisionesEjeXnx_1(){
-    double x = px + hvx * ptiempo;
+    double x = p_x + hvx * ptiempo;
     const double var_px = tparticula - (bmax_x - x);
     if (var_px > 1e-10) {
 
-      ax = ax - (colisiones * var_px + amortiguamiento * vx);
+      a_x = a_x - (colisiones * var_px + amortiguamiento * v_x);
     }
 }
 
 void Particle::ColisionesEjeY0_1(){
-    double y = py + hvy * ptiempo;
+    double y = p_y + hvy * ptiempo;
     const double var_py = tparticula - (y - bmin_y);
     if (var_py > 1e-10) {
-      //std::cout << "Py: "<<py << " hvy: "<< hvy<<"vy:"<<vy<<"\n";
-      ay = ay + (colisiones * var_py - amortiguamiento * vy);
+      //std::cout << "Py: "<<p_y << " hvy: "<< hvy<<"v_y:"<<v_y<<"\n";
+      a_y = a_y + (colisiones * var_py - amortiguamiento * v_y);
     }
 }
 
 void Particle::ColisionesEjeYny_1(){
-    double y = py + hvy * ptiempo;
+    double y = p_y + hvy * ptiempo;
     const double var_py = tparticula - (bmax_y - y);
     if (var_py > 1e-10) {
-      ay = ay - (colisiones * var_py + amortiguamiento * vy);
+      a_y = a_y - (colisiones * var_py + amortiguamiento * v_y);
     }
 }
 
 void Particle::ColisionesEjeZ0_1(){
-    double z = pz + hvz * ptiempo;
+    double z = p_z + hvz * ptiempo;
     const double var_pz = tparticula - (z - bmin_z);
     if (var_pz > 1e-10) {
-      //std::cout << "Pz: "<<pz << " hvz: "<< hvz<<"vz:"<<vz<<"\n";
-      az = az + (colisiones * var_pz - amortiguamiento * vz);
+      //std::cout << "Pz: "<<p_z << " hvz: "<< hvz<<"v_z:"<<v_z<<"\n";
+      a_z = a_z + (colisiones * var_pz - amortiguamiento * v_z);
     }
 }
 void Particle::ColisionesEjeZnz_1(){
-    double z = pz + hvz * ptiempo;
+    double z = p_z + hvz * ptiempo;
     const double var_pz = tparticula - (bmax_z - z);
     if (var_pz > 1e-10) {
-        az = az - (colisiones * var_pz + amortiguamiento * vz);
+        a_z = a_z - (colisiones * var_pz + amortiguamiento * v_z);
     }
 }
 void Particle::MoverParticulas(int n_x, int n_y, int n_z){
@@ -183,13 +183,13 @@ void Particle::MoverParticulas(int n_x, int n_y, int n_z){
     p_y = p_y + hvy * ptiempo + a_y * (ptiempo * ptiempo);
     p_z = p_z + hvz * ptiempo + a_z * (ptiempo * ptiempo);
 
-    vx = hvx + (ax * ptiempo) / 2;
-    vy = hvy + (ay * ptiempo) / 2;
-    vz = hvz + (az * ptiempo) / 2;
+    v_x = hvx + (a_x * ptiempo) / 2;
+    v_y = hvy + (a_y * ptiempo) / 2;
+    v_z = hvz + (a_z * ptiempo) / 2;
 
-    hvx = hvx + ax* ptiempo;
-    hvy = hvy + ay * ptiempo;
-    hvz = hvz + az * ptiempo;
+    hvx = hvx + a_x* ptiempo;
+    hvy = hvy + a_y * ptiempo;
+    hvz = hvz + a_z * ptiempo;
 
     if(i == 0 || i == n_x-1){
       ColisionesEjeX_2();
@@ -205,68 +205,68 @@ void Particle::MoverParticulas(int n_x, int n_y, int n_z){
 void Particle::ColisionesEjeX_2() {
     double d_x;
     if (i == 0){
-      d_x = px - bmin_x;
+      d_x = p_x - bmin_x;
     }
     else{
-      d_x = bmax_x - px;
+      d_x = bmax_x - p_x;
     }
     if(d_x<0){
       if (i == 0){
-        px = bmin_x - d_x;
+        p_x = bmin_x - d_x;
       }
       else{
-        px = bmax_x + d_x;
+        p_x = bmax_x + d_x;
       }
-      vx = -vx;
+      v_x = -v_x;
       hvx = -hvx;
     }
 }
 void Particle::ColisionesEjeY_2() {
     double d_y;
     if (j == 0){
-      d_y = py - bmin_y;
+      d_y = p_y - bmin_y;
     }
     else{
-      d_y = bmax_y - py;
+      d_y = bmax_y - p_y;
     }
     if(d_y<0){
       if (j == 0){
-        py = bmin_y - d_y;
+        p_y = bmin_y - d_y;
       }
       else{
-        py = bmax_y + d_y;
+        p_y = bmax_y + d_y;
       }
-      vy = -vy;
+      v_y = -v_y;
       hvy = -hvy;
     }
 }
 void Particle::ColisionesEjeZ_2() {
     double d_z;
     if (k == 0){
-      d_z = pz - bmin_z;
+      d_z = p_z - bmin_z;
     }
     else{
-      d_z = bmax_z - pz;
+      d_z = bmax_z - p_z;
     }
     if(d_z<0){
       if (k == 0){
-        pz = bmin_z - d_z;
+        p_z = bmin_z - d_z;
       }
       else{
-        pz = bmax_z + d_z;
+        p_z = bmax_z + d_z;
       }
-      vz = -vz;
+      v_z = -v_z;
       hvz= -hvz;
     }
 }
 bool Particle::operator==(const Particle& other) const {
-    return id == other.id;
+    return ide == other.ide;
 }
 bool Particle::operator<(const Particle& other) const {
-    return id < other.id;
+    return ide < other.ide;
 }
 bool Particle::operator>(const Particle& other) const {
-    return id > other.id;
+    return ide > other.ide;
 }
 
 

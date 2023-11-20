@@ -9,11 +9,11 @@
 #include "../sim/variablesglobales.hpp"
 
 
-grid::grid(int nx, int ny, int nz) {
+grid::grid(int n_x, int n_y, int n_z) {
   // Generar bloques para toda la malla
-  for (int var_a = 0; var_a < nx; ++var_a) {
-    for (int var_b = 0; var_b < ny; ++var_b) {
-      for (int var_c = 0; var_c < nz; ++var_c) {
+  for (int var_a = 0; var_a < n_x; ++var_a) {
+    for (int var_b = 0; var_b < n_y; ++var_b) {
+      for (int var_c = 0; var_c < n_z; ++var_c) {
         std::string const block_key = generarClaveBloque(var_a, var_b, var_c);
         Block newBlock;
         newBlock.i = var_a;

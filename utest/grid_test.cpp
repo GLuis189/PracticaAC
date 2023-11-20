@@ -7,40 +7,40 @@
 #include "../sim/variablesglobales.hpp"
 
 TEST(GridTest, BlockCreation) {
-  int const nx = 3;
-  int const ny = 3;
+  int const n_x = 3;
+  int const n_y = 3;
   int const nz = 3;
-  grid const myGrid(nx, ny, nz);
+  grid const myGrid(n_x, n_y, nz);
 
   // Verificar que se crearon todos los bloques
-  EXPECT_EQ(nx * ny * nz, myGrid.blocks.size());
+  EXPECT_EQ(n_x * n_y * nz, myGrid.blocks.size());
 
   // Verificar que cada bloque tiene las coordenadas correctas
   for (const auto& pair : myGrid.blocks) {
         const Block& block = pair.second;
     EXPECT_GE(block.i, 0);
-    EXPECT_LT(block.i, nx);
+    EXPECT_LT(block.i, n_x);
     EXPECT_GE(block.j, 0);
-    EXPECT_LT(block.j, ny);
+    EXPECT_LT(block.j, n_y);
     EXPECT_GE(block.k, 0);
     EXPECT_LT(block.k, nz);
   }
 }
 
 TEST(GridTest, generarClaveBloque) {
-  int const nx = 5;
-  int const ny = 5;
-  int const nz = 5;
-  grid const myGrid(nx, ny, nz);
+  int const n_x = 5;
+  int const n_y = 5;
+  int const n_z = 5;
+  grid const myGrid(n_x, n_y, n_z);
   // Verificar que este método genera la clave correcta para un bloque dado sus índices
   ASSERT_EQ(myGrid.generarClaveBloque(1, 2, 3), "1_2_3");
 }
 
 // Test para el método esValido
 TEST(GridTest, esValido) {
-  int n_x = 10;
-  int n_y = 10;
-  int n_z = 10;
+  int const n_x = 10;
+  int const n_y = 10;
+  int const n_z = 10;
   grid myGrid(n_x, n_y, n_z);
   // Verificar que este método devuelve true para índices válidos y false para índices no válidos
   ASSERT_TRUE(myGrid.esValido(5, 10));
