@@ -177,7 +177,7 @@ void mostrarDatos(){
   std::cout << "Block size: " << sx << " x " << sy << " x " << sz << "\n";
 }
 
-std::vector<Particle> leerArchivo(const std::string& nombreArchivo, bool sonTrazas) {
+/*std::vector<Particle> leerArchivo(const std::string& nombreArchivo) {
   std::ifstream archivo(nombreArchivo, std::ios::binary);
   std::vector<Particle> particles;
 
@@ -185,12 +185,11 @@ std::vector<Particle> leerArchivo(const std::string& nombreArchivo, bool sonTraz
     std::cerr << "Error al abrir el archivo." << std::endl;
     return particles;
   }
-  if (!sonTrazas) {
-    int ppm_salida;
-    int64_t numparticulas_salida;
-    archivo.read(reinterpret_cast<char *>(&ppm_salida), sizeof(ppm_salida));
-    archivo.read(reinterpret_cast<char *>(&numparticulas_salida), sizeof(numparticulas_salida));
-  }
+  float ppm_salida;
+  int numparticulas_salida;
+  archivo.read(reinterpret_cast<char *>(&ppm_salida), sizeof(ppm_salida));
+  archivo.read(reinterpret_cast<char *>(&numparticulas_salida), sizeof(numparticulas_salida));
+
   while (!archivo.eof()) {
     Particle particle;
 
@@ -228,5 +227,5 @@ std::vector<Particle> leerArchivo(const std::string& nombreArchivo, bool sonTraz
 
   archivo.close();
   return particles;
-}
+}*/
 

@@ -5,8 +5,8 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 20)
 
 add_compile_options(-Wall -Wextra -Werror -pedantic -pedantic-errors -O3)
-#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -mcpu=apple-m1") #para mac
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
+#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -mcpu=apple-m1") #para mac
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Enable GoogleTest Library
@@ -32,7 +32,7 @@ include_directories (PUBLIC .)
 # Note this will slow down compilation.
 # You may temporarily disable but do not forget to enable again.
 #set(CMAKE_CXX_CLANG_TIDY "clang−tidy;−header−filter=.∗")
-set(CMAKE_CXX_CLANG_TIDY "/opt/homebrew/opt/llvm/bin/clang-tidy;−header−filter=.∗")
+#set(CMAKE_CXX_CLANG_TIDY "/opt/homebrew/opt/llvm/bin/clang-tidy;−header−filter=.∗")
 
 # Process cmake from sim and fluid directories
 add_subdirectory(sim)
