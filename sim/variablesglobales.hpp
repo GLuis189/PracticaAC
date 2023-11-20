@@ -39,6 +39,8 @@ const double amortiguamiento = 128.0;
 const double vis             = 0.4;  // Asume un valor para μ_p
 const double tparticula      = 2e-4;
 const double ptiempo         = 1e-3;  // Asume un valor para Δt
+const double varconst        = 1e-10;
+const int errorconst         = -5;
 
 const double g_x = 0.0;
 const double g_y = -9.8;

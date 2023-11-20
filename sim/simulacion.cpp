@@ -29,7 +29,7 @@ grid calcularMalla(std::ifstream& inputfile) {
 
   if (numparticulas <= 0) {
     std::cerr << "Error: Invalid number of particles: 0.\n";
-    exit(-5);
+    exit(errorconst);
   }
 
   masa      = densidad / (ppm * ppm * ppm);
@@ -69,7 +69,7 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
   if (numparticulas != contar_particulas) {
     std::cerr << "Error: Number of particles mismatch. Header:" << numparticulas
               << ", Found:" << contar_particulas << ".\n";
-    exit(-5);
+    exit(errorconst);
   }
  return particles;
 }
@@ -80,9 +80,9 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
 
     particle.Inicializar();
 
-    int i_anterior = particle.i;
-    int j_anterior = particle.j;
-    int k_anterior = particle.k;
+    int const i_anterior = particle.i;
+    int const j_anterior = particle.j;
+    int const k_anterior = particle.k;
 
     particle.calcularBloque(s_x, s_y, s_z, n_x, n_y, n_z);
 
