@@ -60,7 +60,7 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
     particle.v_x = v_x, particle.v_y = v_y, particle.v_z = v_z;
     particle.a_y = -9.8, particle.a_x = 0, particle.a_z = 0;
     particle.calcularBloqueInicial(s_x, s_y, s_z, n_x, n_y, n_z);
-    std::string const block_key = malla.generarClaveBloque(particle.i, particle.j, particle.k);
+    int const block_key = malla.generarClaveBloque(particle.i, particle.j, particle.k);
     malla.blocks[block_key].addParticle(particle.ide);
     particles.push_back(particle);
     ++contar_particulas;

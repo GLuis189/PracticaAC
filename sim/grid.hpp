@@ -28,17 +28,17 @@ class grid {
 
 class grid {
   public:
-    std::unordered_map<std::string, Block> blocks; // Almacena los bloques
-    std::vector<std::string> colisionesCx;
-    std::vector<std::string> colisionesCy;
-    std::vector<std::string> colisionesCz;
+    std::unordered_map<int, Block> blocks; // Almacena los bloques
+    std::vector<int> colisionesCx;
+    std::vector<int> colisionesCy;
+    std::vector<int> colisionesCz;
 
     grid(int n_x, int n_y, int n_z);
     void CambiarBloque(int id, int i, int j, int k, int i_anterior, int j_anterior, int k_anterior);
     void calcularDensidades(std::vector<Particle> & particles, int numparticulas, double masa, double suavizado, double suavizado_2);
     static bool esValido(int indice, int max);
-    void calcularBloquesAdyacentes(const std::string& block_key, int a, int b, int c, int n_x, int n_y, int n_z);
-    static std::string generarClaveBloque(int a, int b, int c);
+    void calcularBloquesAdyacentes(const int block_key, int a, int b, int c, int n_x, int n_y, int n_z);
+    static int generarClaveBloque(int a, int b, int c);
     void calcularAceleraciones(std::vector<Particle> & particles, int numparticulas, double pi_sua_6, double masa, double suavizado);
     void ColisionesEjeX_1(std::vector<Particle> & particles);
     void ColisionesEjeY_1(std::vector<Particle> & particles);

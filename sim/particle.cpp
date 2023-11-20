@@ -7,8 +7,6 @@
 #include <cmath>
 
 
-
-
 void Particle::calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z){
     i = static_cast<int>((p_x-bmin_x)/ s_x);
     if (i> n_x -1){

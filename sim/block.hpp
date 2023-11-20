@@ -33,7 +33,7 @@ class Block {
     // void printBlockAndAdyacentes();
     //void printParticles();  // Nuevo método para imprimir las partículas
     std::vector<int> particles;
-    std::vector<std::string> bloques_ady;
+    std::vector<int> bloques_ady;
 };
 
 #endif // BLOCK_HPP

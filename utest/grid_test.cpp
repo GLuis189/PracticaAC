@@ -33,7 +33,7 @@ TEST(GridTest, generarClaveBloque) {
   int const n_z = 5;
   grid const myGrid(n_x, n_y, n_z);
   // Verificar que este método genera la clave correcta para un bloque dado sus índices
-  ASSERT_EQ(myGrid.generarClaveBloque(1, 2, 3), "1_2_3");
+  ASSERT_EQ(myGrid.generarClaveBloque(1, 2, 3), 10203);
 }
 
 // Test para el método esValido
@@ -54,8 +54,7 @@ TEST(GridTest, calcularBloquesAdyacentes) {
   int nz = 10;
   grid myGrid(nx, ny, nz);
   // Verificar que este método calcula correctamente los bloques adyacentes para un bloque dado
-  std::string const block_key2 = myGrid.generarClaveBloque(5, 5, 5);
-  myGrid.calcularBloquesAdyacentes(block_key2, 5, 5, 5, 10, 10, 10);
+  int const block_key2 = myGrid.generarClaveBloque(5, 5, 5);
   ASSERT_EQ(myGrid.blocks[block_key2].bloques_ady.size(), 27);
 }
 
@@ -66,12 +65,12 @@ TEST(GridTest, CambiarBloque) {
   int nz = 10;
   grid myGrid(nx, ny, nz);
   // Añadir una partícula al bloque (5,5,5)
-  std::string const block_key = myGrid.generarClaveBloque(5, 5, 5);
+  int const block_key = myGrid.generarClaveBloque(5, 5, 5);
   myGrid.blocks[block_key].addParticle(1);
   // Cambiar la partícula al bloque (6,6,6)
   myGrid.CambiarBloque(1, 6, 6, 6, 5, 5, 5);
   // Verificar que la partícula se ha movido correctamente
-  std::string const block_key2 = myGrid.generarClaveBloque(6, 6, 6);
+  int const block_key2 = myGrid.generarClaveBloque(6, 6, 6);
   ASSERT_EQ(myGrid.blocks[block_key2].particles.size(), 1);
   ASSERT_EQ(myGrid.blocks[block_key].particles.size(), 0);
 }
@@ -174,6 +173,7 @@ TEST(GridTest, ColisionesEjeZ_1) {
   std::vector<Particle> particles;
   // Añadir una partícula al bloque (0,0,0)
   Particle p;
+  p.ide = 0;
   p.i   = 0;
   p.j   = 0;
   p.k   = 0;
@@ -200,6 +200,7 @@ TEST(GridTest, No_ColisionesEjeZ_1) {
   std::vector<Particle> particles;
   // Añadir una partícula al bloque (0,0,0)
   Particle p;
+  p.ide = 0;
   p.i   = 0;
   p.j   = 0;
   p.k   = 10;

@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include "../sim/progargs.hpp"
+#include "../sim/grid.hpp"
+#include "../sim/particle.hpp"
+
 
 grid calcularMalla(std::ifstream& inputfile);
 
