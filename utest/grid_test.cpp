@@ -86,19 +86,19 @@ TEST(GridTest, ColisionesEjeX_1) {
   // Añadir una partícula al bloque (0,0,0)
   Particle p;
   p.i = 0; p.j = 0; p.k = 0;
-  p.px =  -0.0661478;
+  p.p_x =  -0.0661478;
   p.hvx =  -0.166259;
-  p.vx = -0.191624;
-  p.ax = 0;
+  p.v_x = -0.191624;
+  p.a_x = 0;
   particles.push_back(p);
   myGrid.blocks[myGrid.generarClaveBloque(0, 0, 0)].addParticle(0);
   // Llamar a ColisionesEjeX_1
   myGrid.ColisionesEjeX_1(particles);
-  double x = p.px + p.hvx * ptiempo;
+  double x = p.p_x + p.hvx * ptiempo;
   double var_px = tparticula - (x - bmin_x);
-  double aceleracion = p.ax + (colisiones * var_px - amortiguamiento *p.vx);
+  double aceleracion = p.a_x + (colisiones * var_px - amortiguamiento *p.v_x);
   // Verificar que la partícula ha colisionado correctamente
-  ASSERT_DOUBLE_EQ(particles[0].ax, aceleracion);
+  ASSERT_DOUBLE_EQ(particles[0].a_x, aceleracion);
 }
 TEST(GridTest, No_ColisionesEjeX_1) {
   int nx = 15;
@@ -109,15 +109,15 @@ TEST(GridTest, No_ColisionesEjeX_1) {
   // Añadir una partícula al bloque (0,0,0)
   Particle p;
   p.i = 10; p.j = 0; p.k = 0;
-  p.px =  -0.0661478;
+  p.p_x =  -0.0661478;
   p.hvx =  -0.0661478;
-  p.ax = 0;
+  p.a_x = 0;
   particles.push_back(p);
   myGrid.blocks[myGrid.generarClaveBloque(0, 0, 0)].addParticle(0);
   // Llamar a ColisionesEjeX_1
   myGrid.ColisionesEjeX_1(particles);
   // Verificar que la partícula no ha colisionado
-  ASSERT_DOUBLE_EQ(particles[0].ax, 0);
+  ASSERT_DOUBLE_EQ(particles[0].a_x, 0);
 }
 // Test para el método ColisionesEjeY_1
 TEST(GridTest, ColisionesEjeY_1) {
@@ -129,19 +129,19 @@ TEST(GridTest, ColisionesEjeY_1) {
   // Añadir una partícula al bloque (0,0,0)
   Particle p;
   p.i = 0; p.j = 0; p.k = 0;
-  p.py =  -0.0805976;
+  p.p_y =  -0.0805976;
   p.hvy =  0.0432823;
-  p.vy = 0.0426284;
-  p.ay = -9.8;
+  p.v_y = 0.0426284;
+  p.a_y = -9.8;
   particles.push_back(p);
   myGrid.blocks[myGrid.generarClaveBloque(0, 0, 0)].addParticle(0);
   // Llamar a ColisionesEjeY_1
   myGrid.ColisionesEjeY_1(particles);
-  double y = p.py + p.hvy * ptiempo;
+  double y = p.p_y + p.hvy * ptiempo;
   double var_py = tparticula - (y - bmin_y);
-  double aceleracion = p.ay + (colisiones * var_py - amortiguamiento *p.vy);
+  double aceleracion = p.a_y + (colisiones * var_py - amortiguamiento *p.v_y);
   // Verificar que la partícula ha colisionado correctamente
-  ASSERT_DOUBLE_EQ(particles[0].ay, aceleracion);
+  ASSERT_DOUBLE_EQ(particles[0].a_y, aceleracion);
 }
 TEST(GridTest, No_ColisionesEjeY_1) {
   int nx = 15;
@@ -154,15 +154,15 @@ TEST(GridTest, No_ColisionesEjeY_1) {
   p.i   = 0;
   p.j   = 10;
   p.k   = 0;
-  p.py  = -0.0661478;
+  p.p_y  = -0.0661478;
   p.hvy = -0.0661478;
-  p.ay  = 0;
+  p.a_y  = 0;
   particles.push_back(p);
   myGrid.blocks[grid::generarClaveBloque(0, 0, 0)].addParticle(0);
   // Llamar a ColisionesEjeY_1
   myGrid.ColisionesEjeY_1(particles);
   // Verificar que la partícula no ha colisionado
-  ASSERT_DOUBLE_EQ(particles[0].ay, 0);
+  ASSERT_DOUBLE_EQ(particles[0].a_y, 0);
 }
 
 // Test para el método ColisionesEjeZ_1
@@ -177,19 +177,19 @@ TEST(GridTest, ColisionesEjeZ_1) {
   p.i   = 0;
   p.j   = 0;
   p.k   = 0;
-  p.pz  = -0.0648605;
+  p.p_z  = -0.0648605;
   p.hvz = 0.0442792;
-  p.vz  = 0.0459564;
-  p.az  = 0;
+  p.v_z  = 0.0459564;
+  p.a_z  = 0;
   particles.push_back(p);
   myGrid.blocks[myGrid.generarClaveBloque(0, 0, 0)].addParticle(0);
   // Llamar a ColisionesEjeZ_1
   myGrid.ColisionesEjeZ_1(particles);
-  double z           = p.pz + p.hvz * ptiempo;
+  double z           = p.p_z + p.hvz * ptiempo;
   double var_pz      = tparticula - (z - bmin_z);
-  double aceleracion = p.az + (colisiones * var_pz - amortiguamiento * p.vz);
+  double aceleracion = p.a_z + (colisiones * var_pz - amortiguamiento * p.v_z);
   // Verificar que la partícula ha colisionado correctamente
-  ASSERT_DOUBLE_EQ(particles[0].az, aceleracion);
+  ASSERT_DOUBLE_EQ(particles[0].a_z, aceleracion);
 }
 
 TEST(GridTest, No_ColisionesEjeZ_1) {
@@ -203,13 +203,13 @@ TEST(GridTest, No_ColisionesEjeZ_1) {
   p.i   = 0;
   p.j   = 0;
   p.k   = 10;
-  p.az  = 0;
+  p.a_z  = 0;
   particles.push_back(p);
   myGrid.blocks[myGrid.generarClaveBloque(0, 0, 0)].addParticle(0);
   // Llamar a ColisionesEjeZ_1
   myGrid.ColisionesEjeZ_1(particles);
   // Verificar que la partícula no ha colisionado
-  ASSERT_DOUBLE_EQ(particles[0].az, 0);
+  ASSERT_DOUBLE_EQ(particles[0].a_z, 0);
 }
 
 // Test para el método ColisionesEjeX_2
@@ -227,7 +227,7 @@ TEST(GridTest, ColisionesEjeX_2) {
   // Llamar a ColisionesEjeX_2
   myGrid.ColisionesEjeX_2(particles);
   // Verificar que la partícula ha colisionado correctamente
-  ASSERT_DOUBLE_EQ(particles[0].ax, 1/* valor esperado */);
+  ASSERT_DOUBLE_EQ(particles[0].a_x, 1/* valor esperado */);
 }
 
 // Test para el método ColisionesEjeY_2
@@ -247,7 +247,7 @@ TEST(GridTest, ColisionesEjeY_2) {
   // Llamar a ColisionesEjeY_2
   myGrid.ColisionesEjeY_2(particles);
   // Verificar que la partícula ha colisionado correctamente
-  ASSERT_DOUBLE_EQ(particles[0].ax, 1 /* valor esperado */);
+  ASSERT_DOUBLE_EQ(particles[0].a_x, 1 /* valor esperado */);
 }
 
 // Test para el método ColisionesEjeZ_2
@@ -265,5 +265,5 @@ TEST(GridTest, ColisionesEjeZ_2) {
   // Llamar a ColisionesEjeZ_2
   myGrid.ColisionesEjeZ_2(particles);
   // Verificar que la partícula ha colisionado correctamente
-  ASSERT_DOUBLE_EQ(particles[0].ax, 1/* valor esperado */);
+  ASSERT_DOUBLE_EQ(particles[0].a_x, 1/* valor esperado */);
 }

@@ -2,64 +2,11 @@
 // Created by luis on 18/11/23.
 //
 #include "gtest/gtest.h"
-#include "../sim/simulacion.cpp"
+#include "../sim/simulacion.hpp"
+#include "../sim/particle.hpp"
+#include "../sim/grid.hpp"
 #include "../sim/progargs.hpp"
-
-/*bool compararArchivos(const std:: string& archivo1, const std:: string& archivo2){
-  std::ifstream a_1(archivo1, std::ios::binary);
-  std::ifstream  a_2(archivo2, std::ios::binary);
-
- return std::equal(
-      std
-      )
-}*/
-
-/*TEST(FileComparison, BinaryFiles) {
-    const char* filePath1 = "archivo1.bin";
-    const char* filePath2 = "archivo2.bin";
-
-  std::ifstream file1(filePath1, std::ios::binary);
-  std::ifstream file2(filePath2, std::ios::binary);
-
-  ASSERT_TRUE(file1.is_open()) << "No se pudo abrir el archivo " << filePath1;
-  ASSERT_TRUE(file2.is_open()) << "No se pudo abrir el archivo " << filePath2;
-
-  // Lee ppm y el número de partículas
-  float ppm1, ppm2;
-  int numParticles1, numParticles2;
-
-  file1.read(reinterpret_cast<char*>(&ppm1), sizeof(float));
-  file1.read(reinterpret_cast<char*>(&numParticles1), sizeof(int));
-
-  file2.read(reinterpret_cast<char*>(&ppm2), sizeof(float));
-  file2.read(reinterpret_cast<char*>(&numParticles2), sizeof(int));
-
-  ASSERT_EQ(ppm1, ppm2) << "Los archivos tienen diferentes ppm";
-  ASSERT_EQ(numParticles1, numParticles2) << "Los archivos tienen diferentes números de partículas";
-
-  // Lee los datos de las partículas
-  std::vector<Particle> particles1, particles2;
-  Particle particle;
-
-  while (file1.read(reinterpret_cast<char*>(&particle), sizeof(Particle))) {
-    particles1.push_back(particle);
-  }
-
-  while (file2.read(reinterpret_cast<char*>(&particle), sizeof(Particle))) {
-    particles2.push_back(particle);
-  }
-
-  ASSERT_EQ(particles1.size(), particles2.size()) << "Los archivos tienen tamaños de partículas diferentes";
-
-  // Compara cada partícula
-  for (size_t i = 0; i < particles1.size(); ++i) {
-    EXPECT_TRUE(compareParticles(particles1[i], particles2[i]))
-        << "Diferencia en la partícula " << i;
-  }
-
-  file1.close();
-  file2.close();
-}*/
+#include <fstream>
 
 struct ArchivoData {
     float ppm;
@@ -100,24 +47,7 @@ ArchivoData leerArchivo(const std::string& nombreArchivo) {
   archivo.close();
   return archivoData;
 }
-bool sonArchivosIguales(const std::string& archivo1, const std::string& archivo2) {
-  std::ifstream file1(archivo1, std::ios::binary);
-  std::ifstream file2(archivo2, std::ios::binary);
 
-  char byte1, byte2;
-  int contador = 1;
-  while (file1.get(byte1) && file2.get(byte2)) {
-    // Comparar byte a byte
-    std::cout<<contador<<"\n";
-    contador++;
-    if (byte1 != byte2) {
-      return false;
-    }
-  }
-
-  // Si uno de los archivos llegó al final, el otro también debe haberlo hecho para ser iguales
-  return file1.eof() && file2.eof();
-}
 TEST(PruebaFuncional, CompararConTrazas1_small) {
   ProgArgs args;
   args.nts        = 1;  // Reemplaza esto con el número de iteraciones que quieras
@@ -135,10 +65,10 @@ TEST(PruebaFuncional, CompararConTrazas1_small) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/small-1.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size());
-  ASSERT_EQ(resultado.ppm, trazas.ppm);
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas)
-      << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
     EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
@@ -152,85 +82,318 @@ TEST(PruebaFuncional, CompararConTrazas1_small) {
     EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
   }
 }
-/*TEST(ArchivoTest, ArchivosIguales) {
+
+TEST(PruebaFuncional, CompararConTrazas2_small) {
   ProgArgs args;
-  args.nts = 1;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile = "../small.fld";
-  args.outputfile = "small1_test.out";
+  args.nts        = 2;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../small.fld";
+  args.outputfile = "small2_test.out";
 
   // Ejecuta la simulación
   std::ifstream inputfile(args.inputfile, std::ios::binary);
   std::ofstream outputfile(args.outputfile, std::ios::binary);
-  grid malla = calcularMalla(inputfile);
-  std::vector<Particle> particles = leerParticulas(inputfile, malla);
-  IniciarSimulacion(args, outputfile, malla, particles);
-  const std::string archivo1 = args.outputfile;
-  const std::string archivo2 = "../out/small-1.fld";
-
-  ASSERT_TRUE(sonArchivosIguales(archivo1, archivo2)) << "Los archivos no son iguales";
-}
-
-TEST(PruebaFuncional, CompararConTrazas1_large) {
-  ProgArgs args;
-  args.nts = 1;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile = "../small.fld";
-  args.outputfile = "small1_test.out";
-
-  // Ejecuta la simulación
-  std::ifstream inputfile(args.inputfile, std::ios::binary);
-  std::ofstream outputfile(args.outputfile, std::ios::binary);
-  grid malla = calcularMalla(inputfile);
+  grid malla                      = calcularMalla(inputfile);
   std::vector<Particle> particles = leerParticulas(inputfile, malla);
   IniciarSimulacion(args, outputfile, malla, particles);
 
   // Lee los resultados de la simulación
-  std::vector<Particle> resultado = leerArchivo(args.outputfile);
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/small-2.fld");
 
-  std::vector<Particle> trazas = leerArchivo("../out/small-1.fld");
-  float ppm_resultado, ppm_trazas;
-  int numParticulas_resultado, numParticulas_trazas;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
 
-  std::ifstream resultado_cabecera(args.outputfile, std::ios::binary);
-  inputfile.read(reinterpret_cast<char *>(&ppm_resultado), sizeof(ppm_resultado));
-  inputfile.read(reinterpret_cast<char *>(&numParticulas_resultado), sizeof(numParticulas_resultado));
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
+  }
+}
 
-  std::ifstream trazasfile("../out/small-1.fld", std::ios::binary);
-  trazasfile.read(reinterpret_cast<char *>(&ppm_trazas), sizeof(ppm_trazas));
-  trazasfile.read(reinterpret_cast<char *>(&numParticulas_trazas), sizeof(numParticulas_trazas));
+TEST(PruebaFuncional, CompararConTrazas3_small) {
+  ProgArgs args;
+  args.nts        = 3;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../small.fld";
+  args.outputfile = "small3_test.out";
 
-  ASSERT_EQ(resultado.size(), trazas.size()) << "El número de partículas no coincide con las trazas";
+  // Ejecuta la simulación
+  std::ifstream inputfile(args.inputfile, std::ios::binary);
+  std::ofstream outputfile(args.outputfile, std::ios::binary);
+  grid malla                      = calcularMalla(inputfile);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
+  IniciarSimulacion(args, outputfile, malla, particles);
 
+  // Lee los resultados de la simulación
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/small-3.fld");
 
-  for (size_t i = 0; i < resultado.size(); ++i) {
-    EXPECT_EQ(resultado[i].id, trazas[i].id) << "Fallo en la id de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].px, trazas[i].px) << "Fallo en px de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].py, trazas[i].py) << "Fallo en py de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].pz, trazas[i].pz) << "Fallo en pz de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].hvx, trazas[i].hvx) << "Fallo en hvx de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].hvy, trazas[i].hvy) << "Fallo en hvy de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].hvz, trazas[i].hvz) << "Fallo en hvz de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].vx, trazas[i].vx) << "Fallo en vx de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].vy, trazas[i].vy) << "Fallo en vy de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].vz, trazas[i].vz) << "Fallo en vz de la partícula " << i;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
+  }
+}
+
+TEST(PruebaFuncional, CompararConTrazas4_small) {
+  ProgArgs args;
+  args.nts        = 4;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../small.fld";
+  args.outputfile = "small4_test.out";
+
+  // Ejecuta la simulación
+  std::ifstream inputfile(args.inputfile, std::ios::binary);
+  std::ofstream outputfile(args.outputfile, std::ios::binary);
+  grid malla                      = calcularMalla(inputfile);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
+  IniciarSimulacion(args, outputfile, malla, particles);
+
+  // Lee los resultados de la simulación
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/small-4.fld");
+
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
+  }
+}
+
+TEST(PruebaFuncional, CompararConTrazas5_small) {
+  ProgArgs args;
+  args.nts        = 5;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../small.fld";
+  args.outputfile = "small5_test.out";
+
+  // Ejecuta la simulación
+  std::ifstream inputfile(args.inputfile, std::ios::binary);
+  std::ofstream outputfile(args.outputfile, std::ios::binary);
+  grid malla                      = calcularMalla(inputfile);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
+  IniciarSimulacion(args, outputfile, malla, particles);
+
+  // Lee los resultados de la simulación
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/small-5.fld");
+
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
+  }
+}
+
+TEST(PruebaFuncional, CompararConTrazas1_large) {
+  ProgArgs args;
+  args.nts        = 1;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../large.fld";
+  args.outputfile = "large1_test.out";
+
+  // Ejecuta la simulación
+  std::ifstream inputfile(args.inputfile, std::ios::binary);
+  std::ofstream outputfile(args.outputfile, std::ios::binary);
+  grid malla                      = calcularMalla(inputfile);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
+  IniciarSimulacion(args, outputfile, malla, particles);
+
+  // Lee los resultados de la simulación
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/large-1.fld");
+
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
+  }
+}
+
+TEST(PruebaFuncional, CompararConTrazas2_large) {
+  ProgArgs args;
+  args.nts        = 2;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../large.fld";
+  args.outputfile = "large2_test.out";
+
+  // Ejecuta la simulación
+  std::ifstream inputfile(args.inputfile, std::ios::binary);
+  std::ofstream outputfile(args.outputfile, std::ios::binary);
+  grid malla                      = calcularMalla(inputfile);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
+  IniciarSimulacion(args, outputfile, malla, particles);
+
+  // Lee los resultados de la simulación
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/large-2.fld");
+
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
+  }
+}
+
+TEST(PruebaFuncional, CompararConTrazas3_large) {
+  ProgArgs args;
+  args.nts        = 3;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../large.fld";
+  args.outputfile = "large3_test.out";
+
+  // Ejecuta la simulación
+  std::ifstream inputfile(args.inputfile, std::ios::binary);
+  std::ofstream outputfile(args.outputfile, std::ios::binary);
+  grid malla                      = calcularMalla(inputfile);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
+  IniciarSimulacion(args, outputfile, malla, particles);
+
+  // Lee los resultados de la simulación
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/large-3.fld");
+
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
+  }
+}
+
+TEST(PruebaFuncional, CompararConTrazas4_large) {
+  ProgArgs args;
+  args.nts        = 4;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../large.fld";
+  args.outputfile = "large4_test.out";
+
+  // Ejecuta la simulación
+  std::ifstream inputfile(args.inputfile, std::ios::binary);
+  std::ofstream outputfile(args.outputfile, std::ios::binary);
+  grid malla                      = calcularMalla(inputfile);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
+  IniciarSimulacion(args, outputfile, malla, particles);
+
+  // Lee los resultados de la simulación
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/large-4.fld");
+
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
   }
 }
 
 TEST(PruebaFuncional, CompararConTrazas5_large) {
-  std::vector<Particle> resultado = leerArchivo("../small1_binario.out");
-  std::vector<Particle> trazas = leerArchivo("../trazas_small_1_binario.out");
+  ProgArgs args;
+  args.nts        = 5;  // Reemplaza esto con el número de iteraciones que quieras
+  args.inputfile  = "../large.fld";
+  args.outputfile = "large5_test.out";
 
-  //ASSERT_EQ(resultado.size(), trazas.size()) << "El número de partículas no coincide con las trazas";
+  // Ejecuta la simulación
+  std::ifstream inputfile(args.inputfile, std::ios::binary);
+  std::ofstream outputfile(args.outputfile, std::ios::binary);
+  grid malla                      = calcularMalla(inputfile);
+  std::vector<Particle> particles = leerParticulas(inputfile, malla);
+  IniciarSimulacion(args, outputfile, malla, particles);
 
-  for (size_t i = 0; i < resultado.size(); ++i) {
-    EXPECT_EQ(resultado[i].id, trazas[i].id) << "Fallo en la id de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].px, trazas[i].px) << "Fallo en px de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].py, trazas[i].py) << "Fallo en py de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].pz, trazas[i].pz) << "Fallo en pz de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].hvx, trazas[i].hvx) << "Fallo en hvx de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].hvy, trazas[i].hvy) << "Fallo en hvy de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].hvz, trazas[i].hvz) << "Fallo en hvz de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].vx, trazas[i].vx) << "Fallo en vx de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].vy, trazas[i].vy) << "Fallo en vy de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado[i].vz, trazas[i].vz) << "Fallo en vz de la partícula " << i;
+  // Lee los resultados de la simulación
+  ArchivoData resultado = leerArchivo(args.outputfile);
+  ArchivoData trazas    = leerArchivo("../out/large-5.fld");
+
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+
+  for (size_t i = 0; i < resultado.particles.size(); ++i) {
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
   }
-}*/
+}

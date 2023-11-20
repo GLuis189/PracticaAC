@@ -146,18 +146,18 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
     }
     malla.calcularDensidades(particles, numparticulas, masa, suavizado, suavizado_2);
     malla.calcularAceleraciones(particles, numparticulas, pi_sua_6, masa, suavizado);
-    malla.ColisionesEjeX_1(particles);
+    /*malla.ColisionesEjeX_1(particles);
     malla.ColisionesEjeY_1(particles);
-    malla.ColisionesEjeZ_1(particles);
+    malla.ColisionesEjeZ_1(particles);*/
     for (int part = 0; part < numparticulas; part++){
       Particle & particle = particles[part];
 
-      particle.MoverParticulas(/*nx, ny, nz*/);
+      particle.MoverParticulas(n_x, n_y, n_z);
     }
 
-    malla.ColisionesEjeX_2(particles);
+    /*malla.ColisionesEjeX_2(particles);
     malla.ColisionesEjeY_2(particles);
-    malla.ColisionesEjeZ_2(particles);
+    malla.ColisionesEjeZ_2(particles);*/
   }
 
   // Mostrar los datos de las partículas

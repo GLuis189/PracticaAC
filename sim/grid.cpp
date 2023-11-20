@@ -20,10 +20,10 @@ grid::grid(int nx, int ny, int nz) {
         newBlock.j = var_b;
         newBlock.k = var_c;
         blocks[block_key] = newBlock;
-        if(var_a ==0||var_a ==(nx-1)){colisionesCx.push_back(block_key);}
-        if(var_b ==0|| var_b ==(ny-1)){colisionesCy.push_back(block_key);}
-        if(var_c ==0|| var_c ==(nz-1)){colisionesCz.push_back(block_key);}
-        calcularBloquesAdyacentes(block_key, var_a, var_b, var_c, nx, ny, nz);
+        /*if(var_a ==0||var_a ==(n_x-1)){colisionesCx.push_back(block_key);}
+        if(var_b ==0|| var_b ==(n_y-1)){colisionesCy.push_back(block_key);}
+        if(var_c ==0|| var_c ==(n_z-1)){colisionesCz.push_back(block_key);}*/
+        calcularBloquesAdyacentes(block_key, var_a, var_b, var_c, n_x, n_y, n_z);
       }
     }
   }

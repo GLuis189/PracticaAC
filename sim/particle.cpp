@@ -160,8 +160,8 @@ void Particle::ColisionesEjeZnz_1(){
         az = az - (colisiones * var_pz + amortiguamiento * vz);
     }
 }
-void Particle::MoverParticulas(/*int nx, int ny, int nz*/){
-    /*if (i == 0){
+void Particle::MoverParticulas(int n_x, int n_y, int n_z){
+    if (i == 0){
       ColisionesEjeX0_1();
     }
     else if (i == n_x -1) {
@@ -178,10 +178,10 @@ void Particle::MoverParticulas(/*int nx, int ny, int nz*/){
     }
     else if (k == n_z -1) {
       ColisionesEjeZnz_1();
-    }*/
-    px = px + hvx * ptiempo + ax * (ptiempo * ptiempo);
-    py = py + hvy * ptiempo + ay * (ptiempo * ptiempo);
-    pz = pz + hvz * ptiempo + az * (ptiempo * ptiempo);
+    }
+    p_x = p_x + hvx * ptiempo + a_x * (ptiempo * ptiempo);
+    p_y = p_y + hvy * ptiempo + a_y * (ptiempo * ptiempo);
+    p_z = p_z + hvz * ptiempo + a_z * (ptiempo * ptiempo);
 
     vx = hvx + (ax * ptiempo) / 2;
     vy = hvy + (ay * ptiempo) / 2;
@@ -191,7 +191,7 @@ void Particle::MoverParticulas(/*int nx, int ny, int nz*/){
     hvy = hvy + ay * ptiempo;
     hvz = hvz + az * ptiempo;
 
-    /*if(i == 0 || i == nx-1){
+    if(i == 0 || i == n_x-1){
       ColisionesEjeX_2();
     }
     if(j == 0 || j == n_y-1){
@@ -199,7 +199,7 @@ void Particle::MoverParticulas(/*int nx, int ny, int nz*/){
     }
     if(k == 0 || k == n_z-1){
       ColisionesEjeZ_2();
-    }*/
+    }
 }
 
 void Particle::ColisionesEjeX_2() {
