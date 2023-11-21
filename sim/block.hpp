@@ -12,7 +12,7 @@
 
 class Block {
   public:
-    int i, j ,k;
+    int b_i, b_j ,b_k;
     void addParticle(int parti);
     void removeParticle(int  parti);
     // void printBlockAndAdyacentes();
