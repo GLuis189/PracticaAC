@@ -9,12 +9,14 @@
 #include <vector>
 #include <cmath>
 
-double ppm;
-int numparticulas;
-double masa;
-double suavizado;
-double pi_sua_6;
-double suavizado_2;
+
+double suavizado_2; //NOLINT
+double ppm;         //NOLINT
+int numparticulas;  //NOLINT
+double masa;        //NOLINT
+double suavizado;   //NOLINT
+double pi_sua_6;    //NOLINT
+
 
 grid calcularMalla(std::ifstream& inputfile) {
   ppm           = read_binary_value<float>(inputfile);
@@ -37,7 +39,7 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
   std::vector<Particle> particles;
   particles.reserve(numparticulas);
   int contar_particulas = 0;
-  float p_x, p_y, p_z, hvx, hvy, hvz, v_x, v_y, v_z;
+  float p_x, p_y, p_z, hvx, hvy, hvz, v_x, v_y, v_z;  //NOLINT
   while(read_binary_values(inputfile,  p_x, p_y, p_z, hvx, hvy, hvz, v_x, v_y, v_z)) {
     Particle particle;
     particle.ide = contar_particulas, particle.densidad = 0;
