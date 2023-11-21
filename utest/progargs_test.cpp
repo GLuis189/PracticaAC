@@ -1,5 +1,5 @@
 //#include <gtest/gtest.h>
-
+// NOLINTBEGIN
 #include "gtest/gtest.h"
 #include "../sim/progargs.hpp"
 #include <cstdio>
@@ -63,3 +63,5 @@ TEST(ProgArgsTest, CannotOpenOutputFile) {
   }
 }
 */
+
+// NOLINTEND

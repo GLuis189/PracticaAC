@@ -1,9 +1,35 @@
 //
 // Created by Celia on 18/11/23.
 //
-#include "gtest/gtest.h"
+// NOLINTBEGIN
 #include "../sim/particle.hpp"
 #include "../sim/variablesglobales.hpp"
+
+#include "gtest/gtest.h"
+#include <cmath>
+
+TEST(ParticleTest, Inicializar) {
+  Particle p;
+  p.Inicializar();
+  EXPECT_EQ(p.densidad, 0);
+  EXPECT_EQ(p.aceleracion.c_x, 0);
+  EXPECT_EQ(p.aceleracion.c_y, g_y);
+  EXPECT_EQ(p.aceleracion.c_z, 0);
+}
+TEST(ParticleTest, CalcularDistancia) {
+  Particle p1, p2;
+  p1.posicion.c_x = 0.5;
+  p1.posicion.c_y = 0.5;
+  p1.posicion.c_z = 0.5;
+  p2.posicion.c_x = 0.6;
+  p2.posicion.c_y = 0.6;
+  p2.posicion.c_z = 0.6;
+  double const modulo    = std::sqrt(0.1 * 0.1 + 0.1 * 0.1 + 0.1 * 0.1);
+  double const distancia = modulo * modulo;// La distancia al cuadrado entre p1 y p2
+  EXPECT_NEAR(p1.CalcularDistancia(p2), distancia, 1e-9);
+}
+
+
 /*
 // Test para el método calcularBloqueInicial
 TEST(ParticleTest, calcularBloqueInicial) {
@@ -88,3 +114,5 @@ TEST(ParticleTest, Colisiones) {
 }
 
 */
+
+// NOLINTEND

@@ -2,6 +2,7 @@
 // Created by luis on 30/10/23.
 //
 // test_grid.cpp
+// NOLINTBEGIN
 #include "gtest/gtest.h"
 #include "../sim/grid.hpp"
 #include "../sim/variablesglobales.hpp"
@@ -273,3 +274,5 @@ TEST(GridTest, ColisionesEjeZ_2) {
   // Verificar que la partícula ha colisionado correctamente
   ASSERT_DOUBLE_EQ(particles[0].a_x, 1 );
 }*/
+
+// NOLINTEND
