@@ -91,7 +91,7 @@ void grid::calcularDensidades(std::vector<Particle> & particles, double masa, do
         if (particula > particle) { particle.VariacionDensidad(particula, suavizado_2); }
       }
     }
-    particle.densidad = (particle.densidad + pow(suavizado, 6)) * 315 * masa/ (64 * M_PI * pow(suavizado, 9));
+    particle.densidad = (particle.densidad + pow(suavizado, n_6)) * n_315 * masa/ (n_64 * M_PI * pow(suavizado, n_9));
   }
 }
 

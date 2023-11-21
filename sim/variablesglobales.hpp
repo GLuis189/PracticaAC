@@ -41,6 +41,13 @@ const double tparticula      = 2e-4;
 const double ptiempo         = 1e-3;  // Asume un valor para Δt
 const double varconst        = 1e-10;
 const int errorconst         = -5;
+const int n_6 = 6;
+const int n_9 = 9;
+const int n_64 = 64;
+const int n_315 = 315;
+const int dmil = 10000;
+const int cien = 100;
+
 
 const double g_x = 0.0;
 const double g_y = -9.8;

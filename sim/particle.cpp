@@ -54,11 +54,15 @@ void Particle::VariacionAcelaracion(Particle& particula, double suavizado, doubl
 }
 void Particle::ColisionesEje(int eje, double bmin, double bmax){
     double const col = posicion[eje] + hvelocidad[eje] * ptiempo;
-    int p;
-    if(eje == 0) p = p_i;
-    else if(eje == 1) p = p_j;
-    else p = p_k;
-    if(p==0){
+    int col_p = 0;
+    if(eje == 0) {
+      col_p = p_i;
+    } else if(eje == 1) {
+      col_p = p_j;
+    } else {
+      col_p = p_k;
+    }
+    if(col_p==0){
       const double var_p = tparticula - (col - bmin);
       if (var_p > varconst) {
         aceleracion[eje] += (colisiones * var_p - amortiguamiento * velocidad[eje]);
@@ -100,23 +104,23 @@ void Particle::MoverParticulas(int n_x, int n_y, int n_z){
 }
 
 void Particle::ColisionesEje_2(int eje, double bmax, double bmin){
-    double d = NAN;
-    int p;
-    if(eje == 0) p = p_i;
-    else if(eje == 1) p = p_j;
-    else p = p_k;
-    if(p == 0){
-        d = posicion[eje] - bmin;
+    double col_d = 0.0;
+    int col_p = 0;
+    if(eje == 0) { col_p = p_i;
+    } else if(eje == 1) {col_p = p_j;}
+    else {col_p = p_k;}
+    if(col_p == 0){
+        col_d = posicion[eje] - bmin;
     }
     else{
-        d = bmax - posicion[eje];
+        col_d = bmax - posicion[eje];
     }
-    if(d<0){
-        if(p == 0){
-        posicion[eje] = bmin - d;
+    if(col_d<0){
+        if(col_p == 0){
+        posicion[eje] = bmin - col_d;
         }
         else{
-        posicion[eje] = bmax + d;
+        posicion[eje] = bmax + col_d;
         }
         velocidad[eje] = -velocidad[eje];
         hvelocidad[eje] = -hvelocidad[eje];
