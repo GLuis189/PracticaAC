@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <array>
 
 
 double suavizado_2; //NOLINT
