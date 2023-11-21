@@ -62,3 +62,40 @@ const double bmin_y = -0.08;
 const double bmin_z = -0.065;
 
 #endif // VARIABLESGLOBALES_H
+
+
+ // Forward declaration
+/*template <typename T>
+char* as_writable_buffer(T & value);
+
+template <typename T>
+T read_binary_values(std::istream & is);
+
+// Implementación de as_writable_buffer para tipos no integrales ni de punto flotante
+template <typename T>
+char* as_writable_buffer_impl(T & value) {
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+  return reinterpret_cast<char *>(&value);
+}
+
+// Implementación de as_writable_buffer para tipos integrales o de punto flotante
+template <typename T>
+char* as_writable_buffer(T & value) {
+  return as_writable_buffer_impl(value);
+}
+
+// Implementación de read_binary_value para tipos no integrales ni de punto flotante
+template <typename T>
+T read_binary_value_impl(std::istream & is) {
+  T value{};
+  is.read(as_writable_buffer(value), sizeof(value));
+  return value;
+}
+
+// Implementación de read_binary_value para tipos integrales o de punto flotante
+template <typename T>
+T read_binary_value(std::istream & is) {
+  T value{};
+  is.read(as_writable_buffer(value), sizeof(value));
+  return value;
+}*/
