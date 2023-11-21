@@ -141,7 +141,7 @@ void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& output
   outputfile.close();
 }*/
 
-void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
+[[maybe_unused]] void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
   for (Particle  const& particle: particles) {
     outputfile << "ID: " << particle.ide << "\n";
     outputfile << "Posición (x, y, z): " << particle.posicion.c_x << ", " << particle.posicion.c_y << ", " << particle.posicion.c_z << "\n";
