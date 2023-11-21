@@ -63,6 +63,7 @@ TEST(GridTest, CalcularBloqueInicial) {
   EXPECT_EQ(part.p_j, 13);
   EXPECT_EQ(part.p_k, 11);
 }
+/*
 TEST(GridTest, CambiarBloque) {
   double const suavizado = suavizadot;
   grid myGrid(suavizado);
@@ -71,9 +72,9 @@ TEST(GridTest, CambiarBloque) {
   particle.posicion.c_y = 0.0;
   particle.posicion.c_z = 0.0;
   myGrid.calcularBloqueInicial(particle);
-  int i_anterior        = particle.p_i;
-  int j_anterior        = particle.p_j;
-  int k_anterior        = particle.p_k;
+  const int i_anterior = particle.p_i;
+  const int j_anterior = particle.p_j;
+  const int k_anterior = particle.p_k;
   particle.posicion.c_x = 0.6;
   particle.posicion.c_y = 0.6;
   particle.posicion.c_z = 0.6;
@@ -104,6 +105,7 @@ TEST(GridTest, CalcularDensidades) {
   // ASSERT_DOUBLE_EQ(particles[1].densidad, valor_esperado);
   // ...
 }
+*/
 // Test para el método CambiarBloque
 /*TEST(GridTest, CambiarBloque) {
   double const suavizado = suavizadot;

@@ -32,7 +32,7 @@ const double amortiguamiento = 128.0;
 const double vis             = 0.4;  // Asume un valor para μ_p
 const double tparticula      = 2e-4;
 const double ptiempo         = 1e-3;  // Asume un valor para Δt
-const double varconst        = 1e-10;
+const double var_const       = 1e-10;
 const int errorconst         = -5;
 const int n_5 = 5;
 const int n_6 = 6;
@@ -42,10 +42,10 @@ const int n_315 = 315;
 const int dmil = 10000;
 const int cien = 100;
 const double g_y = -9.8;
+
 const double bmax_x = 0.065;
 const double bmax_y = 0.1;
 const double bmax_z = 0.065;
-
 const double bmin_x = -0.065;
 const double bmin_y = -0.08;
 const double bmin_z = -0.065;

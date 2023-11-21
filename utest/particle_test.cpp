@@ -6,40 +6,43 @@
 
 #include "gtest/gtest.h"
 #include <cmath>
-
-const float k_1 = 0.5;
-const float k_2 = 0.6;
+#include <string>
+#include <array>
 
 TEST(ParticleTest, Inicializar) {
   Particle particle;
   particle.Inicializar();
-  EXPECT_EQ(particle.densidad, 0);
-  EXPECT_EQ(particle.aceleracion.c_x, 0);
-  EXPECT_EQ(particle.aceleracion.c_y, g_y);
-  EXPECT_EQ(particle.aceleracion.c_z, 0);
+  EXPECT_EQ(particle.densidad, 0) << "La densidad no se inicializó.";
+  EXPECT_EQ(particle.aceleracion.c_x, 0) << "La coordenada x de la aceleración no se inicializó.";
+  EXPECT_EQ(particle.aceleracion.c_y, g_y) << "La coordenada y de la aceleración no se inicializó.";
+  EXPECT_EQ(particle.aceleracion.c_z, 0) << "La coordenada z de la aceleración no se inicializó.";
 }
 
 TEST(ParticleTest, CalcularDistancia) {
   Particle particle1; Particle particle2;
-  particle1.posicion.c_x = k_1;
-  particle1.posicion.c_y = k_1;
-  particle1.posicion.c_z = k_1;
-  particle2.posicion.c_x = k_2;
-  particle2.posicion.c_y = k_2;
-  particle2.posicion.c_z = k_2;
-  double const modulo    = std::sqrt(0.1 * 0.1 + 0.1 * 0.1 + 0.1 * 0.1);
-  double const distancia = modulo * modulo;
-  EXPECT_NEAR(particle1.CalcularDistancia(particle2), distancia, 1e-9);
+  particle1.posicion = {0.0, 0., 0.0};
+  particle2.posicion = {1.0, 1.0, 1.0};
+  const double mod = std::sqrt(3.0);
+  const double expected_dist = mod*mod;
+  EXPECT_EQ(particle1.CalcularDistancia(particle2), expected_dist) << "La distancia no coincide con la esperada.";
 }
 
 TEST(ParticleTest, VariacionDensidad) {
+  const double suav = 10.0;
   Particle particle1; Particle particle2;
+  particle1.ide = 1;
+  particle2.ide = 2;
   particle1.posicion = {0.0, 0.0, 0.0};
-  particle2.posicion = {k_2, k_2, k_2};
-  particle1.VariacionDensidad(particle2, 1.0);
-  // Verificar que se calcula correctamente la variación de la densidad
-  ASSERT_DOUBLE_EQ(particle1.densidad, 0);
-  ASSERT_DOUBLE_EQ(particle2.densidad, 0);
+  particle2.posicion = {1.0, 1.0, 1.0};
+  particle1.VariacionDensidad(particle2, suav);
+  EXPECT_NE(particle1.densidad, 0) << "La densidad de la partícula 1 no se incrementó.";
+  EXPECT_NE(particle2.densidad, 0) << "La densidad de la partícula 2 no se incrementó.";
+  const double dist = 3.0;    // (sqrt(3.0))^2 = 3.0
+  const double d_s = suav-dist;
+  const double variacion_densidad_esperada = pow(d_s, 3);
+  EXPECT_EQ(particle1.densidad, variacion_densidad_esperada) << "La densidad de la partícula 1 no coincide con la esperada.";
+  EXPECT_EQ(particle2.densidad, variacion_densidad_esperada) << "La densidad de la partícula 2 no coincide con la esperada.";
+  EXPECT_EQ(particle1.particulas_adyacentes.back(), particle2.ide) << "La partícula 2 no se añadió a las partículas adyacentes de la partícula 1.";
 }
 
 TEST(ParticleTest, VariacionAceleracion) {
@@ -47,21 +50,83 @@ TEST(ParticleTest, VariacionAceleracion) {
   particle1.posicion = {0.0, 0.0, 0.0};
   particle2.posicion = {1.0, 1.0, 1.0};
   particle1.velocidad = {0.0, 0.0, 0.0};
-  particle2.velocidad = {0.0, 0.0, 0.0};
+  particle2.velocidad = {1.0, 1.0, 1.0};
   particle1.aceleracion = {0.0, g_y, 0.0};
   particle1.aceleracion = {0.0, g_y, 0.0};
   double const suavizado = 1.0;
   double const pi_sua_6 = M_PI * pow(suavizado, n_6);
   double const masa = 1.0;
   particle1.VariacionAcelaracion(particle2, suavizado, pi_sua_6, masa);
+  std::array<std::string, 3> coordenadas = {"x", "y", "z"};
   // Comprueba los resultados
-  for (int i = 0; i < 3; i++) {
-    EXPECT_DOUBLE_EQ(particle1.aceleracion[i], -particle2.aceleracion[i]);
+  for (int eje = 0; eje < 3; eje++) {
+    EXPECT_EQ(particle1.aceleracion[eje], -particle2.aceleracion[eje]) << "Las coordenadas " << coordenadas.at(eje) << " no se han calculado correctamente.";
   }
 }
 
+const double pos1 = -0.0661478;
+const double pos2 = -0.0805976;
+const double pos3 = -0.0648605;
+const double hvl1 = -0.166259;
+const double hvl2 = 0.0432823;
+const double hvl3 = 0.0442792;
+const double vel1 = -0.191624;
+const double vel2 = 0.0426284;
+const double bax = 1.0;
+const double bix = -1.0;
+const double bay = 1.0;
+const double biy = -1.0;
+const double baz = 1.0;
+const double biz = -1.0;
+
+TEST(ParticleTest, ColisionesEje) {
+  Particle particle;
+  particle.posicion = {pos1, pos2, pos3};
+  particle.hvelocidad = {hvl1, hvl2, hvl3};
+  particle.velocidad = {vel1, vel2, vel2};
+  particle.aceleracion = {0, g_y, 0};
+  particle.ColisionesEje(0, bax, bix);
+  particle.ColisionesEje(1, bay, biy);
+  particle.ColisionesEje(2, baz, biz);
+  EXPECT_EQ(particle.aceleracion[0], 0.0) << "La coordenada X no coincide con la esperada.";
+  EXPECT_EQ(particle.aceleracion[1], g_y) << "La coordenada Y no coincide con la esperada.";
+  EXPECT_EQ(particle.aceleracion[2], 0.0) << "La coordenada Z no coincide con la esperada.";
+}
 
 /*
+TEST(ParticleTest, ColisionesEje2) {
+  Particle particle;
+  particle.posicion = {pos1, pos2, pos3};
+  particle.hvelocidad = {hvl1, hvl2, hvl3};
+  particle.velocidad = {vel1, vel2, vel2};
+  particle.aceleracion = {0, g_y, 0};
+  particle.ColisionesEje(0, bax, bix);
+  particle.ColisionesEje(1, bay, biy);
+  particle.ColisionesEje(2, baz, biz);
+  EXPECT_EQ(particle.aceleracion[0], 0.0) << "La coordenada X no coincide con la esperada.";
+  EXPECT_EQ(particle.aceleracion[1], g_y) << "La coordenada Y no coincide con la esperada.";
+  EXPECT_EQ(particle.aceleracion[2], 0.0) << "La coordenada Z no coincide con la esperada.";
+}
+ */
+
+/*TEST(ParticleTest, MoverParticulas) {
+  Particle particle;
+  particle.posicion = {pos1, pos2, pos3};
+  particle.hvelocidad = {hvl1, hvl2, hvl3};
+  particle.velocidad = {vel1, vel2, vel2};
+  particle.aceleracion = {0, g_y, 0};
+  particle.MoverParticulas(1, 1, 1);
+  const double res_pos = -0.0661478;
+  const double res_vel = -0.191624;
+  const double res_hvl = -0.166259;
+  // Comprueba los resultados
+  EXPECT_DOUBLE_EQ(particle.posicion[0], res_pos) << "La coordenada X de la posición no coincide con la esperada.";
+  EXPECT_DOUBLE_EQ(particle.velocidad[0], res_vel) << "La coordenada X de la velocidad no coincide con la esperada.";
+  EXPECT_DOUBLE_EQ(particle.hvelocidad[0], res_hvl) << "La coordenada X de la hvelocidad no coincide con la esperada.";
+}*/
+
+/*
+// ESTO DE ABAJO ES LO QUE HABÍA.
 // Test para el método calcularBloqueInicial
 TEST(ParticleTest, calcularBloqueInicial) {
   Particle particle;
