@@ -77,7 +77,7 @@ void Particle::ColisionesEje(double bmin, double bmax, int eje){  //NOLINT
 
 void Particle::MoverParticulas(int n_x, int n_y, int n_z){
     if (p_i == 0|| p_i == n_x -1){
-        ColisionesEje(bmin_x, bmax_x, 0);
+        ColisionesEje(0, bmax_x, bmin_x);
     }
     if (p_j == 0||p_j == n_y -1){
         ColisionesEje(bmin_y, bmax_y, 1);

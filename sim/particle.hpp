@@ -20,14 +20,14 @@ struct Vector{
 
 class Particle {
   public:
-    int ide;
-    Vector posicion;   // Coordenadas de posición
-    Vector hvelocidad; // Coordenadas del vector hv
-    Vector velocidad;   // Coordenadas de la velocidad
-    Vector aceleracion;
-    int p_i, p_j, p_k;
-    std::vector<int> particulas_adyacentes;
-    double densidad;
+    int ide{};
+    Vector posicion{};   // Coordenadas de posición
+    Vector hvelocidad{}; // Coordenadas del vector hv
+    Vector velocidad{};   // Coordenadas de la velocidad
+    Vector aceleracion{};
+    int p_i{}, p_j{}, p_k{};
+    std::vector<int> particulas_adyacentes{};
+    double densidad{};
     void Inicializar();
     void VariacionDensidad(Particle & particula, double suavizado_2);
     double CalcularDistancia(Particle & particula) const;
