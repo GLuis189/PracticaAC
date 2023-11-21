@@ -38,12 +38,12 @@ bool grid::esValido(int indice, int max) {
   return indice >= 0 && indice < max;
 }
 
-void grid::calcularBloquesAdyacentes(const int block_key, int vara, int varb, int varc) {
+void grid::calcularBloquesAdyacentes(const int block_key, int var_a, int var_b, int var_c) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         for (int k = -1; k < 2; k++) {
-          if (esValido(vara+i, n_x) && esValido(varb+j, n_y) && esValido(varc+k, n_z)){
-            int const block_key2 = generarClaveBloque(vara+i, varb+j, varc+k);
+          if (esValido(var_a+i, n_x) && esValido(var_b+j, n_y) && esValido(var_c+k, n_z)){
+            int const block_key2 = generarClaveBloque(var_a+i, var_b+j, var_c+k);
             blocks[block_key].bloques_ady.emplace_back(block_key2);
           }
         }

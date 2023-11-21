@@ -43,8 +43,8 @@ class grid {
     void CambiarBloque(Particle & particle, int i_anterior, int j_anterior, int k_anterior);
     void calcularDensidades(std::vector<Particle> & particles, double masa, double suavizado, double suavizado_2);
     static bool esValido(int indice, int max);
-    void calcularBloquesAdyacentes(int block_key, int vara, int varb, int varc);
-    static int generarClaveBloque(int vara, int varb, int varc);
+    void calcularBloquesAdyacentes(int block_key, int var_a, int var_b, int var_c);
+    static int generarClaveBloque(int var_a, int var_b, int var_c);
     static void calcularAceleraciones(std::vector<Particle> & particles, double pi_sua_6, double masa, double suavizado);
 
 
