@@ -16,9 +16,9 @@ grid::grid(int n_x, int n_y, int n_z) {
       for (int var_c = 0; var_c < n_z; ++var_c) {
         int const block_key = generarClaveBloque(var_a, var_b, var_c);
         Block newBlock;
-        newBlock.i = var_a;
-        newBlock.j = var_b;
-        newBlock.k = var_c;
+        newBlock.b_i = var_a;
+        newBlock.b_j = var_b;
+        newBlock.b_k = var_c;
         blocks[block_key] = newBlock;
         /*if(var_a ==0||var_a ==(n_x-1)){colisionesCx.push_back(block_key);}
         if(var_b ==0|| var_b ==(n_y-1)){colisionesCy.push_back(block_key);}
@@ -36,12 +36,12 @@ bool grid::esValido(int indice, int max) {
   return indice >= 0 && indice < max;
 }
 
-void grid::calcularBloquesAdyacentes(const int block_key, int a, int b, int c, int n_x, int n_y, int n_z) {
+void grid::calcularBloquesAdyacentes(const int block_key, int vara, int varb, int varc, int n_x, int n_y, int n_z) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         for (int k = -1; k < 2; k++) {
-          if (esValido(a+i, n_x) && esValido(b+j, n_y) && esValido(c+k, n_z)){
-            int const block_key2 = generarClaveBloque(a+i, b+j, c+k);
+          if (esValido(vara+i, n_x) && esValido(varb+j, n_y) && esValido(varc+k, n_z)){
+            int const block_key2 = generarClaveBloque(vara+i, varb+j, varc+k);
             blocks[block_key].bloques_ady.emplace_back(block_key2);
           }
         }
@@ -49,16 +49,16 @@ void grid::calcularBloquesAdyacentes(const int block_key, int a, int b, int c, i
     }
 }
 
-void grid::CambiarBloque(int id, int i, int j, int k, int i_anterior, int j_anterior, int k_anterior) {
+void grid::CambiarBloque(int ide, int b_i, int b_j, int b_k, int i_anterior, int j_anterior, int k_anterior) {
   int const block_key = generarClaveBloque(i_anterior, j_anterior, k_anterior);
-  blocks[block_key].removeParticle(id);
-  int const block_key2 = generarClaveBloque(i, j, k);
-  blocks[block_key2].addParticle(id);
+  blocks[block_key].removeParticle(ide);
+  int const block_key2 = generarClaveBloque(b_i, b_j, b_k);
+  blocks[block_key2].addParticle(ide);
 }
 
 void grid::calcularDensidades(std::vector<Particle> & particles, double masa, double suavizado, double suavizado_2) {
   for (Particle& particle : particles) {
-    int const block_key2 = generarClaveBloque(particle.i, particle.j, particle.k);
+    int const block_key2 = generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
     std::vector<int> const bloquesAdy = blocks[block_key2].bloques_ady;
     for (int const& bloque : bloquesAdy) {
       std::vector<int> const& particulas_ady = blocks[bloque].particles;
@@ -73,13 +73,11 @@ void grid::calcularDensidades(std::vector<Particle> & particles, double masa, do
 
 void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_sua_6, double masa, double suavizado){
   for (Particle& particle : particles) {
-    for(int ide_particula: particle.particulas_adyacentes){
+    for(int const ide_particula: particle.particulas_adyacentes){
       Particle& particula = particles[ide_particula];
       double const distancia = particle.CalcularDistancia(particula);
       double const dist_ij = std::sqrt(std::max(distancia, 1e-12));
-      particle.VariacionAcelaracionX(particula, suavizado, pi_sua_6, dist_ij, masa);
-      particle.VariacionAcelaracionY(particula, suavizado, pi_sua_6, dist_ij, masa);
-      particle.VariacionAcelaracionZ(particula, suavizado, pi_sua_6, dist_ij, masa);
+      particle.VariacionAcelaracion(particula, suavizado, pi_sua_6, dist_ij, masa);
     //Particle & particle          = particles[part];
     /*int const block_key2 = generarClaveBloque(particle.i, particle.j, particle.k);
     std::vector<int> const bloquesAdy = blocks[block_key2].bloques_ady;
@@ -102,12 +100,12 @@ void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_su
   }
 }
 
-  void grid:: ColisionesEjeX_1(std::vector<Particle> & particles) {
+  /*void grid:: ColisionesEjeX_1(std::vector<Particle> & particles) {
     for (int  const& bloque : colisionesCx) {
       std::vector<int>  const& particulas_0x = blocks[bloque].particles;
       for (int const id_p : particulas_0x) {
         Particle & particula = particles[id_p];
-        if (particula.i == 0){
+        if (particula.p_i == 0){
           particula.ColisionesEjeX0_1();
         }
         else{
@@ -122,7 +120,7 @@ void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_su
       std::vector<int> const& particulas_0y = blocks[bloque].particles;
       for (int const id_p : particulas_0y) {
         Particle & particula = particles[id_p];
-        if (particula.j == 0){
+        if (particula.p_j == 0){
           particula.ColisionesEjeY0_1();
         }
         else{
@@ -130,14 +128,14 @@ void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_su
         }
       }
     }
-  }
+  }*/
 
-  void grid::ColisionesEjeZ_1(std::vector<Particle> & particles) {
+  /*void grid::ColisionesEjeZ_1(std::vector<Particle> & particles) {
     for (int const& bloque: colisionesCz){
       std::vector<int> const& particulas_0z = blocks[bloque].particles;
       for (int const id_p : particulas_0z) {
         Particle & particula = particles[id_p];
-        if (particula.k == 0){
+        if (particula.p_k == 0){
           particula.ColisionesEjeZ0_1();
         }
         else {
@@ -145,9 +143,9 @@ void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_su
         }
       }
     }
-  }
+  }*/
 
-  void grid::ColisionesEjeX_2(std::vector<Particle> & particles) {
+  /*void grid::ColisionesEjeX_2(std::vector<Particle> & particles) {
     for (int const& bloque: colisionesCx) {
       std::vector<int> const& particulas_0x = blocks[bloque].particles;
       for (int const id_p : particulas_0x) {
@@ -173,4 +171,4 @@ void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_su
         particula.ColisionesEjeZ_2();
       }
     }
-  }
+  }*/

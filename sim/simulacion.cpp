@@ -16,9 +16,9 @@ double masa;
 double suavizado;
 double pi_sua_6;
 double suavizado_2;
-int n_x ;
-int n_y ;
-int n_z ;
+int n_x;
+int n_y;
+int n_z;
 double s_x;
 double s_y;
 double s_z;
@@ -55,12 +55,20 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
   while(read_binary_values(inputfile,  p_x, p_y, p_z, hvx, hvy, hvz, v_x, v_y, v_z)) {
     Particle particle;
     particle.ide = contar_particulas, particle.densidad = 0;
-    particle.p_x = p_x, particle.p_y = p_y, particle.p_z = p_z;
-    particle.hvx = hvx, particle.hvy = hvy, particle.hvz = hvz;
-    particle.v_x = v_x, particle.v_y = v_y, particle.v_z = v_z;
-    particle.a_y = -9.8, particle.a_x = 0, particle.a_z = 0;
+    particle.posicion.c_x = p_x, particle.posicion.c_y = p_y, particle.posicion.c_z = p_z;
+    particle.hvelocidad.c_x = hvx, particle.hvelocidad.c_y = hvy, particle.hvelocidad.c_z = hvz;
+    particle.velocidad.c_x = v_x, particle.velocidad.c_y = v_y, particle.velocidad.c_z = v_z;
+    particle.aceleracion.c_y = -9.8, particle.aceleracion.c_x = 0, particle.aceleracion.c_z = 0;
     particle.calcularBloqueInicial(s_x, s_y, s_z, n_x, n_y, n_z);
-    int const block_key = malla.generarClaveBloque(particle.i, particle.j, particle.k);
+    /*ParametrosBloque param;
+    param.s_x = s_x;
+    param.s_y = s_y;
+    param.s_z = s_z;
+    param.n_x = valores.n_x;
+    param.n_y = valores.n_y;
+    param.n_z = valores.n_z;
+    particle.calcularBloqueInicial(param);*/
+    int const block_key = malla.generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
     malla.blocks[block_key].addParticle(particle.ide);
     particles.emplace_back(particle);
     ++contar_particulas;
@@ -80,16 +88,16 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
 
     particle.Inicializar();
 
-    int const i_anterior = particle.i;
-    int const j_anterior = particle.j;
-    int const k_anterior = particle.k;
+    int const i_anterior = particle.p_i;
+    int const j_anterior = particle.p_j;
+    int const k_anterior = particle.p_k;
 
     particle.calcularBloque(s_x, s_y, s_z, n_x, n_y, n_z);
     /*int clave = malla.generarClaveBloque(particle.i, particle.j, particle.k);
     malla.blocks[clave].addParticle(particle.ide);*/
 
-    if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
-      malla.CambiarBloque(particle.ide, particle.i, particle.j, particle.k, i_anterior, j_anterior, k_anterior);
+    if (i_anterior != particle.p_i || j_anterior != particle.p_j || k_anterior != particle.p_k) {
+      malla.CambiarBloque(particle.ide, particle.p_i, particle.p_j, particle.p_k, i_anterior, j_anterior, k_anterior);
     }
   }
 }
@@ -101,15 +109,15 @@ void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& output
 
   for (const auto& particula : particulas) {
     float values[] = {
-      static_cast<float>(particula.p_x),
-      static_cast<float>(particula.p_y),
-      static_cast<float>(particula.p_z),
-      static_cast<float>(particula.hvx),
-      static_cast<float>(particula.hvy),
-      static_cast<float>(particula.hvz),
-      static_cast<float>(particula.v_x),
-      static_cast<float>(particula.v_y),
-      static_cast<float>(particula.v_z)
+      static_cast<float>(particula.posicion.c_x),
+      static_cast<float>(particula.posicion.c_y),
+      static_cast<float>(particula.posicion.c_z),
+      static_cast<float>(particula.hvelocidad.c_x),
+      static_cast<float>(particula.hvelocidad.c_y),
+      static_cast<float>(particula.hvelocidad.c_z),
+      static_cast<float>(particula.velocidad.c_x),
+      static_cast<float>(particula.velocidad.c_y),
+      static_cast<float>(particula.velocidad.c_z)
     };
 
     outputfile.write(reinterpret_cast<const char*>(values), sizeof(values));
@@ -156,11 +164,11 @@ void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& output
 void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
   for (Particle  const& particle: particles) {
     outputfile << "ID: " << particle.ide << "\n";
-    outputfile << "Posición (x, y, z): " << particle.p_x << ", " << particle.p_y << ", " << particle.p_z << "\n";
-    outputfile << "Velocidad (vx, vy, vz): " << particle.v_x << ", " << particle.v_y << ", " << particle.v_z << "\n";
-    outputfile << "Hvx, Hvy, Hvz: " << particle.hvx << ", " << particle.hvy << ", " << particle.hvz << "\n";
+    outputfile << "Posición (x, y, z): " << particle.posicion.c_x << ", " << particle.posicion.c_y << ", " << particle.posicion.c_z << "\n";
+    outputfile << "Velocidad (vx, vy, vz): " << particle.velocidad.c_x << ", " << particle.velocidad.c_y << ", " << particle.velocidad.c_z << "\n";
+    outputfile << "Hvx, Hvy, Hvz: " << particle.hvelocidad.c_x << ", " << particle.hvelocidad.c_y << ", " << particle.hvelocidad.c_z << "\n";
     outputfile << "Densidad: " << particle.densidad << "\n";
-    outputfile << "Aceleración (accx, accy, accz): " << particle.a_x << ", " << particle.a_y << ", " << particle.a_z << "\n";
+    outputfile << "Aceleración (accx, accy, accz): " << particle.aceleracion.c_x << ", " << particle.aceleracion.c_y << ", " << particle.aceleracion.c_z << "\n";
   }
   outputfile.close();
 }
