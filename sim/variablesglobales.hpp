@@ -50,4 +50,8 @@ const double bmin_x = -0.065;
 const double bmin_y = -0.08;
 const double bmin_z = -0.065;
 
+const double suavizadot = 0.00580479;
+
+const double n_05 = 0.5;
+
 #endif // VARIABLESGLOBALES_H

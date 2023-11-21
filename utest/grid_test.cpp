@@ -2,85 +2,122 @@
 // Created by luis on 30/10/23.
 //
 // test_grid.cpp
-// NOLINTBEGIN
+
 #include "gtest/gtest.h"
 #include "../sim/grid.hpp"
 #include "../sim/variablesglobales.hpp"
 
 TEST(GridTest, GenerarBloques) {
-  double suavizado = 1.0;
-  grid g(suavizado);
+  double const suavizado = 1.0;
+  grid const grid(suavizado);
   // Verificar que se generan la cantidad correcta de bloques
-  int expected_num_blocks = g.n_x * g.n_y * g.n_z;
-  EXPECT_EQ(g.blocks.size(), expected_num_blocks);
+  int const expected_num_blocks = grid.n_x * grid.n_y * grid.n_z;
+  EXPECT_EQ(grid.blocks.size(), expected_num_blocks);
 }
 
 TEST(GridTest, GenerarClaveBloque) {
-  grid g(1.0);
-  EXPECT_EQ(g.generarClaveBloque(1, 2, 3), 10203);
+  grid const grid(1.0);
+  EXPECT_EQ(grid.generarClaveBloque(1, 2, 3), 10203);
 }
 
 TEST(GridTest, EsValido) {
-  grid g(1.0);
-  EXPECT_TRUE(g.esValido(0, 10));
-  EXPECT_FALSE(g.esValido(-1, 10));
-  EXPECT_FALSE(g.esValido(10, 10));
+  grid const grid(1.0);
+  EXPECT_TRUE(grid.esValido(0, 10));
+  EXPECT_FALSE(grid.esValido(-1, 10));
+  EXPECT_FALSE(grid.esValido(10, 10));
 }
 
 // Test para el método calcularBloquesAdyacentes
 TEST(GridTest, calcularBloquesAdyacentes) {
-  double suavizado = 0.00580479;
-  grid g(suavizado);
+  double const suavizado = suavizadot;
+  grid grid(suavizado);
   // Verificar que este método calcula correctamente los bloques adyacentes para un bloque dado
-  int const block_key2 = g.generarClaveBloque(5, 5, 5);
-  ASSERT_EQ(g.blocks[block_key2].bloques_ady.size(), 27);
+  int const block_key2 = grid::generarClaveBloque(5, 5, 5);
+  ASSERT_EQ(grid.blocks[block_key2].bloques_ady.size(), 27);
 }
 
 TEST(GridTest, CalcularBloque) {
-  double suavizado = 0.00580479;
-  grid g(suavizado);
-  Particle p;
-  p.posicion.c_x = 0.5;
-  p.posicion.c_y = 0.5;
-  p.posicion.c_z = 0.5;
-  g.calcularBloque(p);
+  double const suavizado = suavizadot;
+  grid const grid(suavizado);
+  Particle part;
+  part.posicion.c_x = n_05;
+  part.posicion.c_y = n_05;
+  part.posicion.c_z = n_05;
+  grid.calcularBloque(part);
 
-  EXPECT_EQ(p.p_i, 21);
-  EXPECT_EQ(p.p_j, 30);
-  EXPECT_EQ(p.p_k, 21);
+  EXPECT_EQ(part.p_i, 21);
+  EXPECT_EQ(part.p_j, 30);
+  EXPECT_EQ(part.p_k, 21);
 }
 
 TEST(GridTest, CalcularBloqueInicial) {
-  double suavizado = 0.00580479;
-  grid g(suavizado);
-  Particle p;
-  p.posicion.c_x = 0.0;
-  p.posicion.c_y = 0.0;
-  p.posicion.c_z = 0.0;
-  g.calcularBloqueInicial(p);
+  double const suavizado = suavizadot;
+  grid const grid(suavizado);
+  Particle part;
+  part.posicion.c_x = 0.0;
+  part.posicion.c_y = 0.0;
+  part.posicion.c_z = 0.0;
+  grid.calcularBloqueInicial(part);
 
-  EXPECT_EQ(p.p_i, 11);
-  EXPECT_EQ(p.p_j, 13);
-  EXPECT_EQ(p.p_k, 11);
+  EXPECT_EQ(part.p_i, 11);
+  EXPECT_EQ(part.p_j, 13);
+  EXPECT_EQ(part.p_k, 11);
+}
+TEST(GridTest, CambiarBloque) {
+  double const suavizado = suavizadot;
+  grid myGrid(suavizado);
+  Particle particle;
+  particle.posicion.c_x = 0.0;
+  particle.posicion.c_y = 0.0;
+  particle.posicion.c_z = 0.0;
+  myGrid.calcularBloqueInicial(particle);
+  int i_anterior        = particle.p_i;
+  int j_anterior        = particle.p_j;
+  int k_anterior        = particle.p_k;
+  particle.posicion.c_x = 0.6;
+  particle.posicion.c_y = 0.6;
+  particle.posicion.c_z = 0.6;
+  myGrid.calcularBloque(particle);
+
+  myGrid.CambiarBloque(particle, i_anterior, j_anterior, k_anterior);
+  int old_block_key = myGrid.generarClaveBloque(i_anterior, j_anterior, k_anterior);
+  int new_block_key = myGrid.generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
+
+  EXPECT_FALSE(old_block_key == new_block_key);
 }
 
+TEST(GridTest, CalcularDensidades) {
+  double suavizado = suavizadot;
+  grid grid(suavizado);
+  std::vector<Particle>& particles;
+  double masa = 1;
+  double suavizado_2 = suavizado * suavizado;
+  // Llenar el vector de partículas con algunos valores de prueba
+  // particles.push_back(Particle(...));
+  // particles.push_back(Particle(...));
+  // ...
+
+  grid.calcularDensidades(particles, masa, suavizado, suavizado_2);
+
+  // Comprobar que las densidades de las partículas se han calculado correctamente
+  // ASSERT_DOUBLE_EQ(particles[0].densidad, valor_esperado);
+  // ASSERT_DOUBLE_EQ(particles[1].densidad, valor_esperado);
+  // ...
+}
 // Test para el método CambiarBloque
 /*TEST(GridTest, CambiarBloque) {
-  int nx = 10;
-  int ny = 10;
-  int nz = 10;
-  grid myGrid(nx, ny, nz);
-  // Añadir una partícula al bloque (5,5,5)
-  int const block_key = myGrid.generarClaveBloque(5, 5, 5);
-  myGrid.blocks[block_key].addParticle(1);
-  // Cambiar la partícula al bloque (6,6,6)
-  myGrid.CambiarBloque(1, 6, 6, 6, 5, 5, 5);
-  // Verificar que la partícula se ha movido correctamente
-  int const block_key2 = myGrid.generarClaveBloque(6, 6, 6);
+  double const suavizado = suavizadot;
+  grid const myGrid(suavizado);
+  Particle const particle;
+  int const block_key = generarClaveBloque(5, 5, 5);
+  myGrid.blocks[block_key].removeParticle(particle.ide);
+  int const block_key2 = generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
+  blocks[block_key2].addParticle(particle.ide);
   ASSERT_EQ(myGrid.blocks[block_key2].particles.size(), 1);
   ASSERT_EQ(myGrid.blocks[block_key].particles.size(), 0);
-}
+}*/
 
+ /*
 // Test para el método ColisionesEjeX_1
 TEST(GridTest, ColisionesEjeX_1) {
   int nx = 15;
@@ -275,4 +312,3 @@ TEST(GridTest, ColisionesEjeZ_2) {
   ASSERT_DOUBLE_EQ(particles[0].a_x, 1 );
 }*/
 
-// NOLINTEND

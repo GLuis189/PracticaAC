@@ -1,7 +1,6 @@
-//#include <gtest/gtest.h>
-// NOLINTBEGIN
 #include "gtest/gtest.h"
 #include "../sim/progargs.hpp"
+#include "../sim/variablesglobales.hpp"
 #include <cstdio>
 #include <fstream>
 
@@ -28,25 +27,25 @@ TEST(ProgArgsTest, CannotOpenInputFile) {
 TEST(ProgArgsTest, CannotOpenOutputFile) {
   // Crear un archivo y establecer sus permisos a solo lectura
   std::ofstream("readonly.txt").close();
-  int result = std::system("chmod 444 readonly.txt");
+  int result = std::system("chmod 444 readonly.txt");   //NOLINT
   if (result != 0) {
-    std::cerr << "Error al cambiar los permisos del archivo" << std::endl;
+    std::cerr << "Error al cambiar los permisos del archivo" << '\n';
   }
 
   // Crear input.txt si no existe
   std::ofstream const inputFile("input.txt");
   if (!inputFile) {
     std::cerr << "Error: No se pudo crear input.txt.\n";
-    exit(-5);
+    exit(errorconst);
   }
 
   std::vector<std::string> const argv = {"prog", "100", "input.txt", "readonly.txt"};
   EXPECT_EXIT(ProgArgs(argv.size(), argv), ::testing::ExitedWithCode(252), "Error: Cannot open readonly.txt for writing.\n");
 
   // Limpiar
-  result = std::system("rm readonly.txt");
+  result = std::system("rm readonly.txt");  //NOLINT
   if (result != 0) {
-    std::cerr << "Error al eliminar el archivo" << std::endl;
+    std::cerr << "Error al eliminar el archivo" << '\n';
   }
 }
 

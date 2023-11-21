@@ -1,7 +1,6 @@
 //
 // Created by Celia on 18/11/23.
 //
-// NOLINTBEGIN
 #include "../sim/particle.hpp"
 #include "../sim/variablesglobales.hpp"
 
@@ -149,4 +148,3 @@ TEST(ParticleTest, Colisiones) {
 
 */
 
-// NOLINTEND
