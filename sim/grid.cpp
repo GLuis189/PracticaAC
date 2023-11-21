@@ -53,12 +53,12 @@ void grid::calcularBloquesAdyacentes(const int block_key, int vara, int varb, in
     }
 }
 
-void grid::calcularBloque(Particle & particle) {
+void grid::calcularBloque(Particle & particle) const {
     particle.p_i = std::clamp(static_cast<int>((particle.posicion.c_x - bmin_x) / s_x), 0, n_x - 1);
     particle.p_j = std::clamp(static_cast<int>((particle.posicion.c_y - bmin_y) / s_y), 0, n_y - 1);
     particle.p_k = std::clamp(static_cast<int>((particle.posicion.c_z - bmin_z) / s_z), 0, n_z - 1);
 }
-void grid:: calcularBloqueInicial(Particle & particle){
+void grid:: calcularBloqueInicial(Particle & particle) const{
     particle.p_i = static_cast<int>((particle.posicion.c_x-bmin_x)/ s_x);
     if (particle.p_i> n_x -1){
       particle.p_i = n_x -1;
@@ -99,9 +99,7 @@ void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_su
   for (Particle& particle : particles) {
     for(int const ide_particula: particle.particulas_adyacentes){
       Particle& particula = particles[ide_particula];
-      double const distancia = particle.CalcularDistancia(particula);
-      double const dist_ij = std::sqrt(std::max(distancia, 1e-12));
-      particle.VariacionAcelaracion(particula, suavizado, pi_sua_6, dist_ij, masa);
+      particle.VariacionAcelaracion(particula, suavizado, pi_sua_6, masa);
     }
     particle.particulas_adyacentes.clear();
   }

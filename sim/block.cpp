@@ -3,7 +3,6 @@
 //
 // Block.cpp
 #include "block.hpp"
-#include <algorithm>
 
 
 void Block::addParticle(int parti) {

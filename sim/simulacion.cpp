@@ -3,7 +3,6 @@
 #include "../sim/progargs.hpp"
 #include "../sim/variablesglobales.hpp"
 #include "../sim/simulacion.hpp"
-#include <sstream>
 
 #include <fstream>
 #include <iostream>
@@ -46,16 +45,8 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
     particle.posicion.c_x = p_x, particle.posicion.c_y = p_y, particle.posicion.c_z = p_z;
     particle.hvelocidad.c_x = hvx, particle.hvelocidad.c_y = hvy, particle.hvelocidad.c_z = hvz;
     particle.velocidad.c_x = v_x, particle.velocidad.c_y = v_y, particle.velocidad.c_z = v_z;
-    particle.aceleracion.c_y = -9.8, particle.aceleracion.c_x = 0, particle.aceleracion.c_z = 0;
+    particle.aceleracion.c_y = g_y, particle.aceleracion.c_x = 0, particle.aceleracion.c_z = 0;
     malla.calcularBloqueInicial(particle);
-    /*ParametrosBloque param;
-    param.s_x = s_x;
-    param.s_y = s_y;
-    param.s_z = s_z;
-    param.n_x = valores.n_x;
-    param.n_y = valores.n_y;
-    param.n_z = valores.n_z;
-    particle.calcularBloqueInicial(param);*/
     int const block_key = malla.generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
     malla.blocks[block_key].addParticle(particle.ide);
     particles.emplace_back(particle);
@@ -168,18 +159,9 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
     }
     malla.calcularDensidades(particles, masa, suavizado, suavizado_2);
     malla.calcularAceleraciones(particles, pi_sua_6, masa, suavizado);
-    /*malla.ColisionesEjeX_1(particles);
-    malla.ColisionesEjeY_1(particles);
-    malla.ColisionesEjeZ_1(particles);*/
     for (Particle& particle : particles){
-      //Particle & particle = particles[part];
-
       particle.MoverParticulas(malla.n_x, malla.n_y, malla.n_z);
     }
-
-    /*malla.ColisionesEjeX_2(particles);
-    malla.ColisionesEjeY_2(particles);
-    malla.ColisionesEjeZ_2(particles);*/
   }
 
   // Mostrar los datos de las partículas
@@ -198,56 +180,4 @@ void mostrarDatos(grid & malla){
   std::cout << "Number of blocks: " << malla.n_x * malla.n_y * malla.n_z << "\n";
   std::cout << "Block size: " << malla.s_x << " x " << malla.s_y << " x " << malla.s_z << "\n";
 }
-
-/*std::vector<Particle> leerArchivo(const std::string& nombreArchivo) {
-  std::ifstream archivo(nombreArchivo, std::ios::binary);
-  std::vector<Particle> particles;
-
-  if (!archivo.is_open()) {
-    std::cerr << "Error al abrir el archivo." << std::endl;
-    return particles;
-  }
-  float ppm_salida;
-  int numparticulas_salida;
-  archivo.read(reinterpret_cast<char *>(&ppm_salida), sizeof(ppm_salida));
-  archivo.read(reinterpret_cast<char *>(&numparticulas_salida), sizeof(numparticulas_salida));
-
-  while (!archivo.eof()) {
-    Particle particle;
-
-    float p_x, py, pz;
-    float hvx, hvy, hvz;
-    float vx, vy, vz;
-
-    archivo.read(reinterpret_cast<char*>(&p_x), sizeof(p_x));
-    archivo.read(reinterpret_cast<char*>(&py), sizeof(py));
-    archivo.read(reinterpret_cast<char*>(&pz), sizeof(pz));
-
-    archivo.read(reinterpret_cast<char*>(&hvx), sizeof(hvx));
-    archivo.read(reinterpret_cast<char*>(&hvy), sizeof(hvy));
-    archivo.read(reinterpret_cast<char*>(&hvz), sizeof(hvz));
-
-    archivo.read(reinterpret_cast<char*>(&vx), sizeof(vx));
-    archivo.read(reinterpret_cast<char*>(&vy), sizeof(vy));
-    archivo.read(reinterpret_cast<char*>(&vz), sizeof(vz));
-
-    // Convertir los valores de precisión simple a doble precisión
-    particle.p_x = static_cast<double>(p_x);
-    particle.py = static_cast<double>(py);
-    particle.pz = static_cast<double>(pz);
-
-    particle.hvx = static_cast<double>(hvx);
-    particle.hvy = static_cast<double>(hvy);
-    particle.hvz = static_cast<double>(hvz);
-
-    particle.vx = static_cast<double>(vx);
-    particle.vy = static_cast<double>(vy);
-    particle.vz = static_cast<double>(vz);
-
-    particles.push_back(particle);
-  }
-
-  archivo.close();
-  return particles;
-}*/
 

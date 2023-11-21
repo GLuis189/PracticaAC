@@ -28,8 +28,6 @@ class Particle {
     int p_i, p_j, p_k;
     std::vector<int> particulas_adyacentes;
     double densidad;
-    void calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z);
-    void calcularBloque(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z);
     void Inicializar();
     void VariacionDensidad(Particle & particula, double suavizado_2);
     double CalcularDistancia(Particle & particula) const;

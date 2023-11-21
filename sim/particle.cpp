@@ -38,8 +38,9 @@ double Particle::CalcularDistancia(Particle & particula) const {
     return distancia;
 }
 
-void Particle::VariacionAcelaracion(Particle& particula, double suavizado, double pi_sua_6,
-                                    double dist_ij, double masa){
+void Particle::VariacionAcelaracion(Particle& particula, double suavizado, double pi_sua_6, double masa){
+    double const distancia = CalcularDistancia(particula);
+    double const dist_ij = std::sqrt(std::max(distancia, 1e-12));
     for(int indice = 0; indice < 3; indice++){
       double const var_a =
           ((((posicion[indice] - particula.posicion[indice]) * (15 / pi_sua_6) * ((3 * masa * presion) / 2) *
