@@ -2,7 +2,6 @@
 #include <fstream>
 #include <cstdlib>
 #include "progargs.hpp"
-#include <vector>
 
 ProgArgs::ProgArgs(int argc, char* argv[]) {
     if(argc != 4) {

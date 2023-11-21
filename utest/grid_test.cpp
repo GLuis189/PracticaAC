@@ -6,25 +6,12 @@
 #include "../sim/grid.hpp"
 #include "../sim/variablesglobales.hpp"
 
-TEST(GridTest, BlockCreation) {
-  int const n_x = 3;
-  int const n_y = 3;
-  int const nz = 3;
-  grid const myGrid(n_x, n_y, nz);
-
-  // Verificar que se crearon todos los bloques
-  EXPECT_EQ(n_x * n_y * nz, myGrid.blocks.size());
-
-  // Verificar que cada bloque tiene las coordenadas correctas
-  for (const auto& pair : myGrid.blocks) {
-        const Block& block = pair.second;
-    EXPECT_GE(block.i, 0);
-    EXPECT_LT(block.i, n_x);
-    EXPECT_GE(block.j, 0);
-    EXPECT_LT(block.j, n_y);
-    EXPECT_GE(block.k, 0);
-    EXPECT_LT(block.k, nz);
-  }
+TEST(GridTest, GenerarBloques) {
+  double suavizado = 1.0;
+  grid g(suavizado);
+  // Verificar que se generan la cantidad correcta de bloques
+  int expected_num_blocks = g.n_x * g.n_y * g.n_z;
+  EXPECT_EQ(g.blocks.size(), expected_num_blocks);
 }
 
 TEST(GridTest, GenerarClaveBloque) {
