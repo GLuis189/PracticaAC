@@ -12,36 +12,34 @@ struct ArchivoData {
     std::vector<Particle> particles;
 };
 
+template <typename T>
+void readValue(std::ifstream& file, T& value) {
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+  file.read(reinterpret_cast<char*>(&value), sizeof(T));
+}
+
 ArchivoData leerArchivo(const std::string& nombreArchivo) {
   std::ifstream archivo(nombreArchivo, std::ios::binary);
   ArchivoData archivoData;
-
   if (!archivo.is_open()) {
     std::cerr << "Error al abrir el archivo." << "\n";
     return archivoData;
   }
-
-  archivo.read(reinterpret_cast<char*>(&archivoData.ppm), sizeof(archivoData.ppm));
-  archivo.read(reinterpret_cast<char*>(&archivoData.numParticulas), sizeof(archivoData.numParticulas));
-
-  while (!archivo.eof()) {
+  readValue(archivo, archivoData.ppm);
+  readValue(archivo, archivoData.numParticulas);
+  while (archivo) {
     Particle particle;
-
-    archivo.read(reinterpret_cast<char*>(&particle.posicion.c_x), sizeof(particle.posicion.c_x));
-    archivo.read(reinterpret_cast<char*>(&particle.posicion.c_y), sizeof(particle.posicion.c_y));
-    archivo.read(reinterpret_cast<char*>(&particle.posicion.c_z), sizeof(particle.posicion.c_z));
-
-    archivo.read(reinterpret_cast<char*>(&particle.hvelocidad.c_x), sizeof(particle.hvelocidad.c_x));
-    archivo.read(reinterpret_cast<char*>(&particle.hvelocidad.c_y), sizeof(particle.hvelocidad.c_y));
-    archivo.read(reinterpret_cast<char*>(&particle.hvelocidad.c_z), sizeof(particle.hvelocidad.c_z));
-
-    archivo.read(reinterpret_cast<char*>(&particle.velocidad.c_x), sizeof(particle.velocidad.c_x));
-    archivo.read(reinterpret_cast<char*>(&particle.velocidad.c_y), sizeof(particle.velocidad.c_y));
-    archivo.read(reinterpret_cast<char*>(&particle.velocidad.c_z), sizeof(particle.velocidad.c_z));
-
+    readValue(archivo, particle.posicion.c_x);
+    readValue(archivo, particle.posicion.c_y);
+    readValue(archivo, particle.posicion.c_z);
+    readValue(archivo, particle.hvelocidad.c_x);
+    readValue(archivo, particle.hvelocidad.c_y);
+    readValue(archivo, particle.hvelocidad.c_z);
+    readValue(archivo, particle.velocidad.c_x);
+    readValue(archivo, particle.velocidad.c_y);
+    readValue(archivo, particle.velocidad.c_z);
     archivoData.particles.emplace_back(particle);
   }
-
   archivo.close();
   return archivoData;
 }
@@ -63,9 +61,9 @@ TEST(PruebaFuncional, CompararConTrazas1_small) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/small-1.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -98,9 +96,9 @@ TEST(PruebaFuncional, CompararConTrazas2_small) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/small-2.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -133,9 +131,9 @@ TEST(PruebaFuncional, CompararConTrazas3_small) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/small-3.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -168,9 +166,9 @@ TEST(PruebaFuncional, CompararConTrazas4_small) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/small-4.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -188,7 +186,7 @@ TEST(PruebaFuncional, CompararConTrazas4_small) {
 
 TEST(PruebaFuncional, CompararConTrazas5_small) {
   ProgArgs args;
-  args.nts        = 5;  // Reemplaza esto con el número de iteraciones que quieras
+  args.nts        = n_5;  // Reemplaza esto con el número de iteraciones que quieras
   args.inputfile  = "../small.fld";
   args.outputfile = "small5_test.out";
 
@@ -203,9 +201,9 @@ TEST(PruebaFuncional, CompararConTrazas5_small) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/small-5.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -238,9 +236,9 @@ TEST(PruebaFuncional, CompararConTrazas1_large) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/large-1.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -273,9 +271,9 @@ TEST(PruebaFuncional, CompararConTrazas2_large) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/large-2.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -308,9 +306,9 @@ TEST(PruebaFuncional, CompararConTrazas3_large) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/large-3.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -343,9 +341,9 @@ TEST(PruebaFuncional, CompararConTrazas4_large) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/large-4.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
@@ -378,9 +376,9 @@ TEST(PruebaFuncional, CompararConTrazas5_large) {
   ArchivoData resultado = leerArchivo(args.outputfile);
   ArchivoData trazas    = leerArchivo("../out/large-5.fld");
 
-  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";;
-  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";;
-  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
+  ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
+  ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
+  ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
     EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;

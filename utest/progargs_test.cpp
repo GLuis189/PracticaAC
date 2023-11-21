@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <fstream>
 
+
 TEST(ProgArgsTest, InvalidNumberOfArguments) {
     const char* argv_const[] = {"prog", "100", "input.txt"};
   char** argv = const_cast<char**>(argv_const);
