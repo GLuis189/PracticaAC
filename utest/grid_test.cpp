@@ -27,6 +27,19 @@ TEST(GridTest, BlockCreation) {
   }
 }
 
+TEST(GridTest, GenerarClaveBloque) {
+  grid g(1.0);
+  EXPECT_EQ(g.generarClaveBloque(1, 2, 3), 123);
+}
+
+TEST(GridTest, EsValido) {
+  grid g(1.0);
+  EXPECT_TRUE(g.esValido(0, 10));
+  EXPECT_FALSE(g.esValido(-1, 10));
+  EXPECT_FALSE(g.esValido(10, 10));
+}
+
+
 TEST(GridTest, generarClaveBloque) {
   int const n_x = 5;
   int const n_y = 5;
