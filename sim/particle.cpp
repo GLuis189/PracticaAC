@@ -4,9 +4,8 @@
 
 #include "particle.hpp"
 
-#include <math.h>
+
 #include "variablesglobales.hpp"
-#include <algorithm>
 #include <cmath>
 #include <vector>
 

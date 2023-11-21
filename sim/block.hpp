@@ -9,6 +9,7 @@
 #include <vector>
 #include "particle.hpp"
 #include <iostream>
+#include <algorithm>
 
 class Block {
   public:

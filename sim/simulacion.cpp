@@ -46,7 +46,7 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
     particle.velocidad.c_x = v_x, particle.velocidad.c_y = v_y, particle.velocidad.c_z = v_z;
     particle.aceleracion.c_y = g_y, particle.aceleracion.c_x = 0, particle.aceleracion.c_z = 0;
     malla.calcularBloqueInicial(particle);
-    int const block_key = malla.generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
+    int const block_key = grid::generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
     malla.blocks[block_key].addParticle(particle.ide);
     particles.emplace_back(particle);
     ++contar_particulas;
@@ -81,8 +81,10 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
 }
 
 void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& outputfile) {
-  auto ppm2 = static_cast<float>(ppm);
+  float ppm2 = static_cast<float>(ppm);
   outputfile.write(reinterpret_cast<const char*>(&ppm2), sizeof(ppm2));
+
+  // Suponiendo que numparticulas es una variable definida en algún lugar de tu código
   outputfile.write(reinterpret_cast<const char*>(&numparticulas), sizeof(numparticulas));
 
   for (const auto& particula : particulas) {
@@ -98,7 +100,7 @@ void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& output
       static_cast<float>(particula.velocidad.c_z)
     };
 
-    outputfile.write(reinterpret_cast<const char*>(values), sizeof(values));
+    outputfile.write((char*)values, sizeof(values));
   }
 
   outputfile.close();

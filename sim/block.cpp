@@ -5,11 +5,12 @@
 #include "block.hpp"
 
 
+
 void Block::addParticle(int parti) {
   particles.emplace_back(parti);
 }
 
 void Block::removeParticle(int parti){
-  //auto pos = std::find(particles.begin(), particles.end(), p);
-  particles.erase(std::remove(particles.begin(), particles.end(), parti), particles.end());
+  auto pos = std::remove(particles.begin(), particles.end(), parti);
+  particles.erase(pos, particles.end());
 }

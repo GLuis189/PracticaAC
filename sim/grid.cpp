@@ -7,6 +7,7 @@
 #include "grid.hpp"
 #include <cmath>
 #include "../sim/variablesglobales.hpp"
+#include <algorithm>
 
 
 grid::grid(double suavizado)
