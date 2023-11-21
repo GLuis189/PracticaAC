@@ -33,7 +33,7 @@ grid::grid(double suavizado)
   }
 }
 int grid::generarClaveBloque(int var_a, int var_b, int var_c) {
-  return var_a*10000 + var_b*100 + var_c;
+  return var_a*dmil + var_b*cien + var_c;
 }
 
 bool grid::esValido(int indice, int max) {
