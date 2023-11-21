@@ -83,9 +83,9 @@ void Particle::MoverParticulas(int n_x, int n_y, int n_z){
         ColisionesEje(2, bmin_z, bmax_x);
     }
     for(int indice = 0; indice < 3; indice++){
-        posicion[indice] = posicion[indice] + hvelocidad[indice] * ptiempo + aceleracion[indice] * (ptiempo * ptiempo);
+        posicion[indice] +=  hvelocidad[indice] * ptiempo + aceleracion[indice] * (ptiempo * ptiempo);
         velocidad[indice] = hvelocidad[indice] + (aceleracion[indice] * ptiempo) / 2;
-        hvelocidad[indice] = hvelocidad[indice] + aceleracion[indice] * ptiempo;
+        hvelocidad[indice] += aceleracion[indice] * ptiempo;
     }
 
     if(p_i == 0 || p_i == n_x-1){
