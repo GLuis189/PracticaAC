@@ -108,43 +108,6 @@ void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& output
   outputfile.close();
 }
 
-
-
-/*void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& outputfile){
-  float ppm2 = static_cast<float>(ppm);
-  outputfile.write(as_buffer(ppm2), sizeof(ppm2));
-  outputfile.write(as_buffer(numparticulas), sizeof(numparticulas));
-  for (const auto& particula : particulas) {
-    // Convertir los valores de doble precisión a precisión simple antes de escribirlos
-    float p_x = static_cast<float>(particula.p_x);
-    float p_y = static_cast<float>(particula.p_y);
-    float p_z = static_cast<float>(particula.p_z);
-
-    float hvx = static_cast<float>(particula.hvx);
-    float hvy = static_cast<float>(particula.hvy);
-    float hvz = static_cast<float>(particula.hvz);
-
-    float v_x = static_cast<float>(particula.v_x);
-    float v_y = static_cast<float>(particula.v_y);
-    float v_z = static_cast<float>(particula.v_z);
-
-    // Escribir los valores en el archivo
-    outputfile.write(as_buffer(p_x), sizeof(p_x));
-    outputfile.write(as_buffer(p_y), sizeof(p_y));
-    outputfile.write(as_buffer(p_z), sizeof(p_z));
-
-    outputfile.write(as_buffer(hvx), sizeof(hvx));
-    outputfile.write(as_buffer(hvy), sizeof(hvy));
-    outputfile.write(as_buffer(hvz), sizeof(hvz));
-
-    outputfile.write(as_buffer(v_x), sizeof(v_x));
-    outputfile.write(as_buffer(v_y), sizeof(v_y));
-    outputfile.write(as_buffer(v_z), sizeof(v_z));
-  }
-
-  outputfile.close();
-}*/
-
 [[maybe_unused]] void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
   for (Particle  const& particle: particles) {
     outputfile << "ID: " << particle.ide << "\n";

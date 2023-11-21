@@ -51,29 +51,6 @@ void Particle::VariacionAcelaracion(Particle& particula, double suavizado, doubl
       particula.aceleracion[indice] -= var_a;
     }
 }
-void Particle::ColisionesEje(int eje, double bmax, double bmin){    //NOLINT
-    double const col = posicion[eje] + hvelocidad[eje] * ptiempo;
-    int col_p = 0;
-    if(eje == 0) {
-      col_p = p_i;
-    } else if(eje == 1) {
-      col_p = p_j;
-    } else {
-      col_p = p_k;
-    }
-    if(col_p==0){
-      const double var_p = tparticula - (col - bmin);
-      if (var_p > varconst) {
-        aceleracion[eje] += (colisiones * var_p - amortiguamiento * velocidad[eje]);
-      }
-    }
-    else{
-      const double var_p = tparticula - (bmax - col);
-      if (var_p > varconst) {
-        aceleracion[eje] -= (colisiones * var_p + amortiguamiento * velocidad[eje]);
-      }
-    }
-}
 
 void Particle::MoverParticulas(int n_x, int n_y, int n_z){
     if (p_i == 0|| p_i == n_x -1){
@@ -98,6 +75,30 @@ void Particle::MoverParticulas(int n_x, int n_y, int n_z){
     }
     if(p_k == 0 || p_k == n_z-1){
         ColisionesEje_2(2, bmax_z, bmin_z);
+    }
+}
+
+void Particle::ColisionesEje(int eje, double bmax, double bmin){    //NOLINT
+    double const col = posicion[eje] + hvelocidad[eje] * ptiempo;
+    int col_p = 0;
+    if(eje == 0) {
+        col_p = p_i;
+    } else if(eje == 1) {
+        col_p = p_j;
+    } else {
+        col_p = p_k;
+    }
+    if(col_p==0){
+      const double var_p = tparticula - (col - bmin);
+        if (var_p > varconst) {
+          aceleracion[eje] += (colisiones * var_p - amortiguamiento * velocidad[eje]);
+        }
+    }
+    else{
+      const double var_p = tparticula - (bmax - col);
+        if (var_p > varconst) {
+          aceleracion[eje] -= (colisiones * var_p + amortiguamiento * velocidad[eje]);
+        }
     }
 }
 

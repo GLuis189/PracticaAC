@@ -34,7 +34,7 @@ TEST(ProgArgsTest, CannotOpenOutputFile) {
   }
 
   // Crear input.txt si no existe
-  std::ofstream inputFile("input.txt");
+  std::ofstream const inputFile("input.txt");
   if (!inputFile) {
     std::cerr << "Error: No se pudo crear input.txt.\n";
     exit(-5);
