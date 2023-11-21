@@ -26,36 +26,41 @@ TEST(GridTest, EsValido) {
   EXPECT_FALSE(g.esValido(10, 10));
 }
 
-
-TEST(GridTest, generarClaveBloque) {
-  int const n_x = 5;
-  int const n_y = 5;
-  int const n_z = 5;
-  grid const myGrid(n_x, n_y, n_z);
-  // Verificar que este método genera la clave correcta para un bloque dado sus índices
-  ASSERT_EQ(myGrid.generarClaveBloque(1, 2, 3), 10203);
-}
-
-// Test para el método esValido
-TEST(GridTest, esValido) {
-  int const n_x = 10;
-  int const n_y = 10;
-  int const n_z = 10;
-  grid myGrid(n_x, n_y, n_z);
-  // Verificar que este método devuelve true para índices válidos y false para índices no válidos
-  ASSERT_TRUE(myGrid.esValido(5, 10));
-  ASSERT_FALSE(myGrid.esValido(10, 10));
-}
-
 // Test para el método calcularBloquesAdyacentes
 TEST(GridTest, calcularBloquesAdyacentes) {
-  int nx = 10;
-  int ny = 10;
-  int nz = 10;
-  grid myGrid(nx, ny, nz);
+  double suavizado = 0.00580479;
+  grid g(suavizado);
   // Verificar que este método calcula correctamente los bloques adyacentes para un bloque dado
-  int const block_key2 = myGrid.generarClaveBloque(5, 5, 5);
-  ASSERT_EQ(myGrid.blocks[block_key2].bloques_ady.size(), 27);
+  int const block_key2 = g.generarClaveBloque(5, 5, 5);
+  ASSERT_EQ(g.blocks[block_key2].bloques_ady.size(), 27);
+}
+
+TEST(GridTest, CalcularBloque) {
+  double suavizado = 0.00580479;
+  grid g(suavizado);
+  Particle p;
+  p.posicion.c_x = 0.5;
+  p.posicion.c_y = 0.5;
+  p.posicion.c_z = 0.5;
+  g.calcularBloque(p);
+
+  EXPECT_EQ(p.p_i, 21);
+  EXPECT_EQ(p.p_j, 30);
+  EXPECT_EQ(p.p_k, 21);
+}
+
+TEST(GridTest, CalcularBloqueInicial) {
+  double suavizado = 0.00580479;
+  grid g(suavizado);
+  Particle p;
+  p.posicion.c_x = 0.0;
+  p.posicion.c_y = 0.0;
+  p.posicion.c_z = 0.0;
+  g.calcularBloqueInicial(p);
+
+  EXPECT_EQ(p.p_i, 11);
+  EXPECT_EQ(p.p_j, 13);
+  EXPECT_EQ(p.p_k, 11);
 }
 
 // Test para el método CambiarBloque

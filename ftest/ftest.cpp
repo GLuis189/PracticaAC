@@ -1,6 +1,7 @@
 //
 // Created by luis on 18/11/23.
 //
+// NOLINTBEGIN
 #include "gtest/gtest.h"
 #include "../sim/simulacion.hpp"
 #include "../sim/variablesglobales.hpp"
@@ -393,3 +394,4 @@ TEST(PruebaFuncional, CompararConTrazas5_large) {
     EXPECT_DOUBLE_EQ(resultado.particles[i].velocidad.c_z, trazas.particles[i].velocidad.c_z) << "Fallo en v_z de la partícula " << i;
   }
 }
+// NOLINTEND
