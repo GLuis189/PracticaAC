@@ -9,7 +9,8 @@
 #include <vector>
 
 int main(int argc, char *argv[]) {
-  ProgArgs const args(argc, argv);
+  std::vector<char*> const argvVector(argv, argv + argc);
+  ProgArgs const args(argc, argvVector);
 
   std::ifstream inputfile(args.inputfile, std::ios::binary);
   std::ofstream outputfile(args.outputfile, std::ios::binary);

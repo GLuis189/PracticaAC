@@ -3,14 +3,12 @@
 //
 #include "gtest/gtest.h"
 #include "../sim/simulacion.hpp"
-#include "../sim/particle.hpp"
-#include "../sim/grid.hpp"
-#include "../sim/progargs.hpp"
+#include "../sim/variablesglobales.hpp"
 #include <fstream>
 
 struct ArchivoData {
-    float ppm;
-    int numParticulas;
+    float ppm{};
+    int numParticulas{};
     std::vector<Particle> particles;
 };
 
@@ -19,7 +17,7 @@ ArchivoData leerArchivo(const std::string& nombreArchivo) {
   ArchivoData archivoData;
 
   if (!archivo.is_open()) {
-    std::cerr << "Error al abrir el archivo." << std::endl;
+    std::cerr << "Error al abrir el archivo." << "\n";
     return archivoData;
   }
 
@@ -365,7 +363,7 @@ TEST(PruebaFuncional, CompararConTrazas4_large) {
 
 TEST(PruebaFuncional, CompararConTrazas5_large) {
   ProgArgs args;
-  args.nts        = 5;  // Reemplaza esto con el número de iteraciones que quieras
+  args.nts        = n_5;  // Reemplaza esto con el número de iteraciones que quieras
   args.inputfile  = "../large.fld";
   args.outputfile = "large5_test.out";
 

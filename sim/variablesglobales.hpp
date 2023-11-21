@@ -11,13 +11,6 @@ typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, 
   return reinterpret_cast<char*>(&value);
 }
 
-/*template <typename T>
-typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, const char*>
-    as_buffer(const T& value) {
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-  return reinterpret_cast<const char*>(&value);
-}*/
-
 template <typename T>
 typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, T>
     read_binary_value(std::istream& is) {
@@ -47,12 +40,7 @@ const int n_64 = 64;
 const int n_315 = 315;
 const int dmil = 10000;
 const int cien = 100;
-
-
-//const double g_x = 0.0;
 const double g_y = -9.8;
-//const double g_z = 0.0;
-
 const double bmax_x = 0.065;
 const double bmax_y = 0.1;
 const double bmax_z = 0.065;
@@ -62,40 +50,3 @@ const double bmin_y = -0.08;
 const double bmin_z = -0.065;
 
 #endif // VARIABLESGLOBALES_H
-
-
- // Forward declaration
-/*template <typename T>
-char* as_writable_buffer(T & value);
-
-template <typename T>
-T read_binary_values(std::istream & is);
-
-// Implementación de as_writable_buffer para tipos no integrales ni de punto flotante
-template <typename T>
-char* as_writable_buffer_impl(T & value) {
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-  return reinterpret_cast<char *>(&value);
-}
-
-// Implementación de as_writable_buffer para tipos integrales o de punto flotante
-template <typename T>
-char* as_writable_buffer(T & value) {
-  return as_writable_buffer_impl(value);
-}
-
-// Implementación de read_binary_value para tipos no integrales ni de punto flotante
-template <typename T>
-T read_binary_value_impl(std::istream & is) {
-  T value{};
-  is.read(as_writable_buffer(value), sizeof(value));
-  return value;
-}
-
-// Implementación de read_binary_value para tipos integrales o de punto flotante
-template <typename T>
-T read_binary_value(std::istream & is) {
-  T value{};
-  is.read(as_writable_buffer(value), sizeof(value));
-  return value;
-}*/

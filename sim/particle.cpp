@@ -51,7 +51,7 @@ void Particle::VariacionAcelaracion(Particle& particula, double suavizado, doubl
       particula.aceleracion[indice] -= var_a;
     }
 }
-void Particle::ColisionesEje(int eje, double bmin, double bmax){
+void Particle::ColisionesEje(double bmin, double bmax, int eje){  //NOLINT
     double const col = posicion[eje] + hvelocidad[eje] * ptiempo;
     int col_p = 0;
     if(eje == 0) {
@@ -77,13 +77,13 @@ void Particle::ColisionesEje(int eje, double bmin, double bmax){
 
 void Particle::MoverParticulas(int n_x, int n_y, int n_z){
     if (p_i == 0|| p_i == n_x -1){
-        ColisionesEje(0, bmin_x, bmax_x);
+        ColisionesEje(bmin_x, bmax_x, 0);
     }
     if (p_j == 0||p_j == n_y -1){
-        ColisionesEje(1, bmin_y, bmax_y);
+        ColisionesEje(bmin_y, bmax_y, 1);
     }
     if (p_k == 0||p_k == n_z -1){
-        ColisionesEje(2, bmin_z, bmax_x);
+        ColisionesEje(bmin_z, bmax_x, 2);
     }
     for(int indice = 0; indice < 3; indice++){
         posicion[indice] +=  hvelocidad[indice] * ptiempo + aceleracion[indice] * (ptiempo * ptiempo);

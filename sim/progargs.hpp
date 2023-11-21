@@ -10,7 +10,7 @@ struct ProgArgs {
     std::string outputfile;
 
     ProgArgs() = default;
-    ProgArgs(int argc, char *argv[]);
+    ProgArgs(int argc, char* argv[]);
 };
 
 #endif

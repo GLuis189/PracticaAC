@@ -2,12 +2,13 @@
 #include <fstream>
 #include <cstdlib>
 #include "progargs.hpp"
+#include <vector>
 
-ProgArgs::ProgArgs(int argc, char *argv[]) {
+ProgArgs::ProgArgs(int argc, char* argv[]) {
     if(argc != 4) {
         std::cerr << "Error: Invalid number of arguments: " << (argc - 1) << ".\n";
         exit(-1);}
-    nts = atoi(argv[1]);
+    nts = std::stoi(argv[1]);
     if(nts == 0 && argv[1][0] != '0') {
         std::cerr << "Error: time steps must be numeric.\n";
         exit(-1);}
