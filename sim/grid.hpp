@@ -45,14 +45,7 @@ class grid {
     void calcularBloquesAdyacentes(const int block_key, int vara, int varb, int varc);
     static int generarClaveBloque(int vara, int varb, int varc);
     void calcularAceleraciones(std::vector<Particle> & particles, double pi_sua_6, double masa, double suavizado);
-    /*void ColisionesEjeX_1(std::vector<Particle> & particles);
-    void ColisionesEjeY_1(std::vector<Particle> & particles);
-    void ColisionesEjeZ_1(std::vector<Particle> & particles);
-    void ColisionesEjeX_2(std::vector<Particle> & particles);
-    void ColisionesEjeY_2(std::vector<Particle> & particles);
-    void ColisionesEjeZ_2(std::vector<Particle> & particles);*/
 
-    //void printBlocks();
 
     // Otros métodos relacionados con la malla
 };
