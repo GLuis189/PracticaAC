@@ -14,7 +14,7 @@ void reposicionar(grid & malla, std::vector<Particle> & particles);
 
 void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & malla, std::vector<Particle> & particles);
 
-void mostrarDatos();
+void mostrarDatos(grid & malla);
 void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& outputfile);
 
 #endif

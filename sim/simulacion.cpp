@@ -16,12 +16,6 @@ double masa;
 double suavizado;
 double pi_sua_6;
 double suavizado_2;
-int n_x;
-int n_y;
-int n_z;
-double s_x;
-double s_y;
-double s_z;
 
 grid calcularMalla(std::ifstream& inputfile) {
   ppm           = read_binary_value<float>(inputfile);
@@ -180,7 +174,7 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
     for (Particle& particle : particles){
       //Particle & particle = particles[part];
 
-      particle.MoverParticulas(n_x, n_y, n_z);
+      particle.MoverParticulas(malla.n_x, malla.n_y, malla.n_z);
     }
 
     /*malla.ColisionesEjeX_2(particles);
@@ -194,7 +188,7 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
 }
 
 
-void mostrarDatos(){
+void mostrarDatos(grid & malla){
   // Mostrar los datos
   std::cout << "Number of particles: " << numparticulas << "\n";
   std::cout << "Particles per meter: " << ppm << "\n";
