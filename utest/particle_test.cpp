@@ -78,9 +78,9 @@ TEST(ParticleTest, Colisiones) {
   double const varz = p.posicion.c_z + p.hvelocidad.c_z * ptiempo;
   double const var_pz = tparticula - (varz - bmin_z);
   double const a_z = p.aceleracion.c_z + (colisiones * var_pz - amortiguamiento * p.velocidad.c_z);
-  p.ColisionesEjeX0_1();
-  p.ColisionesEjeY0_1();
-  p.ColisionesEjeZ0_1();
+  p.ColisionesEje_1(0, bmax_x, bmin_x);
+  p.ColisionesEje_1(1, bmax_y, bmin_y);
+  p.ColisionesEje_1(2, bmax_z, bmin_z);
   // Verificar que se calculan correctamente las colisiones
   ASSERT_DOUBLE_EQ(p.aceleracion.c_x, a_x);
   ASSERT_DOUBLE_EQ(p.aceleracion.c_y, a_y);
