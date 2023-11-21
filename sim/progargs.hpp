@@ -2,11 +2,7 @@
 #define PROGARGS_H
 
 #include <string>
-
-struct ParametrosBloque {
-    double s_x, s_y, s_z;
-    int n_x, n_y, n_z;
-};
+#include <vector>
 
 struct ProgArgs {
     int nts{};

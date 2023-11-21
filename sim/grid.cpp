@@ -23,10 +23,7 @@ grid::grid(double suavizado)
     for (int var_b = 0; var_b < n_y; ++var_b) {
       for (int var_c = 0; var_c < n_z; ++var_c) {
         int const block_key = generarClaveBloque(var_a, var_b, var_c);
-        Block newBlock;
-        newBlock.b_i = var_a;
-        newBlock.b_j = var_b;
-        newBlock.b_k = var_c;
+        Block const newBlock;
         blocks[block_key] = newBlock;
         calcularBloquesAdyacentes(block_key, var_a, var_b, var_c);
       }
