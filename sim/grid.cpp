@@ -27,9 +27,6 @@ grid::grid(double suavizado)
         newBlock.b_j = var_b;
         newBlock.b_k = var_c;
         blocks[block_key] = newBlock;
-        /*if(var_a ==0||var_a ==(n_x-1)){colisionesCx.push_back(block_key);}
-        if(var_b ==0|| var_b ==(n_y-1)){colisionesCy.push_back(block_key);}
-        if(var_c ==0|| var_c ==(n_z-1)){colisionesCz.push_back(block_key);}*/
         calcularBloquesAdyacentes(block_key, var_a, var_b, var_c);
       }
     }
@@ -54,6 +51,12 @@ void grid::calcularBloquesAdyacentes(const int block_key, int vara, int varb, in
         }
       }
     }
+}
+
+void grid::calcularBloque(Particle & particle) {
+    particle.p_i = std::clamp(static_cast<int>((particle.posicion.c_x - bmin_x) / s_x), 0, n_x - 1);
+    particle.p_j = std::clamp(static_cast<int>((particle.posicion.c_y - bmin_y) / s_y), 0, n_y - 1);
+    particle.p_k = std::clamp(static_cast<int>((particle.posicion.c_z - bmin_z) / s_z), 0, n_z - 1);
 }
 
 void grid::CambiarBloque(int ide, int b_i, int b_j, int b_k, int i_anterior, int j_anterior, int k_anterior) {

@@ -26,12 +26,6 @@ void Particle::calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x
   }
 }
 
-void Particle::calcularBloque(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z) {
-    p_i = std::clamp(static_cast<int>((posicion.c_x - bmin_x) / s_x), 0, n_x - 1);
-    p_j = std::clamp(static_cast<int>((posicion.c_y - bmin_y) / s_y), 0, n_y - 1);
-    p_k = std::clamp(static_cast<int>((posicion.c_z - bmin_z) / s_z), 0, n_z - 1);
-}
-
 void Particle::Inicializar(){
     densidad   = 0;
     aceleracion.c_x        = 0;
