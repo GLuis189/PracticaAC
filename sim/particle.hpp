@@ -11,10 +11,10 @@
 struct Vector{
     double c_x, c_y, c_z;
     double& operator[] (int i) {
-      if(i == 0) return c_x;
-        else if(i == 1) return c_y;
-        else if(i == 2) return c_z;
-        throw std::out_of_range("Index out of range");
+      if(i == 0) { return c_x; };
+      if(i == 1) { return c_y; };
+      if(i == 2) { return c_z; };
+      throw std::out_of_range("Index out of range");
     }
 };
 
