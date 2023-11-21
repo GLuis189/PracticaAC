@@ -7,8 +7,9 @@ ProgArgs::ProgArgs(int argc, const std::vector<std::string>& argv) {
   if (argc != 4) {
     std::cerr << "Error: Invalid number of arguments: " << (argc - 1) << ".\n";
     exit(-1);}
-  nts = std::stoi(argv[1]);
-  if (nts == 0 && argv[1][0] != '0') {
+  try {
+    nts = std::stoi(argv[1]);
+    } catch (const std::invalid_argument& e) {
     std::cerr << "Error: time steps must be numeric.\n";
     exit(-1);}
   if (nts < 0) {
