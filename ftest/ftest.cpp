@@ -385,15 +385,15 @@ TEST(PruebaFuncional, CompararConTrazas5_large) {
   ASSERT_EQ(resultado.numParticulas, trazas.numParticulas) << "El tamaño del archivo no coincide con las trazas";;
 
   for (size_t i = 0; i < resultado.particles.size(); ++i) {
-    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la id de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].p_x, trazas.particles[i].p_x) << "Fallo en p_x de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].p_y, trazas.particles[i].p_y) << "Fallo en p_y de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].p_z, trazas.particles[i].p_z) << "Fallo en p_z de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].hvx, trazas.particles[i].hvx) << "Fallo en hvx de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].hvy, trazas.particles[i].hvy) << "Fallo en hvy de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].hvz, trazas.particles[i].hvz) << "Fallo en hvz de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].v_x, trazas.particles[i].v_x) << "Fallo en v_x de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].v_y, trazas.particles[i].v_y) << "Fallo en v_y de la partícula " << i;
-    EXPECT_DOUBLE_EQ(resultado.particles[i].v_z, trazas.particles[i].v_z) << "Fallo en v_z de la partícula " << i;
+    EXPECT_EQ(resultado.particles[i].ide, trazas.particles[i].ide) << "Fallo en la ide de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].posicion.c_x, trazas.particles[i].posicion.c_x) << "Fallo en p_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].posicion.c_y, trazas.particles[i].posicion.c_y) << "Fallo en p_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].posicion.c_z, trazas.particles[i].posicion.c_z) << "Fallo en p_z de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvelocidad.c_x, trazas.particles[i].hvelocidad.c_x) << "Fallo en hvx de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvelocidad.c_y, trazas.particles[i].hvelocidad.c_y) << "Fallo en hvy de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].hvelocidad.c_z, trazas.particles[i].hvelocidad.c_z) << "Fallo en hvz de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].velocidad.c_x, trazas.particles[i].velocidad.c_x) << "Fallo en v_x de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].velocidad.c_y, trazas.particles[i].velocidad.c_y) << "Fallo en v_y de la partícula " << i;
+    EXPECT_DOUBLE_EQ(resultado.particles[i].velocidad.c_z, trazas.particles[i].velocidad.c_z) << "Fallo en v_z de la partícula " << i;
   }
 }
