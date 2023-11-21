@@ -32,7 +32,7 @@ class Particle {
     void VariacionDensidad(Particle & particula, double suavizado_2);
     double CalcularDistancia(Particle & particula) const;
     void VariacionAcelaracion(Particle & particula, double suavizado, double pi_sua_6, double masa);
-    void ColisionesEje(double bmax, double bmin, int eje);
+    void ColisionesEje(int eje, double bmax, double bmin);
 
     void MoverParticulas(int n_x, int n_y, int n_z);
 

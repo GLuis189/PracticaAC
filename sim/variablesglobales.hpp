@@ -3,7 +3,7 @@
 #ifndef VARIABLESGLOBALES_H
 #define VARIABLESGLOBALES_H
 
-
+//NOLINTBEGIN
 template <typename T>
 typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, char*>
     as_writable_buffer(T& value) {
@@ -23,7 +23,7 @@ template <typename... Args>
 bool read_binary_values(std::ifstream& inputfile, Args&... args) {
   return (inputfile.read(as_writable_buffer(args), sizeof(args)) && ...);
 }
-
+//NOLINTEND
 const double radio           = 1.695;
 const double densidad        = 1e3;
 const double presion         = 3.0;

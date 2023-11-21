@@ -85,8 +85,9 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
 
 void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& outputfile) {
   auto ppm2 = static_cast<float>(ppm);
-  outputfile.write(static_cast<const char*>(static_cast<const void*>(&ppm2)), sizeof(ppm2));
-  outputfile.write(static_cast<const char*>(static_cast<const void*>(&numparticulas)), sizeof(numparticulas));
+
+  outputfile.write(reinterpret_cast<const char*>(&ppm2), sizeof(ppm2));     //NOLINT
+  outputfile.write(reinterpret_cast<const char*>(&numparticulas), sizeof(numparticulas));     //NOLINT
 
   for (const auto& particula : particulas) {
     std::array<float, n_9> values = {
@@ -101,11 +102,13 @@ void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& output
       static_cast<float>(particula.velocidad.c_z)
     };
 
-    outputfile.write(static_cast<const char*>(static_cast<const void*>(values.data())), sizeof(values));
+    outputfile.write(reinterpret_cast<const char*>(values.data()), sizeof(values));     //NOLINT
   }
 
   outputfile.close();
 }
+
+
 
 /*void ResultadosBinarios(std::vector<Particle> & particulas,std::ofstream& outputfile){
   float ppm2 = static_cast<float>(ppm);
