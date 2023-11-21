@@ -5,6 +5,7 @@
 #ifndef FLUID_PARTICLE_HPP
 #define FLUID_PARTICLE_HPP
 //#include "../sim/grid.hpp"
+#include <vector>
 
 
 class Particle {
@@ -15,6 +16,7 @@ class Particle {
     double v_x, v_y, v_z;   // Coordenadas de la velocidad
     double a_x, a_y, a_z;
     int i, j, k;
+    std::vector<int> particulas_adyacentes;
     double densidad;
     void calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z);
     void calcularBloque(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z);

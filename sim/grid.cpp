@@ -58,7 +58,6 @@ void grid::CambiarBloque(int id, int i, int j, int k, int i_anterior, int j_ante
 
 void grid::calcularDensidades(std::vector<Particle> & particles, double masa, double suavizado, double suavizado_2) {
   for (Particle& particle : particles) {
-    //Particle & particle = particles[part];
     int const block_key2 = generarClaveBloque(particle.i, particle.j, particle.k);
     std::vector<int> const bloquesAdy = blocks[block_key2].bloques_ady;
     for (int const& bloque : bloquesAdy) {
@@ -74,8 +73,15 @@ void grid::calcularDensidades(std::vector<Particle> & particles, double masa, do
 
 void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_sua_6, double masa, double suavizado){
   for (Particle& particle : particles) {
+    for(int ide_particula: particle.particulas_adyacentes){
+      Particle& particula = particles[ide_particula];
+      double const distancia = particle.CalcularDistancia(particula);
+      double const dist_ij = std::sqrt(std::max(distancia, 1e-12));
+      particle.VariacionAcelaracionX(particula, suavizado, pi_sua_6, dist_ij, masa);
+      particle.VariacionAcelaracionY(particula, suavizado, pi_sua_6, dist_ij, masa);
+      particle.VariacionAcelaracionZ(particula, suavizado, pi_sua_6, dist_ij, masa);
     //Particle & particle          = particles[part];
-    int const block_key2 = generarClaveBloque(particle.i, particle.j, particle.k);
+    /*int const block_key2 = generarClaveBloque(particle.i, particle.j, particle.k);
     std::vector<int> const bloquesAdy = blocks[block_key2].bloques_ady;
     for (int const & bloque : bloquesAdy) {
       std::vector<int> const & particulas_ady = blocks[bloque].particles;
@@ -83,16 +89,16 @@ void grid::calcularAceleraciones(std::vector<Particle> & particles, double pi_su
         Particle & particula = particles[id_p];
         if (particula > particle) {
             double const distancia = particle.CalcularDistancia(particula);
-            if (distancia < suavizado * suavizado) {
+            if (distancia < suavizado * suavizado) {*/
 
-              double const dist_ij = std::sqrt(std::max(distancia, 1e-12));
-              particle.VariacionAcelaracionX(particula, suavizado, pi_sua_6, dist_ij, masa);
-              particle.VariacionAcelaracionY(particula, suavizado, pi_sua_6, dist_ij, masa);
-              particle.VariacionAcelaracionZ(particula, suavizado, pi_sua_6, dist_ij, masa);
-            }
-        }
-      }
+              //double const dist_ij = std::sqrt(std::max(distancia, 1e-12));
     }
+    particle.particulas_adyacentes.clear();
+
+
+    /*if (blocks[block_key2].particles.back() == particle.ide){
+      blocks[block_key2].particles.clear();
+    }*/
   }
 }
 

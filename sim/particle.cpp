@@ -8,6 +8,7 @@
 #include "variablesglobales.hpp"
 #include <algorithm>
 #include <cmath>
+#include <vector>
 
 
 void Particle::calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z){
@@ -43,6 +44,8 @@ void Particle::VariacionDensidad(Particle & particula, double suavizado_2){
     if ((distancia) < (suavizado_2)) {
       double const variacion_densidad = (suavizado_2 - distancia) * (suavizado_2 - distancia) *
                            (suavizado_2 - distancia);
+
+      particulas_adyacentes.emplace_back(particula.ide);
       densidad  = densidad + variacion_densidad;
       particula.densidad = particula.densidad + variacion_densidad;
     }

@@ -85,6 +85,8 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
     int const k_anterior = particle.k;
 
     particle.calcularBloque(s_x, s_y, s_z, n_x, n_y, n_z);
+    /*int clave = malla.generarClaveBloque(particle.i, particle.j, particle.k);
+    malla.blocks[clave].addParticle(particle.ide);*/
 
     if (i_anterior != particle.i || j_anterior != particle.j || k_anterior != particle.k) {
       malla.CambiarBloque(particle.ide, particle.i, particle.j, particle.k, i_anterior, j_anterior, k_anterior);
