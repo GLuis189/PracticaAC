@@ -58,12 +58,26 @@ void grid::calcularBloque(Particle & particle) {
     particle.p_j = std::clamp(static_cast<int>((particle.posicion.c_y - bmin_y) / s_y), 0, n_y - 1);
     particle.p_k = std::clamp(static_cast<int>((particle.posicion.c_z - bmin_z) / s_z), 0, n_z - 1);
 }
+void grid:: calcularBloqueInicial(Particle & particle){
+    particle.p_i = static_cast<int>((particle.posicion.c_x-bmin_x)/ s_x);
+    if (particle.p_i> n_x -1){
+      particle.p_i = n_x -1;
+    }
+    particle.p_j = static_cast<int>((particle.posicion.c_y-bmin_y)/ s_y);
+    if (particle.p_j>n_y -1){
+      particle.p_j = n_y-1;
+    }
+    particle.p_k = static_cast<int>((particle.posicion.c_z-bmin_z)/ s_z);
+    if (particle.p_k>n_z -1){
+      particle.p_k = n_z -1;
+    }
+}
 
-void grid::CambiarBloque(int ide, int b_i, int b_j, int b_k, int i_anterior, int j_anterior, int k_anterior) {
+void grid::CambiarBloque(Particle & particle, int i_anterior, int j_anterior, int k_anterior) {
   int const block_key = generarClaveBloque(i_anterior, j_anterior, k_anterior);
-  blocks[block_key].removeParticle(ide);
-  int const block_key2 = generarClaveBloque(b_i, b_j, b_k);
-  blocks[block_key2].addParticle(ide);
+  blocks[block_key].removeParticle(particle.ide);
+  int const block_key2 = generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
+  blocks[block_key2].addParticle(particle.ide);
 }
 
 void grid::calcularDensidades(std::vector<Particle> & particles, double masa, double suavizado, double suavizado_2) {

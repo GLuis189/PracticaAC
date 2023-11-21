@@ -47,7 +47,7 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
     particle.hvelocidad.c_x = hvx, particle.hvelocidad.c_y = hvy, particle.hvelocidad.c_z = hvz;
     particle.velocidad.c_x = v_x, particle.velocidad.c_y = v_y, particle.velocidad.c_z = v_z;
     particle.aceleracion.c_y = -9.8, particle.aceleracion.c_x = 0, particle.aceleracion.c_z = 0;
-    particle.calcularBloqueInicial(malla.s_x, malla.s_y, malla.s_z, malla.n_x, malla.n_y, malla.n_z);
+    malla.calcularBloqueInicial(particle);
     /*ParametrosBloque param;
     param.s_x = s_x;
     param.s_y = s_y;
@@ -85,7 +85,7 @@ void reposicionar(grid & malla, std::vector<Particle> & particles) {
     malla.blocks[clave].addParticle(particle.ide);*/
 
     if (i_anterior != particle.p_i || j_anterior != particle.p_j || k_anterior != particle.p_k) {
-      malla.CambiarBloque(particle.ide, particle.p_i, particle.p_j, particle.p_k, i_anterior, j_anterior, k_anterior);
+      malla.CambiarBloque(particle, i_anterior, j_anterior, k_anterior);
     }
   }
 }

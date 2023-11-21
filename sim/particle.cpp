@@ -10,22 +10,6 @@
 #include <cmath>
 #include <vector>
 
-
-void Particle::calcularBloqueInicial(double s_x, double s_y, double s_z, int n_x, int n_y, int n_z){
-  p_i = static_cast<int>((posicion.c_x-bmin_x)/ s_x);
-  if (p_i> n_x -1){
-    p_i = n_x -1;
-  }
-  p_j = static_cast<int>((posicion.c_y-bmin_y)/ s_y);
-  if (p_j>n_y -1){
-    p_j = n_y-1;
-  }
-  p_k = static_cast<int>((posicion.c_z-bmin_z)/ s_z);
-  if (p_k>n_z -1){
-    p_k = n_z -1;
-  }
-}
-
 void Particle::Inicializar(){
     densidad   = 0;
     aceleracion.c_x        = 0;
