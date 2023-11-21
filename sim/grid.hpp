@@ -39,7 +39,8 @@ class grid {
 
     grid(double suavizado);
     void calcularBloque(Particle & particle);
-    void CambiarBloque(int ide, int b_i, int b_j, int b_k, int i_anterior, int j_anterior, int k_anterior);
+    void calcularBloqueInicial(Particle & particle);
+    void CambiarBloque(Particle & particle, int i_anterior, int j_anterior, int k_anterior);
     void calcularDensidades(std::vector<Particle> & particles, double masa, double suavizado, double suavizado_2);
     static bool esValido(int indice, int max);
     void calcularBloquesAdyacentes(const int block_key, int vara, int varb, int varc);
