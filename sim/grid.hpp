@@ -34,11 +34,14 @@ class grid {
     std::vector<int> colisionesCy;
     std::vector<int> colisionesCz;
 
-    grid(int n_x, int n_y, int n_z);
+    int n_x; int n_y; int n_z;
+    double s_x; double s_y; double s_z;
+
+    grid(double suavizado);
     void CambiarBloque(int ide, int b_i, int b_j, int b_k, int i_anterior, int j_anterior, int k_anterior);
     void calcularDensidades(std::vector<Particle> & particles, double masa, double suavizado, double suavizado_2);
     static bool esValido(int indice, int max);
-    void calcularBloquesAdyacentes(const int block_key, int vara, int varb, int varc, int n_x, int n_y, int n_z);
+    void calcularBloquesAdyacentes(const int block_key, int vara, int varb, int varc);
     static int generarClaveBloque(int vara, int varb, int varc);
     void calcularAceleraciones(std::vector<Particle> & particles, double pi_sua_6, double masa, double suavizado);
     void ColisionesEjeX_1(std::vector<Particle> & particles);

@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 
   std::vector<Particle> particles = leerParticulas(inputfile, malla);
 
-  mostrarDatos();
+  mostrarDatos(malla);
   // Inicio de simulación
   IniciarSimulacion(args, outputfile, malla, particles);
 

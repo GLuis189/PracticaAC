@@ -9,7 +9,14 @@
 #include "../sim/variablesglobales.hpp"
 
 
-grid::grid(int n_x, int n_y, int n_z) {
+grid::grid(double suavizado)
+  : n_x(static_cast<int>((bmax_x - bmin_x) / suavizado)),
+    n_y(static_cast<int>((bmax_y - bmin_y) / suavizado)),
+    n_z(static_cast<int>((bmax_z - bmin_z) / suavizado)),
+    s_x((bmax_x - bmin_x) / n_x),
+    s_y((bmax_y - bmin_y) / n_y),
+    s_z((bmax_z - bmin_z) / n_z)
+{
   // Generar bloques para toda la malla
   for (int var_a = 0; var_a < n_x; ++var_a) {
     for (int var_b = 0; var_b < n_y; ++var_b) {
@@ -23,7 +30,7 @@ grid::grid(int n_x, int n_y, int n_z) {
         /*if(var_a ==0||var_a ==(n_x-1)){colisionesCx.push_back(block_key);}
         if(var_b ==0|| var_b ==(n_y-1)){colisionesCy.push_back(block_key);}
         if(var_c ==0|| var_c ==(n_z-1)){colisionesCz.push_back(block_key);}*/
-        calcularBloquesAdyacentes(block_key, var_a, var_b, var_c, n_x, n_y, n_z);
+        calcularBloquesAdyacentes(block_key, var_a, var_b, var_c);
       }
     }
   }
@@ -36,7 +43,7 @@ bool grid::esValido(int indice, int max) {
   return indice >= 0 && indice < max;
 }
 
-void grid::calcularBloquesAdyacentes(const int block_key, int vara, int varb, int varc, int n_x, int n_y, int n_z) {
+void grid::calcularBloquesAdyacentes(const int block_key, int vara, int varb, int varc) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         for (int k = -1; k < 2; k++) {
