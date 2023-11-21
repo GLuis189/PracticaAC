@@ -24,7 +24,6 @@ grid calcularMalla(std::ifstream& inputfile) {
     std::cerr << "Error: Invalid number of particles: 0.\n";
     exit(errorconst);
   }
-
   masa      = densidad / (ppm * ppm * ppm);
   suavizado = radio / ppm;
   pi_sua_6 = M_PI * suavizado * suavizado * suavizado * suavizado * suavizado * suavizado;
@@ -158,7 +157,7 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
      reposicionar(malla, particles);
     }
     malla.calcularDensidades(particles, masa, suavizado, suavizado_2);
-    malla.calcularAceleraciones(particles, pi_sua_6, masa, suavizado);
+    grid::calcularAceleraciones(particles, pi_sua_6, masa, suavizado);
     for (Particle& particle : particles){
       particle.MoverParticulas(malla.n_x, malla.n_y, malla.n_z);
     }

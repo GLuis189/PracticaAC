@@ -11,12 +11,12 @@ typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, 
   return reinterpret_cast<char*>(&value);
 }
 
-template <typename T>
+/*template <typename T>
 typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, const char*>
     as_buffer(const T& value) {
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
   return reinterpret_cast<const char*>(&value);
-}
+}*/
 
 template <typename T>
 typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, T>
@@ -49,9 +49,9 @@ const int dmil = 10000;
 const int cien = 100;
 
 
-const double g_x = 0.0;
+//const double g_x = 0.0;
 const double g_y = -9.8;
-const double g_z = 0.0;
+//const double g_z = 0.0;
 
 const double bmax_x = 0.065;
 const double bmax_y = 0.1;
