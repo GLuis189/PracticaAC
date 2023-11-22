@@ -63,9 +63,9 @@ TEST(GridTest, CalcularBloqueInicial) {
   EXPECT_EQ(part.p_j, 13);
   EXPECT_EQ(part.p_k, 11);
 }
-/*
 TEST(GridTest, CambiarBloque) {
   double const suavizado = suavizadot;
+  double const ceroseis = 0.6;
   grid myGrid(suavizado);
   Particle particle;
   particle.posicion.c_x = 0.0;
@@ -75,18 +75,46 @@ TEST(GridTest, CambiarBloque) {
   const int i_anterior = particle.p_i;
   const int j_anterior = particle.p_j;
   const int k_anterior = particle.p_k;
-  particle.posicion.c_x = 0.6;
-  particle.posicion.c_y = 0.6;
-  particle.posicion.c_z = 0.6;
+  particle.posicion.c_x = ceroseis;
+  particle.posicion.c_y = ceroseis;
+  particle.posicion.c_z = ceroseis;
   myGrid.calcularBloque(particle);
 
   myGrid.CambiarBloque(particle, i_anterior, j_anterior, k_anterior);
-  int old_block_key = myGrid.generarClaveBloque(i_anterior, j_anterior, k_anterior);
-  int new_block_key = myGrid.generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
+  const int old_block_key = grid::generarClaveBloque(i_anterior, j_anterior, k_anterior);
+  const int new_block_key = grid::generarClaveBloque(particle.p_i, particle.p_j, particle.p_k);
 
   EXPECT_FALSE(old_block_key == new_block_key);
 }
+// Prueba para la función calcularDensidades
+TEST(GridTest, CalcularDensidades) {
+  const double masa = 1.0;
+  const double suavizado = 1.0;
+  const double suavizado_2 = suavizado * suavizado;
+  grid grid(suavizadot);
+  std::vector<Particle> particles;
+  // Llenar el vector de partículas con algunos valores de prueba
+  for(int indice = 0; indice < 3; indice++){ const Particle particle; particles.emplace_back(particle);}
 
+  std::vector<Particle> particles_copy = particles;
+
+  grid.calcularDensidades(particles, masa, suavizado, suavizado_2);
+
+  for (Particle& particle : particles_copy) {
+    for (Particle& particula : particles_copy) {
+      if (particula > particle) { particle.VariacionDensidad(particula, suavizado_2); }
+    }
+     particle.densidad = (particle.densidad + pow(suavizado, n_6)) * n_315 * masa/ (n_64 * M_PI * pow(suavizado, n_9));
+  }
+
+  // Comprobar que las densidades de las partículas se han calculado correctamente
+  ASSERT_DOUBLE_EQ(particles[0].densidad, particles_copy[0].densidad);
+  ASSERT_DOUBLE_EQ(particles[1].densidad, particles_copy[1].densidad);
+  ASSERT_DOUBLE_EQ(particles[2].densidad, particles_copy[2].densidad);
+}
+
+
+/*
 TEST(GridTest, CalcularDensidades) {
   double suavizado = suavizadot;
   grid grid(suavizado);
@@ -314,3 +342,47 @@ TEST(GridTest, ColisionesEjeZ_2) {
   ASSERT_DOUBLE_EQ(particles[0].a_x, 1 );
 }*/
 
+/*
+// Test para el método ColisionesEjeX_1
+TEST(GridTest, ColisionesEjeX_1) {
+  int nx = 15;
+  int ny = 21;
+  int nz = 15;
+  grid myGrid(nx, ny, nz);
+  std::vector<Particle> particles;
+  // Añadir una partícula al bloque (0,0,0)
+  Particle p;
+  p.i = 0; p.j = 0; p.k = 0;
+  p.p_x =  -0.0661478;
+  p.hvx =  -0.166259;
+  p.v_x = -0.191624;
+  p.a_x = 0;
+  particles.push_back(p);
+  myGrid.blocks[myGrid.generarClaveBloque(0, 0, 0)].addParticle(0);
+  // Llamar a ColisionesEjeX_1
+  myGrid.ColisionesEjeX_1(particles);
+  double x = p.p_x + p.hvx * ptiempo;
+  double var_px = tparticula - (x - bmin_x);
+  double aceleracion = p.a_x + (colisiones * var_px - amortiguamiento *p.v_x);
+  // Verificar que la partícula ha colisionado correctamente
+  ASSERT_DOUBLE_EQ(particles[0].a_x, aceleracion);
+}
+TEST(GridTest, No_ColisionesEjeX_1) {
+  int nx = 15;
+  int ny = 21;
+  int nz = 15;
+  grid myGrid(nx, ny, nz);
+  std::vector<Particle> particles;
+  // Añadir una partícula al bloque (0,0,0)
+  Particle p;
+  p.i = 10; p.j = 0; p.k = 0;
+  p.p_x =  -0.0661478;
+  p.hvx =  -0.0661478;
+  p.a_x = 0;
+  particles.push_back(p);
+  myGrid.blocks[myGrid.generarClaveBloque(0, 0, 0)].addParticle(0);
+  // Llamar a ColisionesEjeX_1
+  myGrid.ColisionesEjeX_1(particles);
+  // Verificar que la partícula no ha colisionado
+  ASSERT_DOUBLE_EQ(particles[0].a_x, 0);
+}*/

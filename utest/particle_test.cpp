@@ -45,14 +45,16 @@ TEST(ParticleTest, VariacionDensidad) {
   EXPECT_EQ(particle1.particulas_adyacentes.back(), particle2.ide) << "La partícula 2 no se añadió a las partículas adyacentes de la partícula 1.";
 }
 
+const Vector acc = {0, g_y, 0};
+
 TEST(ParticleTest, VariacionAceleracion) {
   Particle particle1; Particle particle2;
   particle1.posicion = {0.0, 0.0, 0.0};
   particle2.posicion = {1.0, 1.0, 1.0};
   particle1.velocidad = {0.0, 0.0, 0.0};
   particle2.velocidad = {1.0, 1.0, 1.0};
-  particle1.aceleracion = {0.0, g_y, 0.0};
-  particle1.aceleracion = {0.0, g_y, 0.0};
+  particle1.aceleracion = acc;
+  particle1.aceleracion = acc;
   double const suavizado = 1.0;
   double const pi_sua_6 = M_PI * pow(suavizado, n_6);
   double const masa = 1.0;
@@ -64,65 +66,93 @@ TEST(ParticleTest, VariacionAceleracion) {
   }
 }
 
-const double pos1 = -0.0661478;
-const double pos2 = -0.0805976;
-const double pos3 = -0.0648605;
-const double hvl1 = -0.166259;
-const double hvl2 = 0.0432823;
-const double hvl3 = 0.0442792;
-const double vel1 = -0.191624;
-const double vel2 = 0.0426284;
-const double bax = 1.0;
-const double bix = -1.0;
-const double bay = 1.0;
-const double biy = -1.0;
-const double baz = 1.0;
-const double biz = -1.0;
+const Vector pos = {-0.0661478, -0.0805976, -0.0648605};
+const Vector hvl = {-0.166259, 0.0432823, 0.0442792};
+const Vector vel = {-0.191624, 0.0426284, 0.0459564};
+const double bmax = 1.0; const double bmin = -1.0;
 
 TEST(ParticleTest, ColisionesEje) {
   Particle particle;
-  particle.posicion = {pos1, pos2, pos3};
-  particle.hvelocidad = {hvl1, hvl2, hvl3};
-  particle.velocidad = {vel1, vel2, vel2};
-  particle.aceleracion = {0, g_y, 0};
-  particle.ColisionesEje(0, bax, bix);
-  particle.ColisionesEje(1, bay, biy);
-  particle.ColisionesEje(2, baz, biz);
-  EXPECT_EQ(particle.aceleracion[0], 0.0) << "La coordenada X no coincide con la esperada.";
-  EXPECT_EQ(particle.aceleracion[1], g_y) << "La coordenada Y no coincide con la esperada.";
-  EXPECT_EQ(particle.aceleracion[2], 0.0) << "La coordenada Z no coincide con la esperada.";
+  particle.posicion = pos;
+  particle.hvelocidad = hvl;
+  particle.velocidad = vel;
+  particle.aceleracion = acc;
+  Vector aceleracion_esperada = acc;
+  for (int eje = 0; eje < 3; eje++) { particle.ColisionesEje(eje, bmax, bmin); }
+  for (int eje = 0; eje < 3; eje++) {
+    EXPECT_EQ(particle.aceleracion[eje], aceleracion_esperada[eje]) << "La aceleracion no coincide con la esperada";
+  }
 }
 
-/*
+// NOLINTBEGIN
 TEST(ParticleTest, ColisionesEje2) {
   Particle particle;
-  particle.posicion = {pos1, pos2, pos3};
-  particle.hvelocidad = {hvl1, hvl2, hvl3};
-  particle.velocidad = {vel1, vel2, vel2};
-  particle.aceleracion = {0, g_y, 0};
-  particle.ColisionesEje(0, bax, bix);
-  particle.ColisionesEje(1, bay, biy);
-  particle.ColisionesEje(2, baz, biz);
-  EXPECT_EQ(particle.aceleracion[0], 0.0) << "La coordenada X no coincide con la esperada.";
-  EXPECT_EQ(particle.aceleracion[1], g_y) << "La coordenada Y no coincide con la esperada.";
-  EXPECT_EQ(particle.aceleracion[2], 0.0) << "La coordenada Z no coincide con la esperada.";
+  particle.posicion = pos;
+  particle.hvelocidad = hvl;
+  particle.velocidad = vel;
+  particle.aceleracion = acc;
+  Vector pos2 = {-0.0661478, -0.0805976, -0.0648605};
+  Vector hvl2 = {-0.166259, 0.0432823, 0.0442792};
+  Vector vel2 = {-0.191624, 0.0426284, 0.0459564};
+  for (int eje = 0; eje < 3; eje++) { particle.ColisionesEje_2(eje, bmax, bmin); }
+  for (int eje = 0; eje < 3; eje++) {
+    if (particle.posicion[eje] < bmin) {
+      EXPECT_EQ(particle.posicion[eje], bmin) << "La posicion en el eje " << eje << " es menor que bmin";
+      EXPECT_EQ(particle.velocidad[eje], -vel2[eje]) << "La velocidad en el eje " << eje << " no se ha invertido correctamente";
+      EXPECT_EQ(particle.hvelocidad[eje], -hvl2[eje]) << "La hvelocidad en el eje " << eje << " no se ha invertido correctamente";
+    } else if (particle.posicion[eje] > bmax) {
+      EXPECT_EQ(particle.posicion[eje], bmax) << "La posicion en el eje " << eje << " es mayor que bmax";
+      EXPECT_EQ(particle.velocidad[eje], -vel2[eje]) << "La velocidad en el eje " << eje << " no se ha invertido correctamente";
+      EXPECT_EQ(particle.hvelocidad[eje], -hvl2[eje]) << "La hvelocidad en el eje " << eje << " no se ha invertido correctamente";
+    } else {
+      EXPECT_EQ(particle.posicion[eje], pos2[eje]) << "La posicion en el eje " << eje << " ha cambiado incorrectamente";
+      EXPECT_EQ(particle.velocidad[eje], vel2[eje]) << "La velocidad en el eje " << eje << " ha cambiado incorrectamente";
+      EXPECT_EQ(particle.hvelocidad[eje], hvl2[eje]) << "La hvelocidad en el eje " << eje << " ha cambiado incorrectamente";
+    }
+  }
 }
- */
+//NOLINTEND
+const int n_15 = 15;
+const int n_21 = 21;
+const Vector pos1 = {-0.0367109, -0.08061, -0.0335985};
+const Vector vel1 = {0.170606, -0.0339197, 0.0979943};
+const Vector hvl1 = {0.166993, -0.0352274, 0.0957909};
+const Vector acc1 = {-714.862, 270.884, 769.135};
+const double var1 = -0.0372588; const double var2 = -0.0796554; const double var3 = -0.0327335;
+const double var4 = -0.190438; const double var5 = -0.115063; const double var6 = 0.480358;
+const double var7 = -0.547869; const double var8 = -0.265354; const double var9 = 0.864926;
+
+TEST(ParticleTest, MoverParticula) {
+  Particle particle;
+  particle.posicion = pos1;
+  particle.velocidad = vel1;
+  particle.hvelocidad = hvl1;
+  particle.aceleracion = acc1;
+  particle.MoverParticulas(n_15, n_21, n_15);
+  Vector pos_esperada = {var1, var2, var3};
+  Vector vel_esperada = {var4, var5, var6};
+  Vector hvl_esperada = {var7, var8, var9};
+  for (int eje = 0; eje < 3; eje++) {
+    EXPECT_NEAR(particle.posicion[eje], pos_esperada[eje], 1e-7) << "La posicion no coincide con la esperada";
+    EXPECT_NEAR(particle.velocidad[eje], vel_esperada[eje], 1e-6) << "La velocidad no coincide con la esperada";
+    EXPECT_NEAR(particle.hvelocidad[eje], hvl_esperada[eje], 1e-5) << "La hvelocidad no coincide con la esperada";
+  }
+}
 
 /*TEST(ParticleTest, MoverParticulas) {
   Particle particle;
-  particle.posicion = {pos1, pos2, pos3};
-  particle.hvelocidad = {hvl1, hvl2, hvl3};
-  particle.velocidad = {vel1, vel2, vel2};
-  particle.aceleracion = {0, g_y, 0};
+  particle.posicion = pos;
+  particle.hvelocidad = hvl;
+  particle.velocidad = vel;
+  particle.aceleracion = acc;
   particle.MoverParticulas(1, 1, 1);
-  const double res_pos = -0.0661478;
-  const double res_vel = -0.191624;
-  const double res_hvl = -0.166259;
+  const double res_pos = -0.063755890642000004;
+  const double res_vel = 0.13128417899999989;
+  const double res_hvl = 0.09630935799999979;
   // Comprueba los resultados
-  EXPECT_DOUBLE_EQ(particle.posicion[0], res_pos) << "La coordenada X de la posición no coincide con la esperada.";
-  EXPECT_DOUBLE_EQ(particle.velocidad[0], res_vel) << "La coordenada X de la velocidad no coincide con la esperada.";
-  EXPECT_DOUBLE_EQ(particle.hvelocidad[0], res_hvl) << "La coordenada X de la hvelocidad no coincide con la esperada.";
+  EXPECT_EQ(particle.posicion[0], res_pos) << "La coordenada X de la posición no coincide con la esperada.";
+  EXPECT_EQ(particle.velocidad[0], res_vel) << "La coordenada X de la velocidad no coincide con la esperada.";
+  EXPECT_EQ(particle.hvelocidad[0], res_hvl) << "La coordenada X de la hvelocidad no coincide con la esperada.";
 }*/
 
 /*
@@ -181,6 +211,7 @@ TEST(ParticleTest, CalcularDistancia) {
   ASSERT_DOUBLE_EQ(distancia, 3.0);
 }
 
+
 // Test para los métodos de colisiones
 TEST(ParticleTest, Colisiones) {
   Particle particle;
@@ -211,5 +242,8 @@ TEST(ParticleTest, Colisiones) {
   ASSERT_DOUBLE_EQ(particle.aceleracion.c_z, a_z);
 }
 
+
+
 */
+
 

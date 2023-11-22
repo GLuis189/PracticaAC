@@ -35,7 +35,7 @@
   return a.id < b.id;
 }*/
 struct Particle {
-    //int64_t id;
+    //int id;
     float px, py, pz;
     float hvx, hvy, hvz;
     float vx, vy, vz;
@@ -43,6 +43,7 @@ struct Particle {
     //double accx, accy, accz;
 };
 
+//NOLINTBEGIN
 template <typename T>
 typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, char*>
     as_writable_buffer(T& value) {
@@ -69,10 +70,10 @@ template <typename... Args>
 bool read_binary_values(std::ifstream& inputfile, Args&... args) {
   return (inputfile.read(as_writable_buffer(args), sizeof(args)) && ...);
 }
-
+//NOLINTEND
 
 int main(int argc, char *argv[]) {
-  std::string nombreArchivo = "./out/small-1.fld";
+  std::string nombreArchivo = "./motion-base-1.trz";
   std::ifstream archivo(nombreArchivo, std::ios::binary);
 
   if (!archivo.is_open()) {
@@ -89,6 +90,7 @@ int main(int argc, char *argv[]) {
 
   for (int i = 0; i < numParticulas; ++i) {
     Particle particle;
+    //archivo.read(reinterpret_cast<char *>(&particle.id), sizeof(int));
     archivo.read(reinterpret_cast<char *>(&particle.px), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&particle.py), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&particle.pz), sizeof(float));
@@ -102,8 +104,9 @@ int main(int argc, char *argv[]) {
   }
 
   archivo.close();
-  std::cout<<"ppm: "<<ppm << "Numero de particulas: "<<numParticulas<< "\n";
+  std::cout<<"ppm: "<<ppm << " - Numero de particulas: "<<numParticulas<< "\n";
   for (const Particle& particle : particles) {
+    //std::cout << "Id: " << particle.id << std::endl;
     std::cout << "Posición (x, y, z): " << particle.px << ", " << particle.py << ", " << particle.pz << std::endl;
     std::cout << "Velocidad (vx, vy, vz): " << particle.vx << ", " << particle.vy << ", " << particle.vz << std::endl;
     std::cout << "Hvx, Hvy, Hvz: " << particle.hvx << ", " << particle.hvy << ", " << particle.hvz << std::endl;

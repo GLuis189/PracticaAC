@@ -8,6 +8,8 @@
 #include "variablesglobales.hpp"
 #include <cmath>
 #include <vector>
+#include <iostream>
+
 
 void Particle::Inicializar(){
     densidad   = 0;
