@@ -32,7 +32,6 @@ include_directories (PUBLIC .)
 # Note this will slow down compilation.
 # You may temporarily disable but do not forget to enable again.
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-header-filter=.*")
-#set(CMAKE_CXX_CLANG_TIDY "/opt/homebrew/opt/llvm/bin/clang-tidy;−header−filter=.∗")
 
 # Process cmake from sim and fluid directories
 add_subdirectory(sim)
