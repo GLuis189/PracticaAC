@@ -1,0 +1,22 @@
+fluid
+   |
+   |
+   sim
+      |
+      |
+      block.cpp
+      block.hpp
+      grid.cpp
+      grid.hpp
+      particle.cpp
+      particle.hpp
+      progargs.cpp
+      progargs.hpp
+      simulacion.cpp
+      simulacion.hpp
+      variablesglobales.hpp
+   fluid
+   utest
+   in
+   out
+   trz

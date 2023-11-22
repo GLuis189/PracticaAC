@@ -4,6 +4,7 @@
 // test_grid.cpp
 
 #include "gtest/gtest.h"
+#include <cmath>
 #include "../sim/grid.hpp"
 #include "../sim/variablesglobales.hpp"
 
