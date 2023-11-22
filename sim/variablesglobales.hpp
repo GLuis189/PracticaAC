@@ -24,6 +24,7 @@ bool read_binary_values(std::ifstream& inputfile, Args&... args) {
   return (inputfile.read(as_writable_buffer(args), sizeof(args)) && ...);
 }
 //NOLINTEND
+
 const double radio           = 1.695;
 const double densidad        = 1e3;
 const double presion         = 3.0;
