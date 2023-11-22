@@ -64,18 +64,11 @@ std::vector<Particle> leerParticulas(std::ifstream& inputfile, grid & malla) {
 
 void reposicionar(grid & malla, std::vector<Particle> & particles) {
   for (Particle& particle : particles) {
-    //Particle & particle = particles[part];
-
     particle.Inicializar();
-
     int const i_anterior = particle.p_i;
     int const j_anterior = particle.p_j;
     int const k_anterior = particle.p_k;
-
     malla.calcularBloque(particle);
-    /*int clave = malla.generarClaveBloque(particle.i, particle.j, particle.k);
-    malla.blocks[clave].addParticle(particle.ide);*/
-
     if (i_anterior != particle.p_i || j_anterior != particle.p_j || k_anterior != particle.p_k) {
       malla.CambiarBloque(particle, i_anterior, j_anterior, k_anterior);
     }
@@ -107,18 +100,6 @@ void ResultadosBinarios(std::vector<Particle>& particulas, std::ofstream& output
   outputfile.close();
 }
 
-[[maybe_unused]] void mostrarResultados(std::vector<Particle> & particles, std::ofstream& outputfile){
-  for (Particle  const& particle: particles) {
-    outputfile << "ID: " << particle.ide << "\n";
-    outputfile << "Posición (x, y, z): " << particle.posicion.c_x << ", " << particle.posicion.c_y << ", " << particle.posicion.c_z << "\n";
-    outputfile << "Velocidad (vx, vy, vz): " << particle.velocidad.c_x << ", " << particle.velocidad.c_y << ", " << particle.velocidad.c_z << "\n";
-    outputfile << "Hvx, Hvy, Hvz: " << particle.hvelocidad.c_x << ", " << particle.hvelocidad.c_y << ", " << particle.hvelocidad.c_z << "\n";
-    outputfile << "Densidad: " << particle.densidad << "\n";
-    outputfile << "Aceleración (accx, accy, accz): " << particle.aceleracion.c_x << ", " << particle.aceleracion.c_y << ", " << particle.aceleracion.c_z << "\n";
-  }
-  outputfile.close();
-}
-
 void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & malla, std::vector<Particle>& particles){
   for (int time = 0; time < args.nts; time++) {
     if(time>0) {
@@ -133,7 +114,6 @@ void IniciarSimulacion(const ProgArgs& args, std::ofstream& outputfile, grid & m
 
   // Mostrar los datos de las partículas
   ResultadosBinarios(particles, outputfile);
-  //mostrarResultados(particles, outputfile);
 }
 
 
