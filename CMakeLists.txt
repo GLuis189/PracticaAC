@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_compile_options(-Wall -Wextra -Werror -pedantic -pedantic-errors -O3)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/fluid)
 
 # Enable GoogleTest Library
 include(FetchContent)

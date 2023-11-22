@@ -48,7 +48,7 @@ ArchivoData leerArchivo(const std::string& nombreArchivo) {
 TEST(PruebaFuncional, CompararConTrazas1_small) {
   ProgArgs args;
   args.nts        = 1;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/small.fld";
+  args.inputfile  = "in/small.fld";
   args.outputfile = "small1_test.out";
 
   // Ejecuta la simulación
@@ -60,7 +60,7 @@ TEST(PruebaFuncional, CompararConTrazas1_small) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/small-1.fld");
+  ArchivoData trazas    = leerArchivo("out/small-1.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -83,7 +83,7 @@ TEST(PruebaFuncional, CompararConTrazas1_small) {
 TEST(PruebaFuncional, CompararConTrazas2_small) {
   ProgArgs args;
   args.nts        = 2;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/small.fld";
+  args.inputfile  = "in/small.fld";
   args.outputfile = "small2_test.out";
 
   // Ejecuta la simulación
@@ -95,7 +95,7 @@ TEST(PruebaFuncional, CompararConTrazas2_small) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/small-2.fld");
+  ArchivoData trazas    = leerArchivo("out/small-2.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -118,7 +118,7 @@ TEST(PruebaFuncional, CompararConTrazas2_small) {
 TEST(PruebaFuncional, CompararConTrazas3_small) {
   ProgArgs args;
   args.nts        = 3;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/small.fld";
+  args.inputfile  = "in/small.fld";
   args.outputfile = "small3_test.out";
 
   // Ejecuta la simulación
@@ -130,7 +130,7 @@ TEST(PruebaFuncional, CompararConTrazas3_small) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/small-3.fld");
+  ArchivoData trazas    = leerArchivo("out/small-3.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -153,7 +153,7 @@ TEST(PruebaFuncional, CompararConTrazas3_small) {
 TEST(PruebaFuncional, CompararConTrazas4_small) {
   ProgArgs args;
   args.nts        = 4;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/small.fld";
+  args.inputfile  = "in/small.fld";
   args.outputfile = "small4_test.out";
 
   // Ejecuta la simulación
@@ -165,7 +165,7 @@ TEST(PruebaFuncional, CompararConTrazas4_small) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/small-4.fld");
+  ArchivoData trazas    = leerArchivo("out/small-4.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -188,7 +188,7 @@ TEST(PruebaFuncional, CompararConTrazas4_small) {
 TEST(PruebaFuncional, CompararConTrazas5_small) {
   ProgArgs args;
   args.nts        = n_5;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/small.fld";
+  args.inputfile  = "in/small.fld";
   args.outputfile = "small5_test.out";
 
   // Ejecuta la simulación
@@ -200,7 +200,7 @@ TEST(PruebaFuncional, CompararConTrazas5_small) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/small-5.fld");
+  ArchivoData trazas    = leerArchivo("out/small-5.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -223,7 +223,7 @@ TEST(PruebaFuncional, CompararConTrazas5_small) {
 TEST(PruebaFuncional, CompararConTrazas1_large) {
   ProgArgs args;
   args.nts        = 1;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/large.fld";
+  args.inputfile  = "in/large.fld";
   args.outputfile = "large1_test.out";
 
   // Ejecuta la simulación
@@ -235,7 +235,7 @@ TEST(PruebaFuncional, CompararConTrazas1_large) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/large-1.fld");
+  ArchivoData trazas    = leerArchivo("out/large-1.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -258,7 +258,7 @@ TEST(PruebaFuncional, CompararConTrazas1_large) {
 TEST(PruebaFuncional, CompararConTrazas2_large) {
   ProgArgs args;
   args.nts        = 2;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/large.fld";
+  args.inputfile  = "in/large.fld";
   args.outputfile = "large2_test.out";
 
   // Ejecuta la simulación
@@ -270,7 +270,7 @@ TEST(PruebaFuncional, CompararConTrazas2_large) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/large-2.fld");
+  ArchivoData trazas    = leerArchivo("out/large-2.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -293,7 +293,7 @@ TEST(PruebaFuncional, CompararConTrazas2_large) {
 TEST(PruebaFuncional, CompararConTrazas3_large) {
   ProgArgs args;
   args.nts        = 3;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/large.fld";
+  args.inputfile  = "in/large.fld";
   args.outputfile = "large3_test.out";
 
   // Ejecuta la simulación
@@ -305,7 +305,7 @@ TEST(PruebaFuncional, CompararConTrazas3_large) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/large-3.fld");
+  ArchivoData trazas    = leerArchivo("out/large-3.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -328,7 +328,7 @@ TEST(PruebaFuncional, CompararConTrazas3_large) {
 TEST(PruebaFuncional, CompararConTrazas4_large) {
   ProgArgs args;
   args.nts        = 4;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/large.fld";
+  args.inputfile  = "in/large.fld";
   args.outputfile = "large4_test.out";
 
   // Ejecuta la simulación
@@ -340,7 +340,7 @@ TEST(PruebaFuncional, CompararConTrazas4_large) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/large-4.fld");
+  ArchivoData trazas    = leerArchivo("out/large-4.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
@@ -363,7 +363,7 @@ TEST(PruebaFuncional, CompararConTrazas4_large) {
 TEST(PruebaFuncional, CompararConTrazas5_large) {
   ProgArgs args;
   args.nts        = n_5;  // Reemplaza esto con el número de iteraciones que quieras
-  args.inputfile  = "../in/large.fld";
+  args.inputfile  = "in/large.fld";
   args.outputfile = "large5_test.out";
 
   // Ejecuta la simulación
@@ -375,7 +375,7 @@ TEST(PruebaFuncional, CompararConTrazas5_large) {
 
   // Lee los resultados de la simulación
   ArchivoData resultado = leerArchivo(args.outputfile);
-  ArchivoData trazas    = leerArchivo("../out/large-5.fld");
+  ArchivoData trazas    = leerArchivo("out/large-5.fld");
 
   ASSERT_EQ(resultado.particles.size(), trazas.particles.size()) << "El número de partículas no coincide con las trazas";
   ASSERT_EQ(resultado.ppm, trazas.ppm) << "El número de partículas por metro no coincide con las trazas";
