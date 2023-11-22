@@ -1,5 +1,5 @@
 //
-// Created by belen on 6/11/23.
+// Created by belen.
 //ey
 
 #include "particle.hpp"
@@ -135,6 +135,3 @@ bool Particle::operator<(const Particle& other) const {
 bool Particle::operator>(const Particle& other) const {
     return ide > other.ide;
 }
-
-
-

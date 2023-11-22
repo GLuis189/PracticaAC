@@ -1,5 +1,4 @@
 #include "../sim/grid.hpp"
-// #include "../sim/particle.hpp"
 #include "../sim/progargs.hpp"
 #include "../sim/variablesglobales.hpp"
 #include "../sim/simulacion.hpp"

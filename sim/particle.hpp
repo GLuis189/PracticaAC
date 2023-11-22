@@ -1,10 +1,6 @@
-//
-// Created by belen on 4/11/23.
-//
 
 #ifndef FLUID_PARTICLE_HPP
 #define FLUID_PARTICLE_HPP
-//#include "../sim/grid.hpp"
 #include <vector>
 #include <stdexcept>
 

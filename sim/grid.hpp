@@ -1,22 +1,3 @@
-//
-// Created by luis on 30/10/23.
-//
-
-/*#ifndef PRACTICAAC_GRID_HPP
-#define PRACTICAAC_GRID_HPP
-
-
-class grid {
-  public:
-    int nx;
-    int ny;
-    int nz;
-
-    grid(float bmax_x, float bmax_y, float bmax_z, float bmin_x, float bmin_y, float bmin_z, float suavizado);
-};
-
-
-#endif //PRACTICAAC_GRID_HPP*/
 // Mesh.hpp
 #ifndef MESH_HPP
 #define MESH_HPP
@@ -47,8 +28,6 @@ class grid {
     static int generarClaveBloque(int var_a, int var_b, int var_c);
     static void calcularAceleraciones(std::vector<Particle> & particles, double pi_sua_6, double masa, double suavizado);
 
-
-    // Otros métodos relacionados con la malla
 };
 
 #endif // MESH_HPP
